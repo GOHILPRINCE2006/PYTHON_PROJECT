@@ -1,0 +1,40 @@
+<!-- templates/recommendox/confirm_delete.html -->
+{% extends 'recommendox/base.html' %}
+{% load static %}
+
+{% block title %}Delete Review{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-exclamation-triangle"></i> Confirm Delete</h5>
+            </div>
+            <div class="card-body">
+                <p class="mb-3">Are you sure you want to delete your review for:</p>
+                <h6 class="mb-3">"{{ review.content.title }}"</h6>
+                
+                <div class="alert alert-secondary mb-3">
+                    <strong>Your review:</strong><br>
+                    "{{ review.comment }}"
+                </div>
+                
+                <p class="text-danger"><small>This action cannot be undone!</small></p>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> Yes, Delete Review
+                        </button>
+                        <a href="{% url 'recommendox:content_detail' review.content.id %}" class="btn btn-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,354 @@
+<!-- recommendox/templates/recommendox/content_detail.html -->
+{% extends 'recommendox/base.html' %}
+
+{% block title %}{{ content.title }} - Movie Recommendation System{% endblock %}
+
+{% block content %}
+<div class="row min-vh-100">
+    <!-- Main Content -->
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="{{ content.poster_url|default:'https://via.placeholder.com/300x450?text=No+Image' }}" 
+                         class="img-fluid rounded-start" alt="{{ content.title }}" 
+                         style="height: 500px; width: 100%; object-fit: cover;">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h1 class="card-title">{{ content.title }}</h1>
+                        
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <span class="badge bg-primary">{{ content.content_type }}</span>
+                            <span class="badge bg-info">{{ content.genre }}</span>
+                            <span class="badge bg-secondary">{{ content.language }}</span>
+                            <span class="badge bg-warning text-dark">
+                                <i class="fas fa-star"></i> {{ content.avg_rating|floatformat:1 }}/5
+                            </span>
+                            <span class="badge bg-light text-dark border">{{ content.release_date|date:"Y" }}</span>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <h5 class="text-muted">Description</h5>
+                            <p class="card-text">{{ content.description }}</p>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            {% if content.director %}
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-user-tie"></i> Director</h6>
+                                <p class="mb-0">{{ content.director }}</p>
+                            </div>
+                            {% endif %}
+                            
+                            {% if content.duration %}
+                            <div class="col-md-6">
+                                <h6><i class="fas fa-clock"></i> Duration</h6>
+                                <p class="mb-0">{{ content.duration }}</p>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        {% if content.cast %}
+                        <div class="mb-3">
+                            <h6><i class="fas fa-users"></i> Cast</h6>
+                            <p class="card-text">{{ content.cast }}</p>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Action Buttons -->
+                        <div class="d-flex flex-wrap gap-2 mt-4">
+                            {% if user.is_authenticated %}
+                            <!-- Watchlist Button -->
+                            <form action="{% url 'recommendox:manage_watchlist' %}" method="POST" class="d-inline">
+                                {% csrf_token %}
+                                <input type="hidden" name="content_id" value="{{ content.id }}">
+                                {% if in_watchlist %}
+                                <button type="submit" name="action" value="remove" class="btn btn-outline-danger">
+                                    <i class="fas fa-bookmark"></i> Remove
+                                </button>
+                                {% else %}
+                                <button type="submit" name="action" value="add" class="btn btn-primary">
+                                    <i class="fas fa-bookmark"></i> Watchlist
+                                </button>
+                                {% endif %}
+                            </form>
+                            
+                            <!-- Rating Button -->
+                            <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ratingModal">
+                                <i class="fas fa-star"></i> Rate
+                            </button>
+                            
+                            <!-- Review Button -->
+                            <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#reviewModal">
+                                <i class="fas fa-comment"></i> Review
+                            </button>
+                            {% endif %}
+                            
+                            {% if content.trailer_url %}
+                            <a href="{{ content.trailer_url }}" target="_blank" class="btn btn-danger">
+                                <i class="fas fa-play"></i> Trailer
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- OTT AVAILABILITY SECTION - MOVED OUTSIDE ACTION BUTTONS -->
+        {% if content.ott_platforms.exists %}
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-tv"></i> Available On</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for ott in content.ott_platforms.all %}
+                    <div class="col-md-6 mb-3">
+                        <div class="d-flex justify-content-between align-items-center p-3 border rounded">
+                            <div>
+                                <strong>{{ ott.get_platform_name_display }}</strong><br>
+                                {% if ott.is_free %}
+                                <span class="badge bg-success mt-1">Free</span>
+                                {% else %}
+                                <span class="badge bg-warning text-dark mt-1">Subscription</span>
+                                {% endif %}
+                            </div>
+                            <a href="{{ ott.watch_url }}" target="_blank" class="btn btn-sm btn-primary">
+                                <i class="fas fa-play"></i> Watch
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Reviews Section -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-comments"></i> User Reviews</h5>
+            </div>
+            <div class="card-body">
+                {% if reviews %}
+                    {% for review in reviews %}
+                    <div class="border-bottom pb-3 mb-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <strong>{{ review.user.username }}</strong>
+                                {% if review.is_verified %}
+                                <span class="badge bg-success ms-2">
+                                    <i class="fas fa-check-circle"></i> Verified
+                                </span>
+                                {% endif %}
+                                {% if not review.is_approved %}
+                                <span class="badge bg-warning text-dark ms-2">
+                                    <i class="fas fa-clock"></i> Pending
+                                </span>
+                                {% endif %}
+                            </div>
+                            <small class="text-muted">{{ review.review_date|date:"M d, Y H:i" }}</small>
+                        </div>
+                        <p class="mb-2">{{ review.comment }}</p>
+                        
+                        {% if user == review.user %}
+                        <div class="d-flex gap-2 mt-2">
+                            <a href="{% url 'recommendox:edit_review' review.id %}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a href="{% url 'recommendox:delete_review' review.id %}" class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-trash"></i> Delete
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-5">No reviews yet. Be the first to review!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar -->
+    <div class="col-lg-4">
+        <!-- User Rating -->
+        {% if user.is_authenticated %}
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">Your Rating</h6>
+            </div>
+            <div class="card-body">
+                {% if user_rating %}
+                <div class="text-center">
+                    <h2>{{ user_rating.rating_value }}/5</h2>
+                    <div class="mb-3">
+                        {% for i in "12345"|make_list %}
+                            {% if forloop.counter <= user_rating.rating_value %}
+                            <i class="fas fa-star text-warning"></i>
+                            {% else %}
+                            <i class="far fa-star text-warning"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <small class="text-muted">{{ user_rating.rating_date|date:"M d, Y" }}</small>
+                </div>
+                {% else %}
+                <p class="text-muted mb-3">You haven't rated this yet.</p>
+                <button type="button" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#ratingModal">
+                    <i class="fas fa-star"></i> Rate Now
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+        
+        <!-- Similar Content -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <h6 class="mb-0">Similar {{ content.content_type }}s</h6>
+            </div>
+            <div class="card-body">
+                {% if similar_content %}
+                    {% for similar in similar_content %}
+                    <div class="d-flex mb-3 border-bottom pb-3">
+                        <img src="{{ similar.poster_url|default:'https://via.placeholder.com/80x100?text=No+Image' }}" 
+                             class="rounded me-3" style="width: 80px; height: 100px; object-fit: cover;" 
+                             alt="{{ similar.title }}">
+                        <div>
+                            <h6 class="mb-1">{{ similar.title }}</h6>
+                            <div class="d-flex gap-1 mb-2">
+                                <span class="badge bg-primary">{{ similar.genre }}</span>
+                                <span class="badge bg-warning text-dark">
+                                    <i class="fas fa-star"></i> {{ similar.avg_rating|floatformat:1 }}
+                                </span>
+                            </div>
+                            <a href="{% url 'recommendox:content_detail' similar.id %}" class="btn btn-sm btn-outline-primary">
+                                View
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-4">No similar content found.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rating Modal -->
+{% if user.is_authenticated %}
+<div class="modal fade" id="ratingModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Rate {{ content.title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{% url 'recommendox:rate_content' content.id %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="text-center mb-4">
+                        <div class="rating-stars mb-3">
+                            {% for i in "12345"|make_list %}
+                            <i class="far fa-star rating-star fa-2x" data-rating="{{ forloop.counter }}" 
+                               style="cursor: pointer; margin: 0 5px; color: #f39c12;"></i>
+                            {% endfor %}
+                        </div>
+                        <input type="hidden" name="rating" id="selectedRating" value="5">
+                        <p id="ratingText">Excellent</p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit Rating</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Review Modal -->
+<div class="modal fade" id="reviewModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Write Review for {{ content.title }}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form action="{% url 'recommendox:add_review' content.id %}" method="POST">
+                {% csrf_token %}
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="form-label">Your Review</label>
+                        <textarea name="comment" class="form-control" rows="5" 
+                                  placeholder="Share your thoughts..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Submit Review</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Rating stars interaction
+    const stars = document.querySelectorAll('.rating-star');
+    const selectedRating = document.getElementById('selectedRating');
+    const ratingText = document.getElementById('ratingText');
+    
+    const ratingDescriptions = {
+        1: 'Poor',
+        2: 'Fair',
+        3: 'Good',
+        4: 'Very Good',
+        5: 'Excellent'
+    };
+    
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            const rating = this.getAttribute('data-rating');
+            selectedRating.value = rating;
+            ratingText.textContent = ratingDescriptions[rating];
+            
+            stars.forEach(s => {
+                const starRating = s.getAttribute('data-rating');
+                if (starRating <= rating) {
+                    s.classList.remove('far');
+                    s.classList.add('fas');
+                } else {
+                    s.classList.remove('fas');
+                    s.classList.add('far');
+                }
+            });
+        });
+        
+        star.addEventListener('mouseover', function() {
+            const rating = this.getAttribute('data-rating');
+            stars.forEach(s => {
+                const starRating = s.getAttribute('data-rating');
+                s.style.color = starRating <= rating ? '#f1c40f' : '#f39c12';
+            });
+        });
+        
+        star.addEventListener('mouseout', function() {
+            const currentRating = selectedRating.value;
+            stars.forEach(s => {
+                const starRating = s.getAttribute('data-rating');
+                s.style.color = '#f39c12';
+            });
+        });
+    });
+});
+</script>
+{% endblock %}
+{% endblock %}

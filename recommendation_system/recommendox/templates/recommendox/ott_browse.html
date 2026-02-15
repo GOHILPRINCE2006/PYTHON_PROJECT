@@ -1,0 +1,110 @@
+<!-- templates/recommendox/ott_browse.html -->
+{% extends 'recommendox/base.html' %}
+{% load static %}
+
+{% block title %}Browse by OTT Platform{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1><i class="fas fa-tv"></i> Browse by OTT Platform</h1>
+        <p class="text-muted">Find content available on your favorite streaming services</p>
+    </div>
+</div>
+
+<!-- Platform Filter -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Select Platform</label>
+                <select name="platform" class="form-select" onchange="this.form.submit()">
+                    <option value="">All Platforms</option>
+                    <option value="Netflix" {% if selected_platform == 'Netflix' %}selected{% endif %}>Netflix</option>
+                    <option value="Amazon Prime" {% if selected_platform == 'Amazon Prime' %}selected{% endif %}>Amazon Prime Video</option>
+                    <option value="Disney+" {% if selected_platform == 'Disney+' %}selected{% endif %}>Disney+ Hotstar</option>
+                    <option value="SonyLIV" {% if selected_platform == 'SonyLIV' %}selected{% endif %}>SonyLIV</option>
+                    <option value="Zee5" {% if selected_platform == 'Zee5' %}selected{% endif %}>ZEE5</option>
+                    <option value="JioCinema" {% if selected_platform == 'JioCinema' %}selected{% endif %}>JioCinema</option>
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Free Only</label>
+                <div class="form-check mt-2">
+                    <input type="checkbox" name="free_only" class="form-check-input" value="True" 
+                           {% if free_only %}checked{% endif %} onchange="this.form.submit()">
+                    <label class="form-check-label">Show only free content</label>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Content Grid -->
+<div class="row">
+    {% if page_obj %}
+        {% for content in page_obj %}
+        <div class="col-md-3 mb-4">
+            <div class="card h-100">
+                <img src="{{ content.poster_url|default:'https://via.placeholder.com/300x450?text=No+Poster' }}" 
+                     class="card-img-top" style="height: 250px; object-fit: cover;">
+                <div class="card-body">
+                    <h6 class="card-title">{{ content.title }}</h6>
+                    <p class="card-text">
+                        <small class="text-muted">
+                            {{ content.content_type }} | {{ content.genre }}<br>
+                            ⭐ {{ content.avg_rating|floatformat:1 }}/5
+                        </small>
+                    </p>
+                    
+                    <!-- Show OTT platforms for this content -->
+                    {% for ott in content.ott_platforms.all|slice:":2" %}
+                    <span class="badge bg-info">{{ ott.get_platform_name_display }}</span>
+                    {% endfor %}
+                    
+                    <a href="{% url 'recommendox:content_detail' content.id %}" class="btn btn-sm btn-primary w-100 mt-2">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        
+        <!-- Pagination -->
+        <div class="col-12">
+            <nav>
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page=1&platform={{ selected_platform }}&free_only={{ free_only }}">&laquo; First</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.previous_page_number }}&platform={{ selected_platform }}&free_only={{ free_only }}">Previous</a>
+                    </li>
+                    {% endif %}
+                    
+                    <li class="page-item active">
+                        <span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+                    </li>
+                    
+                    {% if page_obj.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.next_page_number }}&platform={{ selected_platform }}&free_only={{ free_only }}">Next</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}&platform={{ selected_platform }}&free_only={{ free_only }}">Last &raquo;</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </div>
+    {% else %}
+        <div class="col-12">
+            <p class="text-muted text-center py-5">
+                <i class="fas fa-tv fa-3x mb-3"></i><br>
+                No content found for this platform.
+            </p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

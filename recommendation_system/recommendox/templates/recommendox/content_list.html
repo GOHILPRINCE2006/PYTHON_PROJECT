@@ -1,0 +1,177 @@
+<!-- recommendox/templates/recommendox/content_list.html -->
+{% extends 'recommendox/base.html' %}
+
+{% block title %}Browse - Movie Recommendation System{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>Browse Movies & Series</h1>
+        <p class="text-muted">Discover amazing content from our collection</p>
+    </div>
+    <div class="col-md-4 text-end">
+        {% if user.is_staff %}
+        <a href="{% url 'recommendox:manage_content' %}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Add Content
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" action="{% url 'recommendox:content_list' %}" class="row g-3">
+            <div class="col-md-3">
+                <label class="form-label">Genre</label>
+                <select name="genre" class="form-select">
+                    <option value="">All Genres</option>
+                    {% for genre in genres %}
+                    <option value="{{ genre }}" {% if selected_genre == genre %}selected{% endif %}>
+                        {{ genre }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="col-md-3">
+                <label class="form-label">Language</label>
+                <select name="language" class="form-select">
+                    <option value="">All Languages</option>
+                    {% for language in languages %}
+                    <option value="{{ language }}" {% if selected_language == language %}selected{% endif %}>
+                        {{ language }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <div class="col-md-3">
+                <label class="form-label">Type</label>
+                <select name="content_type" class="form-select">
+                    <option value="">All Types</option>
+                    <option value="Movie" {% if selected_type == 'Movie' %}selected{% endif %}>Movies</option>
+                    <option value="Web Series" {% if selected_type == 'Web Series' %}selected{% endif %}>Web Series</option>
+                </select>
+            </div>
+            
+            <div class="col-md-3">
+                <label class="form-label">Sort By</label>
+                <select name="sort" class="form-select" onchange="this.form.submit()">
+                    <option value="-created_at" {% if request.GET.sort == '-created_at' %}selected{% endif %}>Newest First</option>
+                    <option value="title" {% if request.GET.sort == 'title' %}selected{% endif %}>Title A-Z</option>
+                    <option value="-ratings__rating_value" {% if request.GET.sort == '-ratings__rating_value' %}selected{% endif %}>Highest Rated</option>
+                    <option value="release_date" {% if request.GET.sort == 'release_date' %}selected{% endif %}>Release Date</option>
+                </select>
+            </div>
+            
+            <div class="col-12">
+                <div class="input-group">
+                    <input type="text" name="search" class="form-control" placeholder="Search by title, director, cast..." 
+                           value="{{ search_query|default:'' }}">
+                    <button class="btn btn-primary-custom" type="submit">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                    <a href="{% url 'recommendox:content_list' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-redo"></i> Clear
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Results Count -->
+<p class="text-muted mb-3">
+    Showing {{ content.start_index }} - {{ content.end_index }} of {{ content.paginator.count }} results
+    {% if search_query %}
+    for "{{ search_query }}"
+    {% endif %}
+</p>
+
+<!-- Content Grid -->
+<div class="row">
+    {% for item in content %}
+    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+        <div class="card content-card h-100">
+            <img src="{{ item.poster_url|default:'https://via.placeholder.com/300x400?text=No+Image' }}" 
+                 class="card-img-top content-poster" alt="{{ item.title }}">
+            <div class="card-body">
+                <h5 class="card-title" style="height: 48px; overflow: hidden;">{{ item.title }}</h5>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="badge bg-info">{{ item.content_type }}</span>
+                    <span class="badge bg-warning text-dark">
+                        <i class="fas fa-star"></i> {{ item.avg_rating|default:"N/A" }}
+                    </span>
+                </div>
+                <div class="mb-2">
+                    <span class="genre-badge">{{ item.genre }}</span>
+                    <span class="badge bg-secondary">{{ item.language }}</span>
+                </div>
+                <p class="card-text small text-muted" style="height: 60px; overflow: hidden;">
+                    {{ item.description|truncatechars:100 }}
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <small class="text-muted">{{ item.release_date|date:"Y" }}</small>
+                    <a href="{% url 'recommendox:content_detail' item.id %}" class="btn btn-sm btn-primary-custom">
+                        Details
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <i class="fas fa-film fa-3x text-muted mb-3"></i>
+        <h4 class="text-muted">No content found</h4>
+        <p class="text-muted">Try changing your search filters</p>
+        <a href="{% url 'recommendox:content_list' %}" class="btn btn-primary-custom">
+            <i class="fas fa-redo"></i> Clear Filters
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if content.has_other_pages %}
+<nav aria-label="Page navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if content.has_previous %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ content.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}{% if request.GET.language %}&language={{ request.GET.language }}{% endif %}{% if request.GET.content_type %}&content_type={{ request.GET.content_type }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                <i class="fas fa-chevron-left"></i> Previous
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#"><i class="fas fa-chevron-left"></i> Previous</a>
+        </li>
+        {% endif %}
+        
+        {% for i in content.paginator.page_range %}
+            {% if content.number == i %}
+            <li class="page-item active">
+                <a class="page-link" href="#">{{ i }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ i }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}{% if request.GET.language %}&language={{ request.GET.language }}{% endif %}{% if request.GET.content_type %}&content_type={{ request.GET.content_type }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">{{ i }}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        
+        {% if content.has_next %}
+        <li class="page-item">
+            <a class="page-link" href="?page={{ content.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}{% if request.GET.language %}&language={{ request.GET.language }}{% endif %}{% if request.GET.content_type %}&content_type={{ request.GET.content_type }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+                Next <i class="fas fa-chevron-right"></i>
+            </a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" href="#">Next <i class="fas fa-chevron-right"></i></a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}

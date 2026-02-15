@@ -1,0 +1,205 @@
+<!-- recommendox/templates/recommendox/user_dashboard.html -->
+{% extends 'recommendox/base.html' %}
+
+{% block title %}Dashboard - Movie Recommendation System{% endblock %}
+
+{% block content %}
+<!-- Dashboard Header -->
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>Welcome, {{ user.username }}!</h1>
+        <p class="text-muted">Your personalized movie and series dashboard</p>
+    </div>
+</div>
+
+<!-- User Stats -->
+<div class="row mb-5">
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="stats-card text-center">
+            <i class="fas fa-bookmark text-primary"></i>
+            <h3>{{ watchlist.count }}</h3>
+            <p class="text-muted">Watchlist</p>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="stats-card text-center">
+            <i class="fas fa-star text-warning"></i>
+            <h3>{{ user_ratings.count }}</h3>
+            <p class="text-muted">Ratings Given</p>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="stats-card text-center">
+            <i class="fas fa-comment text-info"></i>
+            <h3>{{ user.reviews.count }}</h3>
+            <p class="text-muted">Reviews</p>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="stats-card text-center">
+            {% if profile.is_premium %}
+            <i class="fas fa-crown text-warning"></i>
+            <h3>Premium</h3>
+            <p class="text-muted">Member</p>
+            {% else %}
+            <i class="fas fa-user text-secondary"></i>
+            <h3>Basic</h3>
+            <p class="text-muted">Member</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<!-- Personalized Recommendations -->
+<h2 class="section-title">✨ Recommended For You</h2>
+<div class="row mb-5">
+    {% if recommendations %}
+        {% for content in recommendations %}
+        <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+            <div class="card content-card h-100">
+                <img src="{{ content.poster_url|default:'https://via.placeholder.com/300x400?text=No+Image' }}" 
+                     class="card-img-top content-poster" alt="{{ content.title }}">
+                <div class="card-body">
+                    <h5 class="card-title" style="height: 48px; overflow: hidden;">{{ content.title }}</h5>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span class="genre-badge">{{ content.genre }}</span>
+                        <span class="rating-badge">
+                            <i class="fas fa-star"></i> {{ content.avg_rating|default:"N/A" }}
+                        </span>
+                    </div>
+                    <p class="card-text small text-muted" style="height: 60px; overflow: hidden;">
+                        {{ content.description|truncatechars:100 }}
+                    </p>
+                    <div class="d-flex justify-content-between">
+                        <span class="badge bg-secondary">{{ content.language }}</span>
+                        <a href="{% url 'recommendox:content_detail' content.id %}" class="btn btn-sm btn-primary-custom">
+                            View
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+    <div class="col-12 text-center py-4">
+        <i class="fas fa-film fa-3x text-muted mb-3"></i>
+        <p class="text-muted">No recommendations yet. Rate some movies to get personalized suggestions!</p>
+        <a href="{% url 'recommendox:content_list' %}" class="btn btn-primary-custom">
+            <i class="fas fa-th-list"></i> Browse Content
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Watchlist -->
+<div class="row">
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-bookmark"></i> Your Watchlist</h5>
+            </div>
+            <div class="card-body">
+                {% if watchlist %}
+                    {% for content in watchlist %}
+                    <div class="d-flex align-items-center mb-3 border-bottom pb-3">
+                        <img src="{{ content.poster_url|default:'https://via.placeholder.com/60x80?text=No+Image' }}" 
+                             class="rounded me-3" style="width: 60px; height: 80px; object-fit: cover;" 
+                             alt="{{ content.title }}">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">{{ content.title }}</h6>
+                            <div class="d-flex gap-1 mb-2">
+                                <small class="text-muted">{{ content.genre }}</small>
+                                <small class="text-warning">
+                                    <i class="fas fa-star"></i> {{ content.avg_rating|default:"N/A" }}
+                                </small>
+                            </div>
+                        </div>
+                        <div>
+                            <a href="{% url 'recommendox:content_detail' content.id %}" class="btn btn-sm btn-outline-primary">
+                                Watch
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-4">Your watchlist is empty.</p>
+                    <a href="{% url 'recommendox:content_list' %}" class="btn btn-primary-custom w-100">
+                        <i class="fas fa-plus"></i> Add to Watchlist
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Ratings -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-star"></i> Recent Ratings</h5>
+            </div>
+            <div class="card-body">
+                {% if user_ratings %}
+                    {% for rating in user_ratings %}
+                    <div class="d-flex align-items-center mb-3 border-bottom pb-3">
+                        <img src="{{ rating.content.poster_url|default:'https://via.placeholder.com/60x80?text=No+Image' }}" 
+                             class="rounded me-3" style="width: 60px; height: 80px; object-fit: cover;" 
+                             alt="{{ rating.content.title }}">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">{{ rating.content.title }}</h6>
+                            <div class="mb-2">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= rating.rating_value %}
+                                    <i class="fas fa-star text-warning"></i>
+                                    {% else %}
+                                    <i class="far fa-star text-warning"></i>
+                                    {% endif %}
+                                {% endfor %}
+                                <small class="text-muted ms-2">{{ rating.rating_date|date:"M d" }}</small>
+                            </div>
+                        </div>
+                        <div>
+                            <a href="{% url 'recommendox:content_detail' rating.content.id %}" class="btn btn-sm btn-outline-primary">
+                                View
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-4">You haven't rated any content yet.</p>
+                    <a href="{% url 'recommendox:content_list' %}" class="btn btn-primary-custom w-100">
+                        <i class="fas fa-star"></i> Rate Content
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-6 col-sm-6">
+                        <a href="{% url 'recommendox:content_list' %}" class="btn btn-outline-primary w-100 h-100 py-3">
+                            <i class="fas fa-th-list fa-2x mb-2"></i><br>
+                            Browse All
+                        </a>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <a href="{% url 'recommendox:content_list' %}?genre={{ profile.favorite_genres|default:'Action' }}" 
+                           class="btn btn-outline-success w-100 h-100 py-3">
+                            <i class="fas fa-heart fa-2x mb-2"></i><br>
+                            Favorite Genre
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

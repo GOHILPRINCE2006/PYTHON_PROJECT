@@ -1,0 +1,168 @@
+{% extends 'recommendox/base.html' %}
+
+{% block title %}Register - Movie Recommendation System{% endblock %}
+
+{% block content %}
+
+<style>
+.nav-link {
+    display: none !important;
+}
+</style>
+
+<div class="row justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="col-md-6">
+        <div class="card shadow">
+            
+            <!-- Header color same as navbar -->
+            <div class="card-header text-white text-center" style="background: #2c5d7c;">
+                <h3 class="mb-0">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </h3>
+            </div>
+
+            <div class="card-body p-4">
+
+                <form method="post" action="{% url 'recommendox:register' %}">
+                    {% csrf_token %}
+                    
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        Please correct the errors below.
+                        <ul class="mb-0 mt-2">
+                            {% for field, errors in form.errors.items %}
+                                {% for error in errors %}
+                                    <li>{{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label">
+                            <i class="fas fa-user"></i> Username
+                        </label>
+                        <input type="text" name="username" class="form-control" 
+                               id="id_username" required autofocus
+                               value="{{ form.username.value|default:'' }}">
+                    </div>
+                    
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="id_email" class="form-label">
+                            <i class="fas fa-envelope"></i> Email
+                        </label>
+                        <input type="email" name="email" class="form-control" 
+                               id="id_email" required
+                               value="{{ form.email.value|default:'' }}">
+                    </div>
+                    
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label for="id_password1" class="form-label">
+                            <i class="fas fa-lock"></i> Password
+                        </label>
+                        <input type="password" name="password1" class="form-control" 
+                               id="id_password1" required>
+                        <div class="form-text">
+                            Password must be at least 8 characters.
+                        </div>
+                    </div>
+                    
+                    <!-- Confirm Password -->
+                    <div class="mb-4">
+                        <label for="id_password2" class="form-label">
+                            <i class="fas fa-lock"></i> Confirm Password
+                        </label>
+                        <input type="password" name="password2" class="form-control" 
+                               id="id_password2" required>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary btn-lg" style="background: #2c5d7c;">
+                            <i class="fas fa-user-plus"></i> Create Account
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="text-muted mb-0">Already have an account?</p>
+                    <a href="{% url 'recommendox:login' %}" class="btn btn-outline-primary">
+                        <i class="fas fa-sign-in-alt"></i> Login Here
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="card-footer text-center">
+                <small class="text-muted">
+                    By creating an account, you agree to our Terms of Service and Privacy Policy
+                </small>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    const password1 = document.getElementById('id_password1');
+    const password2 = document.getElementById('id_password2');
+    
+    function checkPasswordStrength() {
+        const password = password1.value;
+        let indicator = document.getElementById('passwordStrength');
+
+        if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.id = 'passwordStrength';
+            indicator.className = 'mt-2';
+            password1.parentNode.appendChild(indicator);
+        }
+
+        if (password.length === 0) {
+            indicator.innerHTML = '';
+            return;
+        }
+
+        if (password.length < 8) {
+            indicator.innerHTML = '<small class="text-danger">Too short</small>';
+        } else {
+            indicator.innerHTML = '<small class="text-success">Valid password</small>';
+        }
+    }
+    
+    function checkPasswordMatch() {
+        let indicator = document.getElementById('passwordMatch');
+
+        if (!indicator) {
+            indicator = document.createElement('div');
+            indicator.id = 'passwordMatch';
+            indicator.className = 'mt-2';
+            password2.parentNode.appendChild(indicator);
+        }
+
+        if (password2.value === '') {
+            indicator.innerHTML = '';
+            return;
+        }
+
+        if (password1.value === password2.value) {
+            indicator.innerHTML = '<small class="text-success">Passwords match</small>';
+        } else {
+            indicator.innerHTML = '<small class="text-danger">Passwords do not match</small>';
+        }
+    }
+
+    password1.addEventListener('input', checkPasswordStrength);
+    password1.addEventListener('input', checkPasswordMatch);
+    password2.addEventListener('input', checkPasswordMatch);
+});
+</script>
+{% endblock %}

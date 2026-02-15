@@ -1,0 +1,121 @@
+<!-- recommendox/templates/recommendox/home.html -->
+{% extends 'recommendox/base.html' %}
+
+{% block title %}Home - Movie Recommendation System{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section text-center py-5 mb-5" style="background: linear-gradient(rgba(44, 62, 80, 0.9), rgba(52, 152, 219, 0.8)); color: white; border-radius: 10px;">
+    <h1 class="display-4 fw-bold mb-3">Discover Your Next Favorite</h1>
+    <p class="lead mb-4">Personalized movie and series recommendations based on your taste</p>
+    
+    <div class="search-box mx-auto" style="max-width: 600px;">
+        <form action="{% url 'recommendox:content_list' %}" method="GET" class="input-group input-group-lg">
+            <input type="text" name="search" class="form-control" placeholder="Search movies, series, actors...">
+            <button class="btn btn-light" type="submit">
+                <i class="fas fa-search"></i> Search
+            </button>
+        </form>
+        
+        <div class="mt-3 d-flex flex-wrap justify-content-center gap-2">
+            {% for genre in popular_genres %}
+            <a href="{% url 'recommendox:content_list' %}?genre={{ genre.genre }}" class="btn btn-sm btn-outline-light">
+                {{ genre.genre }}
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Stats -->
+<div class="row mb-5">
+</div>
+
+<!-- Trending Now -->
+<h2 class="section-title">🔥 Trending Now</h2>
+<div class="row mb-5">
+    {% for content in trending_content %}
+    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+        <div class="card content-card h-100">
+            <img src="{{ content.poster_url|default:'https://via.placeholder.com/300x400?text=No+Image' }}" 
+                 class="card-img-top content-poster" alt="{{ content.title }}">
+            <div class="card-body">
+                <h5 class="card-title" style="height: 48px; overflow: hidden;">{{ content.title }}</h5>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="genre-badge">{{ content.genre }}</span>
+                    <span class="rating-badge">
+                        <i class="fas fa-star"></i> {{ content.avg_rating|default:"N/A" }}
+                    </span>
+                </div>
+                <p class="card-text small text-muted" style="height: 60px; overflow: hidden;">
+                    {{ content.description|truncatechars:100 }}
+                </p>
+                <div class="d-flex justify-content-between">
+                    <span class="badge bg-secondary">{{ content.language }}</span>
+                    <a href="{% url 'recommendox:content_detail' content.id %}" class="btn btn-sm btn-primary-custom">
+                        View Details
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-4">
+        <i class="fas fa-film fa-3x text-muted mb-3"></i>
+        <p class="text-muted">No content available yet.</p>
+        {% if user.is_staff %}
+        <a href="{% url 'recommendox:manage_content' %}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Add Content
+        </a>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Recently Added -->
+<h2 class="section-title">🆕 Recently Added</h2>
+<div class="row mb-5">
+    {% for content in recent_content %}
+    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+        <div class="card content-card h-100">
+            <img src="{{ content.poster_url|default:'https://via.placeholder.com/300x400?text=No+Image' }}" 
+                 class="card-img-top content-poster" alt="{{ content.title }}">
+            <div class="card-body">
+                <h5 class="card-title" style="height: 48px; overflow: hidden;">{{ content.title }}</h5>
+                <div class="d-flex justify-content-between mb-2">
+                    <span class="badge bg-info">{{ content.content_type }}</span>
+                    <small class="text-muted">{{ content.release_date|date:"Y" }}</small>
+                </div>
+                <p class="card-text small text-muted" style="height: 60px; overflow: hidden;">
+                    {{ content.description|truncatechars:100 }}
+                </p>
+                <a href="{% url 'recommendox:content_detail' content.id %}" class="btn btn-sm btn-primary-custom w-100">
+                    <i class="fas fa-info-circle"></i> Details
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Call to Action -->
+<div class="text-center py-5 mt-5" style="background: #f8f9fa; border-radius: 10px;">
+    <h2 class="mb-3">Ready to Discover?</h2>
+    <p class="lead mb-4">Join thousands of users who find their perfect movies and series</p>
+    {% if not user.is_authenticated %}
+    <a href="{% url 'recommendox:register' %}" class="btn btn-primary-custom btn-lg me-3">
+        <i class="fas fa-user-plus"></i> Sign Up Free
+    </a>
+    <a href="{% url 'recommendox:login' %}" class="btn btn-outline-secondary btn-lg">
+        <i class="fas fa-sign-in-alt"></i> Login
+    </a>
+    {% else %}
+    <a href="{% url 'recommendox:content_list' %}" class="btn btn-primary-custom btn-lg me-3">
+        <i class="fas fa-th-list"></i> Browse All
+    </a>
+    <a href="{% url 'recommendox:user_dashboard' %}" class="btn btn-outline-secondary btn-lg">
+        <i class="fas fa-tachometer-alt"></i> Your Dashboard
+    </a>
+    {% endif %}
+</div>
+{% endblock %}

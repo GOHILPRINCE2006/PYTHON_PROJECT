@@ -1,0 +1,169 @@
+<!-- recommendox/templates/recommendox/admin_dashboard.html -->
+{% extends 'recommendox/base.html' %}
+
+{% block title %}Admin Dashboard - Movie Recommendation System{% endblock %}
+
+{% block content %}
+<!-- Admin Header -->
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
+        <p class="text-muted">Manage your movie recommendation system</p>
+</div>
+
+<!-- Quick Stats -->
+<div class="row mb-5">
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="stats-card text-center bg-primary text-white">
+            <i class="fas fa-users"></i>
+            <h3>{{ total_users }}</h3>
+            <p>Total Users</p>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="stats-card text-center bg-success text-white">
+            <i class="fas fa-film"></i>
+            <h3>{{ total_content }}</h3>
+            <p>Total Content</p>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="stats-card text-center bg-warning text-dark">
+            <i class="fas fa-comment"></i>
+            <h3>{{ total_reviews }}</h3>
+            <p>Total Reviews</p>
+        </div>
+    </div>
+    <div class="col-md-3 col-sm-6 mb-3">
+        <div class="stats-card text-center bg-danger text-white">
+            <i class="fas fa-clock"></i>
+            <h3>{{ pending_reviews }}</h3>
+            <p>Pending Reviews</p>
+        </div>
+    </div>
+</div>
+
+<!-- Two Column Layout -->
+<div class="row">
+    <!-- Recent Content -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-plus-circle"></i> Recently Added Content</h5>
+                <a href="{% url 'recommendox:manage_content' %}" class="btn btn-sm btn-primary">Add More</a>
+            </div>
+            <div class="card-body">
+                {% if recent_content %}
+                    {% for content in recent_content %}
+                    <div class="d-flex align-items-center mb-3 border-bottom pb-3">
+                        <img src="{{ content.poster_url|default:'https://via.placeholder.com/60x80?text=No+Image' }}" 
+                             class="rounded me-3" style="width: 60px; height: 80px; object-fit: cover;" 
+                             alt="{{ content.title }}">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-1">{{ content.title }}</h6>
+                            <div class="d-flex gap-2 mb-2">
+                                <span class="badge bg-info">{{ content.content_type }}</span>
+                                <span class="badge bg-secondary">{{ content.genre }}</span>
+                                <small class="text-muted">{{ content.created_at|date:"M d" }}</small>
+                            </div>
+                        </div>
+                        <div>
+                            <a href="{% url 'recommendox:content_detail' content.id %}" class="btn btn-sm btn-outline-primary">
+                                View
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-4">No content added yet.</p>
+                    <a href="{% url 'recommendox:manage_content' %}" class="btn btn-primary w-100">
+                        <i class="fas fa-plus"></i> Add First Content
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Reviews -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0"><i class="fas fa-comments"></i> Recent Reviews</h5>
+                <a href="{% url 'recommendox:moderate_reviews' %}" class="btn btn-sm btn-primary">Moderate All</a>
+            </div>
+            <div class="card-body">
+                {% if recent_reviews %}
+                    {% for review in recent_reviews %}
+                    <div class="mb-3 border-bottom pb-3">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <strong>{{ review.user.username }}</strong>
+                                <span class="badge bg-secondary ms-2">{{ review.content.title|truncatechars:20 }}</span>
+                            </div>
+                            <div>
+                                {% if review.is_approved %}
+                                <span class="badge bg-success">Approved</span>
+                                {% else %}
+                                <span class="badge bg-warning text-dark">Pending</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <p class="mb-2 small">{{ review.comment|truncatechars:100 }}</p>
+                        <div class="d-flex justify-content-between">
+                            <small class="text-muted">{{ review.review_date|date:"M d, Y H:i" }}</small>
+                            <div>
+                                <a href="{% url 'recommendox:moderate_reviews' %}" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-edit"></i> Moderate
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-4">No reviews yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Admin Actions -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Admin Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-3 col-sm-6">
+                        <a href="{% url 'recommendox:manage_content' %}" class="btn btn-success w-100 h-100 py-4">
+                            <i class="fas fa-plus-circle fa-2x mb-2"></i><br>
+                            Manage Content
+                        </a>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <a href="{% url 'recommendox:manage_users' %}" class="btn btn-primary w-100 h-100 py-4">
+                            <i class="fas fa-users fa-2x mb-2"></i><br>
+                            Manage Users
+                        </a>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <a href="{% url 'recommendox:moderate_reviews' %}" class="btn btn-warning w-100 h-100 py-4">
+                            <i class="fas fa-comment fa-2x mb-2"></i><br>
+                            Moderate Reviews
+                        </a>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <a href="/admin/" target="_blank" class="btn btn-danger w-100 h-100 py-4">
+                            <i class="fas fa-lock fa-2x mb-2"></i><br>
+                            Django Admin
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,38 @@
+<!-- templates/recommendox/edit_review.html -->
+{% extends 'recommendox/base.html' %}
+{% load static %}
+
+{% block title %}Edit Review{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-edit"></i> Edit Your Review</h5>
+            </div>
+            <div class="card-body">
+                <h6 class="mb-3">Content: <strong>{{ review.content.title }}</strong></h6>
+                
+                <form method="POST">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Your Review</label>
+                        <textarea name="comment" class="form-control" rows="6" required>{{ review.comment }}</textarea>
+                    </div>
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Update Review
+                        </button>
+                        <a href="{% url 'recommendox:content_detail' review.content.id %}" class="btn btn-secondary">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

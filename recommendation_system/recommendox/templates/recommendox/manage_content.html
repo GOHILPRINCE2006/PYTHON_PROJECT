@@ -1,0 +1,392 @@
+<!-- templates/recommendox/manage_content.html -->
+{% extends 'recommendox/base.html' %}
+{% load static %}
+
+{% block title %}Manage Content - Admin{% endblock %}
+
+{% block content %}
+<!-- Add New Content Form -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-plus-circle"></i> Add New Content</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+            <div class="alert alert-danger">
+                <strong>Error! Please fix the following:</strong>
+                <ul>
+                {% for field in form %}
+                    {% for error in field.errors %}
+                    <li>{{ field.label }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Title *</label>
+                    <input type="text" name="title" class="form-control" 
+                           value="{{ form.title.value|default:'' }}" required>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Content Type *</label>
+                    <select name="content_type" class="form-select" required>
+                        <option value="">Select Type</option>
+                        <option value="Movie" {% if form.content_type.value == 'Movie' %}selected{% endif %}>Movie</option>
+                        <option value="Web Series" {% if form.content_type.value == 'Web Series' %}selected{% endif %}>Web Series</option>
+                        <option value="TV Show" {% if form.content_type.value == 'TV Show' %}selected{% endif %}>TV Show</option>
+                        <option value="Documentary" {% if form.content_type.value == 'Documentary' %}selected{% endif %}>Documentary</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Genre *</label>
+                    <select name="genre" class="form-select" required>
+                        <option value="">Select Genre</option>
+                        <option value="Action" {% if form.genre.value == 'Action' %}selected{% endif %}>Action</option>
+                        <option value="Comedy" {% if form.genre.value == 'Comedy' %}selected{% endif %}>Comedy</option>
+                        <option value="Drama" {% if form.genre.value == 'Drama' %}selected{% endif %}>Drama</option>
+                        <option value="Sci-Fi" {% if form.genre.value == 'Sci-Fi' %}selected{% endif %}>Sci-Fi</option>
+                        <option value="Horror" {% if form.genre.value == 'Horror' %}selected{% endif %}>Horror</option>
+                        <option value="Romance" {% if form.genre.value == 'Romance' %}selected{% endif %}>Romance</option>
+                        <option value="Thriller" {% if form.genre.value == 'Thriller' %}selected{% endif %}>Thriller</option>
+                        <option value="Documentary" {% if form.genre.value == 'Documentary' %}selected{% endif %}>Documentary</option>
+                        <option value="Animation" {% if form.genre.value == 'Animation' %}selected{% endif %}>Animation</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Language *</label>
+                    <input type="text" name="language" class="form-control" 
+                        value="{{ form.language.value|default:'' }}" required>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Release Date *</label>
+                    <input type="date" name="release_date" class="form-control" 
+                        value="{{ form.release_date.value|date:'Y-m-d'|default:'' }}" required>
+                </div>
+                
+                <!-- ADD THIS MISSING DURATION FIELD -->
+                <div class="col-md-4 mb-3">
+                    <label class="form-label" id="durationLabel">
+                        {% if form.content_type.value == 'Web Series' %}
+                            Season *
+                        {% else %}
+                            Duration *
+                        {% endif %}
+                    </label>
+                    <input type="text" name="duration" class="form-control" 
+                        value="{{ form.duration.value|default:'' }}" 
+                        id="durationInput"
+                        placeholder="{% if form.content_type.value == 'Web Series' %}e.g., Season 1{% else %}e.g., 2h 30m{% endif %}" 
+                        required>
+                    <small class="text-muted" id="durationHelp">
+                        {% if form.content_type.value == 'Web Series' %}
+                            For web series: e.g., "Season 1"
+                        {% else %}
+                            For movies: e.g., "2h 30m"
+                        {% endif %}
+                    </small>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Director</label>
+                    <input type="text" name="director" class="form-control" 
+                           value="{{ form.director.value|default:'' }}">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Cast</label>
+                    <input type="text" name="cast" class="form-control" 
+                           value="{{ form.cast.value|default:'' }}">
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <label class="form-label">Description *</label>
+                <textarea name="description" class="form-control" rows="4" required>{{ form.description.value|default:'' }}</textarea>
+            </div>
+            
+            <!-- Add this section in manage_content.html before the submit button - JUST ONE PLATFORM -->
+            <div class="card mb-3">
+                <div class="card-header bg-info text-white">
+                    <h6 class="mb-0"><i class="fas fa-tv"></i> OTT Availability (Optional)</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-5 mb-3">
+                            <label class="form-label">Platform</label>
+                            <select name="ott_platform" class="form-select">
+                                <option value="">-- Not Available on OTT --</option>
+                                <option value="Netflix">Netflix</option>
+                                <option value="Amazon Prime">Amazon Prime Video</option>
+                                <option value="Disney+">Disney+ Hotstar</option>
+                                <option value="SonyLIV">SonyLIV</option>
+                                <option value="Zee5">ZEE5</option>
+                                <option value="JioCinema">JioCinema</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+                        <div class="col-md-5 mb-3">
+                            <label class="form-label">Watch URL</label>
+                            <input type="url" name="ott_url" class="form-control" placeholder="https://...">
+                        </div>
+                        <div class="col-md-2 mb-3">
+                            <label class="form-label">Free?</label>
+                            <select name="ott_free" class="form-select">
+                                <option value="False">No (Subscription)</option>
+                                <option value="True">Yes (Free)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <small class="text-muted">Select platform where this content is available.</small>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Poster URL</label>
+                    <input type="text" name="poster_url" class="form-control" 
+                           value="{{ form.poster_url.value|default:'' }}">
+                    <small class="text-muted">Leave empty for default image</small>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Trailer URL</label>
+                    <input type="text" name="trailer_url" class="form-control" 
+                           value="{{ form.trailer_url.value|default:'' }}">
+                </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Save Content
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Existing Content List -->
+<div class="card">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0"><i class="fas fa-list"></i> Existing Content ({{ content_list|length }})</h5>
+        <div>
+            <input type="text" id="searchContent" class="form-control form-control-sm" 
+                   placeholder="Search content..." style="width: 250px;">
+        </div>
+    </div>
+    <div class="card-body">
+        {% if content_list %}
+        <div class="table-responsive">
+            <table class="table table-hover" id="contentTable">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Poster</th>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Genre</th>
+                        <th>Release Date</th>
+                        <th>Rating</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for content in content_list %}
+                    <tr>
+                        <td>{{ content.id }}</td>
+                        <td>
+                            <img src="{{ content.poster_url|default:'https://via.placeholder.com/50x70?text=No+Image' }}" 
+                                 style="width: 50px; height: 70px; object-fit: cover; border-radius: 5px;">
+                        </td>
+                        <td>
+                            <strong>{{ content.title }}</strong><br>
+                            <small class="text-muted">{{ content.language }}</small>
+                        </td>
+                        <td><span class="badge bg-info">{{ content.content_type }}</span></td>
+                        <td><span class="badge bg-secondary">{{ content.genre }}</span></td>
+                        <td>{{ content.release_date|date:"Y-m-d" }}</td>
+                        <td>
+                            <span class="badge bg-warning text-dark">
+                                <i class="fas fa-star"></i> {{ content.avg_rating|default:"0" }}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="btn-group btn-group-sm">
+                                <a href="{% url 'recommendox:content_detail' content.id %}" 
+                                   class="btn btn-outline-primary" title="View">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="#" class="btn btn-outline-success" 
+                                   onclick="editContent({{ content.id }})" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <a href="#" class="btn btn-outline-danger" 
+                                   onclick="deleteContent({{ content.id }}, '{{ content.title }}')" 
+                                   title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted text-center py-5">
+            <i class="fas fa-film fa-3x mb-3"></i><br>
+            No content available. Add your first movie or series using the form above.
+        </p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title"><i class="fas fa-exclamation-triangle"></i> Confirm Delete</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete "<span id="deleteTitle"></span>"?</p>
+                <p class="text-danger"><small>This action cannot be undone!</small></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <form id="deleteForm" method="POST" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete Permanently</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-success text-white">
+                <h5 class="modal-title"><i class="fas fa-edit"></i> Edit Content</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" id="editModalBody">
+                <!-- Edit form will be loaded here via AJAX -->
+                <div class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Search functionality
+document.getElementById('searchContent').addEventListener('keyup', function() {
+    const searchText = this.value.toLowerCase();
+    const tableRows = document.querySelectorAll('#contentTable tbody tr');
+    
+    tableRows.forEach(row => {
+        const title = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+        const genre = row.querySelector('td:nth-child(5)').textContent.toLowerCase();
+        const type = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
+        
+        if (title.includes(searchText) || genre.includes(searchText) || type.includes(searchText)) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+});
+
+// Delete function
+function deleteContent(contentId, contentTitle) {
+    document.getElementById('deleteTitle').textContent = contentTitle;
+    document.getElementById('deleteForm').action = `/admin/manage-content/delete/${contentId}/`;
+    
+    var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+    deleteModal.show();
+}
+
+// Edit function
+function editContent(contentId) {
+    var editModal = new bootstrap.Modal(document.getElementById('editModal'));
+    editModal.show();
+    
+    // Load edit form via AJAX
+    fetch(`/admin/manage-content/edit/${contentId}/`)
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('editModalBody').innerHTML = html;
+        })
+        .catch(error => {
+            document.getElementById('editModalBody').innerHTML = `
+                <div class="alert alert-danger">
+                    Error loading edit form. Please try again.
+                </div>
+            `;
+        });
+}
+
+// Handle URL parameters - maintain state on page reload
+window.addEventListener('load', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('edited') === 'success') {
+        alert('Content updated successfully!');
+    } else if (urlParams.get('deleted') === 'success') {
+        alert('Content deleted successfully!');
+    } else if (urlParams.get('added') === 'success') {
+        alert('Content added successfully!');
+    }
+});
+
+const contentTypeSelect = document.querySelector('select[name="content_type"]');
+const durationLabel = document.getElementById('durationLabel');
+const durationInput = document.getElementById('durationInput');
+const durationHelp = document.getElementById('durationHelp');
+
+function updateDurationField() {
+    const contentType = contentTypeSelect.value;
+    
+    if (contentType === 'Movie') {
+        durationLabel.innerHTML = 'Duration *';
+        durationInput.placeholder = 'e.g., 2h 30m';
+        durationHelp.innerHTML = 'For movies: e.g., "2h 30m"';
+        durationInput.required = true;
+    } else if (contentType === 'Web Series') {
+        durationLabel.innerHTML = 'Season *';
+        durationInput.placeholder = 'e.g., Season 1, Season 1-3';
+        durationHelp.innerHTML = 'For web series: e.g., "Season 1" or "Season 1-3"';
+        durationInput.required = true;
+    } else if (contentType === 'TV Show') {
+        durationLabel.innerHTML = 'Seasons *';
+        durationInput.placeholder = 'e.g., Season 1-5';
+        durationHelp.innerHTML = 'For TV shows: e.g., "Season 1-5"';
+        durationInput.required = true;
+    } else {
+        durationLabel.innerHTML = 'Duration';
+        durationInput.placeholder = 'Optional';
+        durationHelp.innerHTML = 'Optional for documentaries';
+        durationInput.required = false;
+    }
+}
+
+// Initial call
+if (contentTypeSelect) {
+    contentTypeSelect.addEventListener('change', updateDurationField);
+    updateDurationField(); // Set initial state based on current value
+}
+</script>
+{% endblock %}
