@@ -37,6 +37,10 @@ urlpatterns = [
     path('admin/make-reviewer/<int:user_id>/', views.make_reviewer, name='make_reviewer'),
 
     # recommendox/urls.py - Add these URLs
+    path('creator/dashboard/', views.creator_dashboard, name='creator_dashboard'),
+    path('admin/make-creator/<int:user_id>/', views.make_creator, name='make_creator'),
+
+    # recommendox/urls.py - Add these URLs
 
     # recommendox/urls.py
     path('ott/browse/', views.ott_browse, name='ott_browse'),

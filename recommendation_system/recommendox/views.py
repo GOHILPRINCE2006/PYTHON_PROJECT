@@ -9,13 +9,16 @@ from django.core.paginator import Paginator
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from django import forms
+from django.utils import timezone
+from datetime import timedelta
 from .models import (
     Content, UserProfile, GoldenUser, Watchlist, 
-    Rating, Review, Analytics, Message, Reviewer,ContentOTT  
+    Rating, Review, Analytics, Message, Reviewer, ContentOTT, ContentCreator
 )
 from .forms import UserRegistrationForm, ContentForm, ReviewForm
 
-# ==================== HELPER FUNCTIONS ====================
+
+# ==================== HELPER FUNCTIONS & DECORATORS (MUST BE FIRST) ====================
 
 def is_reviewer(user):
     """Check if user has reviewer role"""
@@ -25,6 +28,33 @@ def is_reviewer(user):
         return hasattr(user.profile, 'reviewer_profile') and user.profile.reviewer_profile.is_active
     except:
         return False
+
+
+def is_content_creator(user):
+    """Check if user has content creator role"""
+    if not user.is_authenticated:
+        return False
+    try:
+        return hasattr(user.profile, 'creator_profile') and user.profile.creator_profile.is_active
+    except:
+        return False
+
+
+def content_creator_required(view_func):
+    """Decorator to check if user is content creator"""
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('recommendox:login')
+        
+        if request.user.is_staff:  # Admin can also access
+            return view_func(request, *args, **kwargs)
+        
+        if is_content_creator(request.user):
+            return view_func(request, *args, **kwargs)
+        
+        messages.error(request, 'You need to be a verified content creator to access this page.')
+        return redirect('recommendox:user_dashboard')
+    return wrapper
 
 
 def get_personalized_recommendations(user):
@@ -323,6 +353,7 @@ def add_review(request, content_id):
     
     return redirect('recommendox:content_detail', content_id=content_id)
 
+
 @login_required
 def edit_review(request, review_id):
     """Edit user's own review"""
@@ -366,50 +397,68 @@ def delete_review(request, review_id):
     return render(request, 'recommendox/confirm_delete.html', {'review': review})
 
 
-# ==================== ADMIN VIEWS ====================
+# ==================== CONTENT CREATOR VIEWS ====================
 
-@staff_member_required
-def admin_dashboard(request):
-    """Admin dashboard"""
-    # Statistics
-    total_users = User.objects.count()
-    total_content = Content.objects.count()
-    total_reviews = Review.objects.count()
-    pending_reviews = Review.objects.filter(is_approved=False).count()
-    approved_reviews = Review.objects.filter(is_approved=True).count()
-    total_reviewers = Reviewer.objects.count()
+@content_creator_required
+def creator_dashboard(request):
+    """Content Creator Dashboard"""
+    user = request.user
     
-    # Recent activity
-    recent_content = Content.objects.order_by('-created_at')[:5]
-    recent_reviews = Review.objects.order_by('-review_date')[:5]
+    # Get creator profile
+    creator = None
+    try:
+        creator = user.profile.creator_profile
+    except:
+        pass
+    
+    # Get content added by this creator (if you track this)
+    # You might need to add a 'added_by' field to Content model
+    # For now, show all content
+    recent_content = Content.objects.order_by('-created_at')[:10]
+    
+    # Get statistics
+    total_content = Content.objects.count()
+    recent_count = Content.objects.filter(created_at__gte=timezone.now() - timedelta(days=7)).count()
     
     context = {
-        'total_users': total_users,
-        'total_content': total_content,
-        'total_reviews': total_reviews,
-        'pending_reviews': pending_reviews,
-        'approved_reviews': approved_reviews,
-        'total_reviewers': total_reviewers,
+        'creator': creator,
         'recent_content': recent_content,
-        'recent_reviews': recent_reviews,
+        'total_content': total_content,
+        'recent_count': recent_count,
     }
-    return render(request, 'recommendox/admin_dashboard.html', context)
+    return render(request, 'recommendox/creator_dashboard.html', context)
 
 
-@staff_member_required
+@content_creator_required
 def manage_content(request):
-    """Content management for admin"""
+    """Content management for admin and creators"""
     if request.method == 'POST':
         form = ContentForm(request.POST)
         if form.is_valid():
-            form.save()
-            messages.success(request, 'Content added successfully!')
+            # Save the content first
+            content = form.save()
+            
+            # Save ONE OTT platform
+            platform = request.POST.get('ott_platform')
+            url = request.POST.get('ott_url')
+            is_free = request.POST.get('ott_free') == 'True'
+            
+            if platform and url:  # Only save if both platform and URL are provided
+                ContentOTT.objects.create(
+                    content=content,
+                    platform_name=platform,
+                    watch_url=url,
+                    is_free=is_free
+                )
+                messages.success(request, f'Content added with OTT platform: {platform}')
+            else:
+                messages.success(request, 'Content added successfully (no OTT platform)')
+            
             return redirect('recommendox:manage_content')
     else:
         form = ContentForm()
     
     content_list = Content.objects.all().order_by('-created_at')
-    
     context = {
         'form': form,
         'content_list': content_list,
@@ -417,7 +466,7 @@ def manage_content(request):
     return render(request, 'recommendox/manage_content.html', context)
 
 
-@staff_member_required
+@content_creator_required
 def edit_content(request, content_id):
     """Edit content"""
     content = get_object_or_404(Content, id=content_id)
@@ -428,8 +477,6 @@ def edit_content(request, content_id):
             form.save()
             
             # Update OTT platform (delete old, create new)
-            from .models import ContentOTT
-            # Delete existing OTT entry
             ContentOTT.objects.filter(content=content).delete()
             
             # Create new OTT entry
@@ -450,18 +497,17 @@ def edit_content(request, content_id):
     else:
         form = ContentForm(instance=content)
         # Get existing OTT data for the form
-        from .models import ContentOTT
         ott = ContentOTT.objects.filter(content=content).first()
     
     context = {
         'form': form,
         'content': content,
-        'ott': ott if 'ott' in locals() else None,
+        'ott': ott,
     }
     return render(request, 'recommendox/edit_content.html', context)
 
 
-@staff_member_required
+@content_creator_required
 def delete_content(request, content_id):
     """Delete content"""
     if request.method == 'POST':
@@ -471,6 +517,39 @@ def delete_content(request, content_id):
         messages.success(request, f'"{title}" deleted successfully!')
     
     return redirect('recommendox:manage_content')
+
+
+# ==================== ADMIN VIEWS ====================
+
+@staff_member_required
+def admin_dashboard(request):
+    """Admin dashboard"""
+    # Statistics
+    total_users = User.objects.count()
+    total_content = Content.objects.count()
+    total_reviews = Review.objects.count()
+    pending_reviews = Review.objects.filter(is_approved=False).count()
+    approved_reviews = Review.objects.filter(is_approved=True).count()
+    total_reviewers = Reviewer.objects.count()
+    total_creators = ContentCreator.objects.count()
+    
+    # Recent activity
+    recent_content = Content.objects.order_by('-created_at')[:5]
+    recent_reviews = Review.objects.order_by('-review_date')[:5]
+    
+    context = {
+        'total_users': total_users,
+        'total_content': total_content,
+        'total_reviews': total_reviews,
+        'pending_reviews': pending_reviews,
+        'approved_reviews': approved_reviews,
+        'total_reviewers': total_reviewers,
+        'total_creators': total_creators,
+        'recent_content': recent_content,
+        'recent_reviews': recent_reviews,
+    }
+    return render(request, 'recommendox/admin_dashboard.html', context)
+
 
 @staff_member_required
 def manage_users(request):
@@ -503,12 +582,17 @@ def manage_users(request):
             user.delete()
             messages.success(request, f'User "{username}" deleted.')
     
-    # Get reviewer status for each user
+    # Get reviewer status and creator status for each user
     for user in users:
         try:
             user.is_reviewer = hasattr(user.profile, 'reviewer_profile') and user.profile.reviewer_profile.is_active
         except:
             user.is_reviewer = False
+        
+        try:
+            user.is_creator = hasattr(user.profile, 'creator_profile') and user.profile.creator_profile.is_active
+        except:
+            user.is_creator = False
     
     context = {
         'users': users,
@@ -535,6 +619,28 @@ def make_reviewer(request, user_id):
             is_active=True
         )
         messages.success(request, f'{user.username} is now a reviewer! Their reviews will be auto-approved.')
+    
+    return redirect('recommendox:manage_users')
+
+
+@staff_member_required
+def make_creator(request, user_id):
+    """Upgrade a user to content creator role"""
+    user = get_object_or_404(User, id=user_id)
+    profile, created = UserProfile.objects.get_or_create(user=user)
+    
+    # Check if already creator
+    try:
+        if profile.creator_profile:
+            messages.warning(request, f'{user.username} is already a content creator!')
+            return redirect('recommendox:manage_users')
+    except:
+        # Create creator profile
+        ContentCreator.objects.create(
+            user_profile=profile,
+            is_active=True
+        )
+        messages.success(request, f'{user.username} is now a content creator! They can add/edit/delete content.')
     
     return redirect('recommendox:manage_users')
 
@@ -584,43 +690,8 @@ def moderate_reviews(request):
     }
     return render(request, 'recommendox/moderate_reviews.html', context)
 
-# recommendox/views.py - Update the POST part
-@staff_member_required
-def manage_content(request):
-    """Content management for admin"""
-    if request.method == 'POST':
-        form = ContentForm(request.POST)
-        if form.is_valid():
-            # Save the content first
-            content = form.save()
-            
-            # Save ONE OTT platform
-            platform = request.POST.get('ott_platform')
-            url = request.POST.get('ott_url')
-            is_free = request.POST.get('ott_free') == 'True'
-            
-            if platform and url:  # Only save if both platform and URL are provided
-                from .models import ContentOTT
-                ContentOTT.objects.create(
-                    content=content,
-                    platform_name=platform,
-                    watch_url=url,
-                    is_free=is_free
-                )
-                messages.success(request, f'Content added with OTT platform: {platform}')
-            else:
-                messages.success(request, 'Content added successfully (no OTT platform)')
-            
-            return redirect('recommendox:manage_content')
-    else:
-        form = ContentForm()
-    
-    content_list = Content.objects.all().order_by('-created_at')
-    context = {
-        'form': form,
-        'content_list': content_list,
-    }
-    return render(request, 'recommendox/manage_content.html', context)
+
+# ==================== OTT VIEWS ====================
 
 def ott_browse(request):
     """Browse content by OTT platform"""

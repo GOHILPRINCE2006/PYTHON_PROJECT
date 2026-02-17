@@ -2,7 +2,7 @@
 from django.contrib import admin
 from .models import (
     Content, Season, Episode, UserProfile, GoldenUser, 
-    Watchlist, Rating, Review, Analytics, Message, Reviewer, ContentOTT
+    Watchlist, Rating, Review, Analytics, Message, Reviewer, ContentOTT, ContentCreator
 )
 
 # Register your models here
@@ -79,3 +79,10 @@ class ContentOTTAdmin(admin.ModelAdmin):
     list_display = ('id', 'content', 'platform_name', 'is_free')
     list_filter = ('platform_name', 'is_free')
     search_fields = ('content__title',)
+
+
+@admin.register(ContentCreator)
+class ContentCreatorAdmin(admin.ModelAdmin):
+    list_display = ('id', 'user_profile', 'is_active', 'verified_at', 'total_contents_added')
+    list_filter = ('is_active',)
+    search_fields = ('user_profile__user__username',)

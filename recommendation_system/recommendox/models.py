@@ -285,3 +285,25 @@ class Message(models.Model):
     def mark_as_read(self):  # ADD THIS
         self.is_read = True
         self.save()
+
+# recommendox/models.py - Add this after Reviewer model
+
+class ContentCreator(models.Model):
+    """Content Creator - can add/edit/delete content like admin"""
+    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name='creator_profile')
+    is_active = models.BooleanField(default=True)
+    verified_at = models.DateTimeField(auto_now_add=True)
+    expertise = models.CharField(max_length=200, blank=True, null=True, help_text="e.g., Movie Reviewer, Series Expert")
+    total_contents_added = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return f"Content Creator: {self.user_profile.user.username}"
+    
+    def increment_content_count(self):
+        self.total_contents_added += 1
+        self.save()
+    
+    class Meta:
+        permissions = [
+            ("can_manage_content", "Can add, edit, delete content"),
+        ]

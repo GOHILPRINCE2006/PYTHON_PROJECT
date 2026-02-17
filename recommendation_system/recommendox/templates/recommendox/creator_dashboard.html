@@ -1,0 +1,119 @@
+<!-- templates/recommendox/creator_dashboard.html -->
+{% extends 'recommendox/base.html' %}
+{% load static %}
+
+{% block title %}Content Creator Dashboard{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1><i class="fas fa-pen-fancy"></i> Content Creator Dashboard</h1>
+        <p class="text-muted">Welcome back, {{ user.username }}! You can add, edit, and delete content.</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'recommendox:manage_content' %}" class="btn btn-primary">
+            <i class="fas fa-plus-circle"></i> Add New Content
+        </a>
+    </div>
+</div>
+
+<!-- Stats Cards -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="stats-card text-center bg-primary text-white">
+            <i class="fas fa-film"></i>
+            <h3>{{ total_content }}</h3>
+            <p>Total Content</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stats-card text-center bg-success text-white">
+            <i class="fas fa-calendar-week"></i>
+            <h3>{{ recent_count }}</h3>
+            <p>Added This Week</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stats-card text-center bg-info text-white">
+            <i class="fas fa-check-circle"></i>
+            <h3>Verified</h3>
+            <p>Content Creator</p>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="fas fa-bolt"></i> Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <a href="{% url 'recommendox:manage_content' %}" class="btn btn-outline-primary w-100 py-3">
+                            <i class="fas fa-plus-circle fa-2x mb-2"></i><br>
+                            Add New Content
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{% url 'recommendox:manage_content' %}" class="btn btn-outline-warning w-100 py-3">
+                            <i class="fas fa-edit fa-2x mb-2"></i><br>
+                            Edit Content
+                        </a>
+                    </div>
+                    <div class="col-md-4">
+                        <a href="{% url 'recommendox:manage_content' %}" class="btn btn-outline-danger w-100 py-3">
+                            <i class="fas fa-trash fa-2x mb-2"></i><br>
+                            Delete Content
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Content -->
+<div class="card">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-history"></i> Recent Content in System</h5>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Type</th>
+                        <th>Genre</th>
+                        <th>Added</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in recent_content %}
+                    <tr>
+                        <td>{{ item.id }}</td>
+                        <td>{{ item.title }}</td>
+                        <td>{{ item.content_type }}</td>
+                        <td>{{ item.genre }}</td>
+                        <td>{{ item.created_at|date:"M d, Y" }}</td>
+                        <td>
+                            <a href="{% url 'recommendox:content_detail' item.id %}" class="btn btn-sm btn-outline-primary">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{% url 'recommendox:edit_content' item.id %}" class="btn btn-sm btn-outline-success">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

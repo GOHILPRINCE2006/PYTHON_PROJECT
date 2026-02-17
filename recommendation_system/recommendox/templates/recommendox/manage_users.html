@@ -8,7 +8,7 @@
 <div class="row mb-4">
     <div class="col-md-8">
         <h1><i class="fas fa-users"></i> Manage Users</h1>
-        <p class="text-muted">View, block, unblock, delete users and promote to reviewers</p>
+        <p class="text-muted">View, block, unblock, delete users and promote to reviewers or content creators</p>
     </div>
     <div class="col-md-4 text-end">
         <a href="{% url 'recommendox:admin_dashboard' %}" class="btn btn-outline-secondary">
@@ -75,8 +75,14 @@
                             {% endif %}
                         </td>
                         <td>
-                            {% if u.is_reviewer %}
+                            {% if u.is_superuser %}
+                            <span class="badge bg-danger">Admin</span>
+                            {% elif u.is_creator %}
                             <span class="badge bg-info">
+                                <i class="fas fa-pen-fancy"></i> Creator
+                            </span>
+                            {% elif u.is_reviewer %}
+                            <span class="badge bg-success">
                                 <i class="fas fa-check-circle"></i> Reviewer
                             </span>
                             {% else %}
@@ -84,13 +90,23 @@
                             {% endif %}
                         </td>
                         <td>
-                            <div class="btn-group btn-group-sm">
+                            <div class="btn-group btn-group-sm" style="gap: 5px; flex-wrap: wrap;">
                                 <!-- Make Reviewer Button -->
-                                {% if not u.is_reviewer and not u.is_superuser %}
+                                {% if not u.is_reviewer and not u.is_creator and not u.is_superuser %}
                                 <form method="POST" action="{% url 'recommendox:make_reviewer' u.id %}" class="d-inline">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-success" title="Make Reviewer">
-                                        <i class="fas fa-user-check"></i> Make Reviewer
+                                        <i class="fas fa-user-check"></i> Reviewer
+                                    </button>
+                                </form>
+                                {% endif %}
+                                
+                                <!-- Make Creator Button -->
+                                {% if not u.is_creator and not u.is_reviewer and not u.is_superuser %}
+                                <form method="POST" action="{% url 'recommendox:make_creator' u.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-info" title="Make Content Creator">
+                                        <i class="fas fa-pen-fancy"></i> Creator
                                     </button>
                                 </form>
                                 {% endif %}
