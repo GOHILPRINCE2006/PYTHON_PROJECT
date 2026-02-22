@@ -197,12 +197,12 @@ def content_detail(request, content_id):
         
         in_watchlist = Watchlist.objects.filter(user=request.user, content=content).exists()
     
-    # Get similar content (same genre)
+    # Get similar content (same genre) 
     similar_content = Content.objects.filter(
         genre=content.genre
     ).exclude(id=content_id).annotate(
-        avg_rating=Avg('ratings__rating_value')
-    ).order_by('-avg_rating')[:4]
+        rating_avg=Avg('ratings__rating_value')  
+    ).order_by('-rating_avg')[:4]
     
     # Get approved reviews
     reviews = Review.objects.filter(content=content, is_approved=True).order_by('-review_date')
@@ -211,7 +211,7 @@ def content_detail(request, content_id):
         'content': content,
         'user_rating': user_rating,
         'in_watchlist': in_watchlist,
-        'similar_content': similar_content,
+        'similar_content': similar_content, 
         'reviews': reviews,
     }
     return render(request, 'recommendox/content_detail.html', context)
