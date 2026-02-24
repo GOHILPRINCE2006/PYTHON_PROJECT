@@ -1,7 +1,7 @@
 <!-- recommendox/templates/recommendox/base.html -->
 <!DOCTYPE html>
 {% load static %}
-{% load nav_active %}  <!-- Add this line to load your custom template tag -->
+{% load nav_active %}
 
 <html lang="en">
 <head>
@@ -27,12 +27,14 @@
         body {
             background-color: var(--light-bg);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding-top: 70px;
+            padding-top: 76px;  /* Increased from 70px to account for navbar height */
         }
         
         .navbar {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 0.5rem 1rem;
+            min-height: 60px;
         }
         
         .navbar-brand {
@@ -40,10 +42,64 @@
             font-size: 1.5rem;
         }
         
+        .navbar-nav {
+            align-items: center;
+        }
+        
+        .navbar-nav .nav-link {
+            padding: 0.5rem 0.8rem;
+            margin: 0 0.2rem;
+            border-radius: 5px;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+        
+        .navbar-nav .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        
         .navbar-nav .nav-link.active {
             font-weight: bold;
             background-color: rgba(255, 255, 255, 0.2);
-            border-radius: 5px;
+        }
+        
+        /* Badge styles */
+        .badge-pending {
+            background-color: #ffc107;
+            color: #000;
+            font-size: 0.65rem;
+            padding: 0.2rem 0.4rem;
+            margin-left: 5px;
+            border-radius: 10px;
+            font-weight: normal;
+        }
+        
+        .badge-verified {
+            background-color: #28a745;
+            color: white;
+            font-size: 0.65rem;
+            padding: 0.2rem 0.4rem;
+            margin-left: 5px;
+            border-radius: 10px;
+            font-weight: normal;
+        }
+        
+        /* Responsive fixes */
+        @media (max-width: 1200px) {
+            .navbar-nav .nav-link {
+                padding: 0.5rem 0.5rem;
+                font-size: 0.85rem;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .navbar-nav {
+                align-items: flex-start;
+            }
+            .navbar-nav .nav-link {
+                padding: 0.5rem 0;
+            }
         }
         
         .footer {
@@ -150,6 +206,7 @@
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Left side navigation - COMPACT VERSION -->
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link {% active request '^/$' %} {% active request '/home' %}" href="{% url 'recommendox:home' %}">
@@ -163,54 +220,79 @@
                     </li>
                     
                     {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link {% active request '/dashboard/' %}" href="{% url 'recommendox:user_dashboard' %}">
-                            <i class="fas fa-user"></i> Dashboard
-                        </a>
-                    </li>
-                    {% endif %}
+                        <!-- Dashboard - Always show -->
+                        <li class="nav-item">
+                            <a class="nav-link {% active request '/dashboard/' %}" href="{% url 'recommendox:user_dashboard' %}">
+                                <i class="fas fa-user"></i> Dashboard
+                            </a>
+                        </li>
+                        
+                        <!-- GOLDEN USER - CONDENSED VERSION -->
+                        {% if user.profile.golden_profile %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if '/golden/' in request.path %}active{% endif %}" 
+                                   href="{% url 'recommendox:golden_dashboard' %}">
+                                    <i class="fas fa-crown"></i> Golden
+                                    {% if user.profile.golden_profile.verification_status == 'Pending' %}
+                                        <span class="badge-pending">⏳</span>
+                                    {% elif user.profile.golden_profile.verification_status == 'Verified' %}
+                                        <span class="badge-verified">✓</span>
+                                    {% endif %}
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if '/golden/become/' in request.path %}active{% endif %}" 
+                                   href="{% url 'recommendox:become_golden' %}">
+                                    <i class="fas fa-crown"></i> Join Golden
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        <!-- OTT -->
+                        <li class="nav-item">
+                            <a class="nav-link {% if '/ott/browse/' in request.path %}active{% endif %}" 
+                               href="{% url 'recommendox:ott_browse' %}">
+                                <i class="fas fa-tv"></i> OTT
+                            </a>
+                        </li>
 
-                    {% if user.is_authenticated %}
-                   
-                    <li class="nav-item">
-                        <a class="nav-link {% if '/ott/browse/' in request.path %}active{% endif %}" 
-                        href="{% url 'recommendox:ott_browse' %}">
-                            <i class="fas fa-tv"></i> OTT
-                        </a>
-                    </li>
-                    {% endif %}
+                        <!-- Creator -->
+                        {% if user.profile.creator_profile or user.is_staff %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if '/creator/' in request.path %}active{% endif %}" 
+                               href="{% url 'recommendox:creator_dashboard' %}">
+                                <i class="fas fa-pen-fancy"></i> Creator
+                            </a>
+                        </li>
+                        {% endif %}
 
-                    {% if user.is_authenticated and user.profile.creator_profile or user.is_staff %}
-                    <li class="nav-item">
-                        <a class="nav-link {% if '/creator/' in request.path %}active{% endif %}" 
-                        href="{% url 'recommendox:creator_dashboard' %}">
-                            <i class="fas fa-pen-fancy"></i> Creator
-                        </a>
-                    </li>
-                    {% endif %}
-
-                    {% if user.is_staff %}
-                    <li class="nav-item">
-                        <a class="nav-link {% if '/admin' in request.path or '/manage-content' in request.path or '/manage-users' in request.path or '/moderate-reviews' in request.path %}active{% endif %}" 
-                        href="{% url 'recommendox:admin_dashboard' %}">
-                            <i class="fas fa-tachometer-alt"></i> Admin
-                        </a>
-                    </li>
+                        <!-- Admin -->
+                        {% if user.is_staff %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if '/admin' in request.path or '/manage-content' in request.path or '/manage-users' in request.path or '/moderate-reviews' in request.path %}active{% endif %}" 
+                               href="{% url 'recommendox:admin_dashboard' %}">
+                                <i class="fas fa-tachometer-alt"></i> Admin
+                            </a>
+                        </li>
+                        {% endif %}
                     {% endif %}
                 </ul>
                 
+                <!-- Search Form -->
                 <form class="d-flex me-3" action="{% url 'recommendox:content_list' %}" method="GET">
-                    <input class="form-control me-2" type="search" name="search" placeholder="Search movies/series...">
+                    <input class="form-control me-2" type="search" name="search" placeholder="Search...">
                     <button class="btn btn-outline-light" type="submit">
                         <i class="fas fa-search"></i>
                     </button>
                 </form>
                 
+                <!-- User Menu -->
                 <ul class="navbar-nav">
                     {% if user.is_authenticated %}
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle {% active request '/dashboard/' %}" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
-                                <i class="fas fa-user-circle"></i> {{ user.username }}
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                                <i class="fas fa-user-circle"></i> {{ user.username|truncatechars:8 }}
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li>
@@ -218,6 +300,13 @@
                                         <i class="fas fa-tachometer-alt"></i> Dashboard
                                     </a>
                                 </li>
+                                {% if user.profile.golden_profile %}
+                                <li>
+                                    <a class="dropdown-item" href="{% url 'recommendox:golden_dashboard' %}">
+                                        <i class="fas fa-crown"></i> Golden Dashboard
+                                    </a>
+                                </li>
+                                {% endif %}
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <a class="dropdown-item" href="{% url 'recommendox:logout' %}">
@@ -243,6 +332,7 @@
         </div>
     </nav>
 
+    <!-- Messages -->
     {% if messages %}
     <div class="container mt-3">
         {% for message in messages %}
@@ -254,10 +344,12 @@
     </div>
     {% endif %}
 
-    <main class="container">
+    <!-- Main Content - Added top margin for spacing -->
+    <main class="container" style="margin-top: 20px;">
         {% block content %}{% endblock %}
     </main>
 
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">   
             <div class="text-center">
@@ -271,9 +363,7 @@
     
     <!-- Custom JS -->
     <script>
-    
         document.addEventListener('DOMContentLoaded', function() {
-    
             const ratingStars = document.querySelectorAll('.rating-star');
             ratingStars.forEach(star => {
                 star.addEventListener('click', function() {

@@ -1,0 +1,192 @@
+<!-- templates/recommendox/golden_dashboard.html -->
+{% extends 'recommendox/base.html' %}
+{% load static %}
+
+{% block title %}Golden User Dashboard{% endblock %}
+
+{% block content %}
+<!-- Professional Profile Header -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card bg-dark text-white">
+            {% if golden.cover_image %}
+            <img src="{{ golden.cover_image.url }}" class="card-img" style="height: 200px; object-fit: cover; opacity: 0.5;">
+            {% else %}
+            <div style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+            {% endif %}
+            
+            <div class="card-img-overlay d-flex align-items-end">
+                <div class="d-flex align-items-center">
+                    {% if golden.profile_image %}
+                    <img src="{{ golden.profile_image.url }}" class="rounded-circle border border-3 border-white" 
+                         style="width: 100px; height: 100px; object-fit: cover;">
+                    {% else %}
+                    <div class="bg-secondary rounded-circle border border-3 border-white d-flex align-items-center justify-content-center"
+                         style="width: 100px; height: 100px;">
+                        <i class="fas fa-user fa-3x text-white"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="ms-3">
+                        <h2 class="mb-0">{{ user.username }}</h2>
+                        <p class="mb-0">{{ golden.profession }}</p>
+                        {{ golden.get_verification_badge|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Overview -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stats-card text-center bg-primary text-white">
+            <i class="fas fa-film"></i>
+            <h3>{{ total_content }}</h3>
+            <p>Total Content</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card text-center bg-success text-white">
+            <i class="fas fa-star"></i>
+            <h3>{{ avg_rating_all|floatformat:1 }}</h3>
+            <p>Average Rating</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card text-center bg-info text-white">
+            <i class="fas fa-comment"></i>
+            <h3>{{ total_reviews }}</h3>
+            <p>Total Reviews</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card text-center bg-warning text-dark">
+            <i class="fas fa-tv"></i>
+            <h3>{{ platform_stats|length }}</h3>
+            <p>OTT Platforms</p>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Content Analytics -->
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Content Analytics</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Title</th>
+                                <th>Type</th>
+                                <th>Ratings</th>
+                                <th>Avg Rating</th>
+                                <th>Reviews</th>
+                                <th>OTT</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for content in content_stats %}
+                            <tr>
+                                <td>{{ content.title }}</td>
+                                <td>{{ content.content_type }}</td>
+                                <td>{{ content.total_ratings }}</td>
+                                <td>
+                                    <span class="badge bg-warning">
+                                        {{ content.rating_avg|floatformat:1 }}/5
+                                    </span>
+                                </td>
+                                <td>{{ content.total_reviews }}</td>
+                                <td>
+                                    {% for ott in content.ott_platforms_list %}
+                                    <span class="badge bg-info">{{ ott.platform_name }}</span>
+                                    {% empty %}
+                                    <span class="badge bg-secondary">None</span>
+                                    {% endfor %}
+                                </td>
+                                <td>
+                                    <a href="{% url 'recommendox:golden_content_analytics' content.id %}" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-chart-line"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Platform Availability Stats - R.2.1 -->
+        <div class="card mb-4">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-tv"></i> OTT Platform Availability</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for platform in platform_stats %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body text-center">
+                                <h5>{{ platform.platform_name }}</h5>
+                                <h3>{{ platform.total_content }}</h3>
+                                <p>Content Available</p>
+                                <span class="badge bg-success">{{ platform.free_content }} Free</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">No platform data available.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recent Reviews -->
+    <div class="col-md-4">
+        <div class="card mb-4">
+            <div class="card-header bg-success text-white">
+                <h5 class="mb-0"><i class="fas fa-comments"></i> Recent Audience Feedback</h5>
+            </div>
+            <div class="card-body" style="max-height: 500px; overflow-y: auto;">
+                {% for review in recent_reviews %}
+                <div class="border-bottom mb-3 pb-3">
+                    <div class="d-flex justify-content-between">
+                        <strong>{{ review.user.username }}</strong>
+                        <small class="text-muted">{{ review.review_date|date:"M d, Y" }}</small>
+                    </div>
+                    <p class="mb-1">{{ review.comment|truncatechars:100 }}</p>
+                    <small class="text-muted">on <strong>{{ review.content.title }}</strong></small>
+                </div>
+                {% empty %}
+                <p class="text-muted">No recent reviews.</p>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <!-- Professional Info -->
+        <div class="card">
+            <div class="card-header bg-warning text-dark">
+                <h5 class="mb-0"><i class="fas fa-id-card"></i> Professional Info</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Profession:</strong> {{ golden.profession }}</p>
+                <p><strong>Experience:</strong> {{ golden.years_of_experience }} years</p>
+                {% if golden.company %}<p><strong>Company:</strong> {{ golden.company }}</p>{% endif %}
+                <p><strong>Notable Works:</strong> {{ golden.notable_works|truncatechars:100 }}</p>
+                <p><strong>Content Views:</strong> {{ golden.total_content_views }}</p>
+                <p><strong>Reviews Given:</strong> {{ golden.total_reviews_given }}</p>
+                <p><strong>Joined:</strong> {{ golden.created_at|date:"M d, Y" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

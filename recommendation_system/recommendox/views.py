@@ -11,13 +11,11 @@ from django.contrib import messages
 from django import forms
 from django.utils import timezone
 from datetime import timedelta
+from .forms import UserRegistrationForm, ContentForm, ReviewForm 
 from .models import (
-    Content, UserProfile, Watchlist, 
-    Rating, Review, Reviewer, ContentOTT, ContentCreator
-    #GoldenUser,Analytics, Message
+    Content, UserProfile, GoldenUser, Watchlist, 
+    Rating, Review, Analytics, Message, Reviewer, ContentOTT, ContentCreator
 )
-from .forms import UserRegistrationForm, ContentForm #ReviewForm
-
 
 #HELPER FUNCTIONS 
 
@@ -537,6 +535,9 @@ def admin_dashboard(request):
     total_reviewers = Reviewer.objects.count()
     total_creators = ContentCreator.objects.count()
     
+    # ADD THIS - Golden User stats
+    pending_golden = GoldenUser.objects.filter(verification_status='Pending').count()
+    
     # Recent activity
     recent_content = Content.objects.order_by('-created_at')[:5]
     recent_reviews = Review.objects.order_by('-review_date')[:5]
@@ -549,6 +550,7 @@ def admin_dashboard(request):
         'approved_reviews': approved_reviews,
         'total_reviewers': total_reviewers,
         'total_creators': total_creators,
+        'pending_golden': pending_golden,  # ADD THIS
         'recent_content': recent_content,
         'recent_reviews': recent_reviews,
     }
@@ -724,3 +726,302 @@ def ott_browse(request):
         'free_only': free_only,
     }
     return render(request, 'recommendox/ott_browse.html', context)
+
+# recommendox/views.py - Add these views
+
+# Helper function to check if user is golden user
+def is_golden_user(user):
+    """Check if user has golden user profile"""
+    if not user.is_authenticated:
+        return False
+    try:
+        return hasattr(user.profile, 'golden_profile')
+    except:
+        return False
+
+# Decorator for golden user access
+def golden_user_required(view_func):
+    """Decorator to check if user is golden user"""
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return redirect('recommendox:login')
+        
+        if request.user.is_staff:  # Admin can also access
+            return view_func(request, *args, **kwargs)
+        
+        if is_golden_user(request.user):
+            return view_func(request, *args, **kwargs)
+        
+        messages.error(request, 'This section is only for verified Golden Users.')
+        return redirect('recommendox:user_dashboard')
+    return wrapper
+
+@login_required
+def become_golden_user(request):
+    """Apply to become a golden user"""
+    user = request.user
+    
+    # Check if already golden user
+    try:
+        if hasattr(user.profile, 'golden_profile'):
+            golden = user.profile.golden_profile
+            if golden.verification_status == 'Pending':
+                messages.info(request, 'Your Golden User application is pending verification.')
+                return redirect('recommendox:golden_dashboard')
+            elif golden.verification_status == 'Verified':
+                messages.success(request, 'You are already a verified Golden User!')
+                return redirect('recommendox:golden_dashboard')
+            elif golden.verification_status == 'Rejected':
+                # Allow re-application if rejected
+                messages.warning(request, 'Your previous application was rejected. You can apply again.')
+                # Delete old rejected profile so they can reapply
+                golden.delete()
+    except AttributeError:
+        # User has no profile or golden_profile attribute
+        pass
+    except:
+        # Other errors - just continue to application form
+        pass
+    
+    if request.method == 'POST':
+        # Get form data
+        profession = request.POST.get('profession')
+        bio = request.POST.get('bio')
+        years_experience = request.POST.get('years_experience', 0)
+        company = request.POST.get('company', '')
+        website = request.POST.get('website', '')
+        notable_works = request.POST.get('notable_works', '')
+        awards = request.POST.get('awards', '')
+        
+        # Handle social media links
+        social_media = {
+            'twitter': request.POST.get('twitter', ''),
+            'instagram': request.POST.get('instagram', ''),
+            'linkedin': request.POST.get('linkedin', ''),
+            'imdb': request.POST.get('imdb', ''),
+        }
+        
+        # Handle file uploads
+        profile_image = request.FILES.get('profile_image')
+        cover_image = request.FILES.get('cover_image')
+        verification_docs = request.FILES.get('verification_docs')
+        
+        # Get or create user profile
+        profile, created = UserProfile.objects.get_or_create(user=user)
+        
+        # Create golden user profile
+        golden_user = GoldenUser.objects.create(
+            user_profile=profile,
+            profession=profession,
+            bio=bio,
+            years_of_experience=years_experience,
+            company=company,
+            website=website,
+            social_media_links=social_media,
+            notable_works=notable_works,
+            awards=awards,
+            profile_image=profile_image,
+            cover_image=cover_image,
+            verification_documents=verification_docs,
+            verification_status='Pending'
+        )
+        
+        messages.success(request, 'Your Golden User application has been submitted for verification!')
+        return redirect('recommendox:golden_dashboard')
+    
+    # GET request - show application form
+    professions = GoldenUser.PROFESSION_CHOICES
+    return render(request, 'recommendox/become_golden.html', {'professions': professions})
+
+
+@golden_user_required
+def golden_dashboard(request):
+    """Golden User Dashboard - Shows different content based on verification status"""
+    user = request.user
+    golden = user.profile.golden_profile
+    
+    # If pending verification, show pending message
+    if golden.verification_status == 'Pending':
+        return render(request, 'recommendox/golden_pending.html', {'golden': golden})
+    
+    # If rejected, show rejection message
+    if golden.verification_status == 'Rejected':
+        return render(request, 'recommendox/golden_rejected.html', {'golden': golden})
+    
+    # Only verified users see the full dashboard
+    from django.db.models import Count, Avg, Q
+    from .models import Content, Review, Rating, ContentOTT
+    
+    # Get all content with analytics
+    content_stats = Content.objects.annotate(
+        total_ratings=Count('ratings'),
+        rating_avg=Avg('ratings__rating_value'),
+        total_reviews=Count('reviews')
+    ).order_by('-total_ratings')[:20]
+    
+    # Get OTT availability info for each content
+    for content in content_stats:
+        content.ott_platforms_list = ContentOTT.objects.filter(content=content)
+    
+    # Get recent reviews from all users
+    recent_reviews = Review.objects.select_related('user', 'content').order_by('-review_date')[:10]
+    
+    # Get platform popularity
+    platform_stats = ContentOTT.objects.values('platform_name').annotate(
+        total_content=Count('content'),
+        free_content=Count('id', filter=Q(is_free=True))
+    ).order_by('-total_content')
+    
+    context = {
+        'golden': golden,
+        'content_stats': content_stats,
+        'recent_reviews': recent_reviews,
+        'platform_stats': platform_stats,
+        'total_content': Content.objects.count(),
+        'total_reviews': Review.objects.count(),
+        'avg_rating_all': Rating.objects.aggregate(avg=Avg('rating_value'))['avg'] or 0,
+    }
+    return render(request, 'recommendox/golden_dashboard.html', context)
+
+@golden_user_required
+def golden_content_analytics(request, content_id):
+    """Detailed analytics for specific content"""
+    content = get_object_or_404(Content, id=content_id)
+    
+    # Track that golden user viewed this
+    golden = request.user.profile.golden_profile
+    golden.increment_content_views()
+    
+    # Get rating distribution (count of each star)
+    rating_stats = Rating.objects.filter(content=content).values('rating_value').annotate(
+        count=Count('id')
+    ).order_by('rating_value')
+    
+    # Get all approved reviews
+    reviews = Review.objects.filter(content=content, is_approved=True).select_related('user')
+    
+    # Get OTT platform availability
+    ott_availability = ContentOTT.objects.filter(content=content)
+    
+    # Similar content recommendations
+    similar_content = Content.objects.filter(genre=content.genre).exclude(id=content_id)[:5]
+    
+    context = {
+        'content': content,
+        'rating_stats': rating_stats,
+        'total_ratings': Rating.objects.filter(content=content).count(),
+        'avg_rating': content.avg_rating,
+        'reviews': reviews,
+        'total_reviews': reviews.count(),
+        'ott_availability': ott_availability,
+        'similar_content': similar_content,
+        'golden': golden,
+    }
+    return render(request, 'recommendox/golden_content_analytics.html', context)
+
+@staff_member_required
+def verify_golden_users(request):
+    """Admin view to verify golden user applications - R.3 Verification"""
+    
+    # Filter applications
+    status_filter = request.GET.get('status', 'Pending')
+    
+    # Base queryset with select_related for efficiency
+    base_qs = GoldenUser.objects.select_related('user_profile__user')
+    
+    if status_filter == 'All':
+        applications = base_qs.all()
+    else:
+        applications = base_qs.filter(verification_status=status_filter)
+    
+    # Handle POST request for verification/rejection
+    if request.method == 'POST':
+        golden_id = request.POST.get('golden_id')
+        action = request.POST.get('action')
+        notes = request.POST.get('notes', '')
+        
+        if not golden_id or not action:
+            messages.error(request, 'Invalid request.')
+            return redirect('recommendox:verify_golden_users')
+        
+        golden = get_object_or_404(GoldenUser, id=golden_id)
+        
+        if action == 'verify':
+            golden.verification_status = 'Verified'
+            golden.verified_at = timezone.now()
+            golden.verified_by = request.user
+            golden.verification_notes = notes
+            messages.success(request, f'{golden.user_profile.user.username} is now a verified Golden User!')
+            
+        elif action == 'reject':
+            golden.verification_status = 'Rejected'
+            golden.verification_notes = notes
+            messages.warning(request, f'Application for {golden.user_profile.user.username} rejected.')
+            
+        else:
+            messages.error(request, 'Unknown action.')
+            return redirect('recommendox:verify_golden_users')
+        
+        golden.save()
+        return redirect('recommendox:verify_golden_users')
+    
+    # Get counts for dashboard
+    pending_count = GoldenUser.objects.filter(verification_status='Pending').count()
+    verified_count = GoldenUser.objects.filter(verification_status='Verified').count()
+    rejected_count = GoldenUser.objects.filter(verification_status='Rejected').count()
+    total_count = GoldenUser.objects.count()
+    
+    context = {
+        'applications': applications,
+        'status_filter': status_filter,
+        'pending_count': pending_count,
+        'verified_count': verified_count,
+        'rejected_count': rejected_count,
+        'total_count': total_count,
+    }
+    return render(request, 'recommendox/verify_golden.html', context)
+
+@golden_user_required
+def edit_golden_profile(request):
+    """Edit golden user professional profile - R.1 Profile Management"""
+    golden = request.user.profile.golden_profile
+    
+    if request.method == 'POST':
+        # Update profile fields
+        golden.profession = request.POST.get('profession', golden.profession)
+        golden.bio = request.POST.get('bio', golden.bio)
+        golden.years_of_experience = request.POST.get('years_experience', golden.years_of_experience)
+        golden.company = request.POST.get('company', golden.company)
+        golden.website = request.POST.get('website', golden.website)
+        golden.notable_works = request.POST.get('notable_works', golden.notable_works)
+        golden.awards = request.POST.get('awards', golden.awards)
+        
+        # Update social media
+        social_media = {
+            'twitter': request.POST.get('twitter', ''),
+            'instagram': request.POST.get('instagram', ''),
+            'linkedin': request.POST.get('linkedin', ''),
+            'imdb': request.POST.get('imdb', ''),
+        }
+        golden.social_media_links = social_media
+        
+        # Handle image uploads
+        if request.FILES.get('profile_image'):
+            golden.profile_image = request.FILES['profile_image']
+        if request.FILES.get('cover_image'):
+            golden.cover_image = request.FILES['cover_image']
+        
+        golden.save()
+        messages.success(request, 'Your professional profile has been updated!')
+        return redirect('recommendox:golden_dashboard')
+    
+    # GET request - show edit form
+    professions = GoldenUser.PROFESSION_CHOICES
+    social = golden.social_media_links or {}
+    
+    context = {
+        'golden': golden,
+        'professions': professions,
+        'social': social,
+    }
+    return render(request, 'recommendox/edit_golden_profile.html', context)

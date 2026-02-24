@@ -1,0 +1,37 @@
+<!-- templates/recommendox/golden_rejected.html -->
+{% extends 'recommendox/base.html' %}
+{% load static %}
+
+{% block title %}Application Rejected{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card text-center">
+            <div class="card-header bg-danger text-white">
+                <h4 class="mb-0"><i class="fas fa-times-circle"></i> Application Rejected</h4>
+            </div>
+            <div class="card-body py-5">
+                <i class="fas fa-crown fa-5x text-danger mb-4"></i>
+                <h3>Your Golden User application was not approved</h3>
+                
+                {% if golden.verification_notes %}
+                <div class="alert alert-secondary mt-4">
+                    <h5>Reason:</h5>
+                    <p>{{ golden.verification_notes }}</p>
+                </div>
+                {% endif %}
+                
+                <div class="mt-4">
+                    <a href="{% url 'recommendox:become_golden' %}" class="btn btn-warning">
+                        <i class="fas fa-redo"></i> Apply Again
+                    </a>
+                    <a href="{% url 'recommendox:user_dashboard' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back to Dashboard
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -134,33 +134,88 @@ class UserProfile(models.Model):
             setattr(self, key, value)
         self.save()
 
+# recommendox/models.py - Add/Update GoldenUser model
+
 class GoldenUser(models.Model):
-    SUBSCRIPTION_STATUS = [
-        ('Active', 'Active'),
-        ('Expired', 'Expired'),
-        ('Cancelled', 'Cancelled'),
+    """Golden User - Industry professional with verified status"""
+    
+    PROFESSION_CHOICES = [
+        ('Actor', 'Actor'),
+        ('Director', 'Director'),
+        ('Producer', 'Producer'),
+        ('Writer', 'Writer'),
+        ('Cinematographer', 'Cinematographer'),
+        ('Editor', 'Editor'),
+        ('Music Director', 'Music Director'),
+        ('Critic', 'Film Critic'),
+        ('Journalist', 'Entertainment Journalist'),
+        ('Other', 'Other'),
     ]
     
-    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name='golden_user')
-    subscription_date = models.DateField(auto_now_add=True)
-    subscription_status = models.CharField(max_length=20, choices=SUBSCRIPTION_STATUS, default='Active')
-    verification_documents = models.FileField(upload_to='verification_docs/', blank=True, null=True)
-    is_verified = models.BooleanField(default=False)
+    VERIFICATION_STATUS = [
+        ('Pending', 'Pending Verification'),
+        ('Verified', 'Verified Professional'),
+        ('Rejected', 'Verification Rejected'),
+    ]
     
-    def view_analytics(self, content=None):
-        # In a real app, this would fetch detailed analytics
-        from django.db.models import Count, Avg
-        analytics = {}
-        if content:
-            analytics['content'] = {
-                'total_ratings': content.ratings.count(),
-                'avg_rating': content.avg_rating,
-                'total_reviews': content.reviews.count(),
-            }
-        return analytics
+    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name='golden_profile')
+    
+    # Professional details
+    profession = models.CharField(max_length=50, choices=PROFESSION_CHOICES)
+    bio = models.TextField(max_length=1000, blank=True, null=True, help_text="Your professional background")
+    years_of_experience = models.IntegerField(default=0)
+    company = models.CharField(max_length=200, blank=True, null=True)
+    website = models.URLField(max_length=500, blank=True, null=True)
+    social_media_links = models.JSONField(default=dict, blank=True, help_text="JSON of social media URLs")
+    
+    # Profile media
+    profile_image = models.ImageField(upload_to='golden_profiles/', blank=True, null=True)
+    cover_image = models.ImageField(upload_to='golden_covers/', blank=True, null=True)
+    
+    # Verification
+    verification_status = models.CharField(max_length=20, choices=VERIFICATION_STATUS, default='Pending')
+    verification_documents = models.FileField(upload_to='verification_docs/', blank=True, null=True)
+    verification_notes = models.TextField(blank=True, null=True, help_text="Admin notes on verification")
+    verified_at = models.DateTimeField(blank=True, null=True)
+    verified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='verified_golden_users')
+    
+    # Professional portfolio
+    notable_works = models.TextField(blank=True, null=True, help_text="List of notable works/projects")
+    awards = models.TextField(blank=True, null=True, help_text="Awards and recognitions")
+    
+    # Stats
+    total_content_views = models.IntegerField(default=0)
+    total_reviews_given = models.IntegerField(default=0)
+    followers_count = models.IntegerField(default=0)
+    
+    # Timestamps
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"Golden User: {self.user_profile.user.username}"
+        return f"Golden User: {self.user_profile.user.username} - {self.profession}"
+    
+    def is_verified(self):
+        return self.verification_status == 'Verified'
+    
+    def get_verification_badge(self):
+        if self.is_verified():
+            return '<span class="badge bg-success"><i class="fas fa-check-circle"></i> Verified Professional</span>'
+        return '<span class="badge bg-warning"><i class="fas fa-clock"></i> Pending Verification</span>'
+    
+    def increment_content_views(self):
+        self.total_content_views += 1
+        self.save()
+    
+    def increment_reviews_given(self):
+        self.total_reviews_given += 1
+        self.save()
+    
+    class Meta:
+        permissions = [
+            ("verify_golden_user", "Can verify golden users"),
+            ("view_golden_analytics", "Can view golden user analytics"),
+        ]
 
 class Watchlist(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='watchlists')

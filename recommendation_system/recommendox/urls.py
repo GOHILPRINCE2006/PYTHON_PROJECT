@@ -37,4 +37,13 @@ urlpatterns = [
 
     #OTT
     path('ott/browse/', views.ott_browse, name='ott_browse'),
+
+    # Golden User URLs
+    path('golden/become/', views.become_golden_user, name='become_golden'),
+    path('golden/dashboard/', views.golden_dashboard, name='golden_dashboard'),
+    path('golden/analytics/<int:content_id>/', views.golden_content_analytics, name='golden_content_analytics'),
+    path('golden/edit-profile/', views.edit_golden_profile, name='edit_golden_profile'),
+
+    # Admin verification URLs
+    path('admin/verify-golden/', views.verify_golden_users, name='verify_golden_users'),
 ]

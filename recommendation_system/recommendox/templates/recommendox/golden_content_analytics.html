@@ -1,0 +1,154 @@
+<!-- templates/recommendox/golden_content_analytics.html -->
+{% extends 'recommendox/base.html' %}
+{% load static %}
+
+{% block title %}Analytics: {{ content.title }}{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1><i class="fas fa-chart-line"></i> Content Analytics</h1>
+        <p class="text-muted">Detailed insights for <strong>{{ content.title }}</strong></p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'recommendox:golden_dashboard' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+    </div>
+</div>
+
+<!-- Content Info Card -->
+<div class="card mb-4">
+    <div class="row g-0">
+        <div class="col-md-2">
+            <img src="{{ content.poster_url|default:'https://via.placeholder.com/150x200?text=No+Image' }}" 
+                 class="img-fluid rounded-start" style="height: 200px; width: 100%; object-fit: cover;">
+        </div>
+        <div class="col-md-10">
+            <div class="card-body">
+                <h3 class="card-title">{{ content.title }}</h3>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <span class="badge bg-primary">{{ content.content_type }}</span>
+                    <span class="badge bg-info">{{ content.genre }}</span>
+                    <span class="badge bg-secondary">{{ content.language }}</span>
+                    <span class="badge bg-warning text-dark">
+                        <i class="fas fa-star"></i> {{ avg_rating|floatformat:1 }}/5
+                    </span>
+                </div>
+                <p class="card-text">{{ content.description|truncatechars:200 }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Rating Distribution -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Rating Distribution</h5>
+            </div>
+            <div class="card-body">
+                {% if rating_stats %}
+                    {% for stat in rating_stats %}
+                    <div class="mb-3">
+                        <div class="d-flex justify-content-between">
+                            <span>{{ stat.rating_value }} Star</span>
+                            <span>{{ stat.count }} ratings</span>
+                        </div>
+                        <div class="progress" style="height: 20px;">
+                            <div class="progress-bar bg-warning" 
+                                 style="width: {% widthratio stat.count total_ratings 100 %}%;">
+                                {% widthratio stat.count total_ratings 100 %}%
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    <p class="text-muted mt-3">Total Ratings: {{ total_ratings }}</p>
+                {% else %}
+                    <p class="text-muted text-center py-4">No ratings yet for this content.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- OTT Availability -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-info text-white">
+                <h5 class="mb-0"><i class="fas fa-tv"></i> OTT Availability</h5>
+            </div>
+            <div class="card-body">
+                {% if ott_availability %}
+                    {% for ott in ott_availability %}
+                    <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+                        <div>
+                            <strong>{{ ott.get_platform_name_display }}</strong>
+                            {% if ott.is_free %}
+                            <span class="badge bg-success ms-2">Free</span>
+                            {% else %}
+                            <span class="badge bg-warning text-dark ms-2">Subscription</span>
+                            {% endif %}
+                        </div>
+                        <a href="{{ ott.watch_url }}" target="_blank" class="btn btn-sm btn-primary">
+                            <i class="fas fa-play"></i> Watch
+                        </a>
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted text-center py-4">No OTT availability info.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Reviews Section -->
+<div class="card mb-4">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="fas fa-comments"></i> User Reviews ({{ total_reviews }})</h5>
+    </div>
+    <div class="card-body">
+        {% if reviews %}
+            {% for review in reviews %}
+            <div class="border-bottom mb-3 pb-3">
+                <div class="d-flex justify-content-between">
+                    <strong>{{ review.user.username }}</strong>
+                    <small class="text-muted">{{ review.review_date|date:"M d, Y" }}</small>
+                </div>
+                <p class="mb-1">{{ review.comment }}</p>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted text-center py-4">No reviews yet for this content.</p>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Similar Content -->
+<div class="card">
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0"><i class="fas fa-film"></i> Similar Content</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            {% for similar in similar_content %}
+            <div class="col-md-2 col-sm-4 mb-3">
+                <div class="card h-100">
+                    <img src="{{ similar.poster_url|default:'https://via.placeholder.com/100x150?text=No+Image' }}" 
+                         class="card-img-top" style="height: 120px; object-fit: cover;">
+                    <div class="card-body p-2">
+                        <h6 class="card-title small">{{ similar.title|truncatechars:15 }}</h6>
+                        <span class="badge bg-warning text-dark small">
+                            {{ similar.avg_rating|floatformat:1 }}★
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-muted">No similar content found.</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

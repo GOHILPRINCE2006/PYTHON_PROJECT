@@ -1,0 +1,33 @@
+<!-- templates/recommendox/golden_pending.html -->
+{% extends 'recommendox/base.html' %}
+{% load static %}
+
+{% block title %}Golden User Application Pending{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card text-center">
+            <div class="card-header bg-warning text-white">
+                <h4 class="mb-0"><i class="fas fa-clock"></i> Application Pending</h4>
+            </div>
+            <div class="card-body py-5">
+                <i class="fas fa-crown fa-5x text-warning mb-4"></i>
+                <h3>Your Golden User application is under review!</h3>
+                <p class="lead">Thank you for applying. Our team will verify your professional details and get back to you soon.</p>
+                
+                <div class="alert alert-info mt-4">
+                    <h5><i class="fas fa-info-circle"></i> Application Status</h5>
+                    <p><strong>Profession:</strong> {{ golden.profession }}</p>
+                    <p><strong>Submitted:</strong> {{ golden.created_at|date:"F d, Y" }}</p>
+                    <p><strong>Status:</strong> <span class="badge bg-warning">Pending Verification</span></p>
+                </div>
+                
+                <a href="{% url 'recommendox:user_dashboard' %}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left"></i> Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

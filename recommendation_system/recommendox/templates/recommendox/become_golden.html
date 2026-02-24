@@ -1,0 +1,123 @@
+<!-- templates/recommendox/become_golden.html -->
+{% extends 'recommendox/base.html' %}
+{% load static %}
+
+{% block title %}Become a Golden User{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-warning text-white">
+                <h4 class="mb-0"><i class="fas fa-crown"></i> Golden User Application</h4>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">Apply to become a verified industry professional. Golden users get access to exclusive analytics and can verify their professional status.</p>
+                
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <h5 class="mt-3">Professional Information</h5>
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Profession *</label>
+                            <select name="profession" class="form-select" required>
+                                <option value="">Select Profession</option>
+                                {% for value, label in professions %}
+                                <option value="{{ value }}">{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Years of Experience</label>
+                            <input type="number" name="years_experience" class="form-control" min="0" value="0">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Professional Bio</label>
+                        <textarea name="bio" class="form-control" rows="4" placeholder="Tell us about your career..."></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Company/Organization</label>
+                            <input type="text" name="company" class="form-control" placeholder="e.g., Warner Bros, Netflix">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Personal Website</label>
+                            <input type="url" name="website" class="form-control" placeholder="https://...">
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4">Social Media Links</h5>
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"><i class="fab fa-twitter"></i> Twitter</label>
+                            <input type="url" name="twitter" class="form-control" placeholder="https://twitter.com/...">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"><i class="fab fa-instagram"></i> Instagram</label>
+                            <input type="url" name="instagram" class="form-control" placeholder="https://instagram.com/...">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"><i class="fab fa-linkedin"></i> LinkedIn</label>
+                            <input type="url" name="linkedin" class="form-control" placeholder="https://linkedin.com/in/...">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label"><i class="fab fa-imdb"></i> IMDb</label>
+                            <input type="url" name="imdb" class="form-control" placeholder="https://imdb.com/name/...">
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4">Portfolio</h5>
+                    <hr>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Notable Works</label>
+                        <textarea name="notable_works" class="form-control" rows="3" placeholder="List your notable projects/films..."></textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Awards & Recognitions</label>
+                        <textarea name="awards" class="form-control" rows="3" placeholder="List any awards..."></textarea>
+                    </div>
+                    
+                    <h5 class="mt-4">Profile Media</h5>
+                    <hr>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Profile Image</label>
+                            <input type="file" name="profile_image" class="form-control" accept="image/*">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Cover Image</label>
+                            <input type="file" name="cover_image" class="form-control" accept="image/*">
+                        </div>
+                    </div>
+                    
+                    <h5 class="mt-4">Verification Documents</h5>
+                    <hr>
+                    <div class="mb-3">
+                        <label class="form-label">Upload Proof of Profession *</label>
+                        <input type="file" name="verification_docs" class="form-control" required>
+                        <small class="text-muted">Upload industry ID, portfolio, or any proof of your professional status.</small>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-warning btn-lg w-100 mt-3">
+                        <i class="fas fa-paper-plane"></i> Submit Application
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

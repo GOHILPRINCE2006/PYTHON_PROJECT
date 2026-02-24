@@ -1,17 +1,44 @@
-<!-- recommendox/templates/recommendox/admin_dashboard.html -->
+<!-- templates/recommendox/admin_dashboard.html -->
 {% extends 'recommendox/base.html' %}
 
 {% block title %}Admin Dashboard - Movie Recommendation System{% endblock %}
 
 {% block content %}
-<!-- Admin Header -->
-<div class="row mb-4">
+<!-- Admin Header - FIXED missing closing div -->
+<div class="row mb-4" style="margin-top: 10px;">
     <div class="col-md-8">
         <h1><i class="fas fa-tachometer-alt"></i> Admin Dashboard</h1>
         <p class="text-muted">Manage your movie recommendation system</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <div class="btn-group">
+            <button type="button" class="btn btn-danger dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fas fa-cog"></i> Admin Actions
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="{% url 'recommendox:manage_content' %}">
+                    <i class="fas fa-plus"></i> Add Content
+                </a></li>
+                <li><a class="dropdown-item" href="{% url 'recommendox:manage_users' %}">
+                    <i class="fas fa-users"></i> Manage Users
+                </a></li>
+                <li><a class="dropdown-item" href="{% url 'recommendox:moderate_reviews' %}">
+                    <i class="fas fa-comment"></i> Moderate Reviews
+                </a></li>
+                <!-- ADDED: Golden User Verification Link -->
+                <li><a class="dropdown-item" href="{% url 'recommendox:verify_golden_users' %}">
+                    <i class="fas fa-crown"></i> Verify Golden Users
+                </a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/admin/" target="_blank">
+                    <i class="fas fa-lock"></i> Django Admin
+                </a></li>
+            </ul>
+        </div>
+    </div>
 </div>
 
-<!-- Quick Stats -->
+<!-- Quick Stats - ADDED golden user stats -->
 <div class="row mb-5">
     <div class="col-md-3 col-sm-6 mb-3">
         <div class="stats-card text-center bg-primary text-white">
@@ -35,10 +62,10 @@
         </div>
     </div>
     <div class="col-md-3 col-sm-6 mb-3">
-        <div class="stats-card text-center bg-danger text-white">
-            <i class="fas fa-clock"></i>
-            <h3>{{ pending_reviews }}</h3>
-            <p>Pending Reviews</p>
+        <div class="stats-card text-center bg-info text-white">
+            <i class="fas fa-crown"></i>
+            <h3>{{ pending_golden|default:"0" }}</h3>
+            <p>Golden Pending</p>
         </div>
     </div>
 </div>
@@ -127,7 +154,7 @@
     </div>
 </div>
 
-<!-- Quick Admin Actions -->
+<!-- Quick Admin Actions - ADDED Golden Verify button -->
 <div class="row mt-4">
     <div class="col-12">
         <div class="card">
@@ -155,9 +182,9 @@
                         </a>
                     </div>
                     <div class="col-md-3 col-sm-6">
-                        <a href="/admin/" target="_blank" class="btn btn-danger w-100 h-100 py-4">
-                            <i class="fas fa-lock fa-2x mb-2"></i><br>
-                            Django Admin
+                        <a href="{% url 'recommendox:verify_golden_users' %}" class="btn btn-info w-100 h-100 py-4">
+                            <i class="fas fa-crown fa-2x mb-2"></i><br>
+                            Verify Golden
                         </a>
                     </div>
                 </div>
@@ -166,4 +193,24 @@
     </div>
 </div>
 
+<!-- Additional row for Django Admin -->
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-dark text-white">
+                <h5 class="mb-0"><i class="fas fa-tools"></i> Advanced</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <a href="/admin/" target="_blank" class="btn btn-outline-danger w-100 py-3">
+                            <i class="fas fa-lock fa-2x mb-2"></i><br>
+                            Django Admin Panel
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
