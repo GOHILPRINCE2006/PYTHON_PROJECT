@@ -107,14 +107,29 @@ def get_personalized_recommendations(user):
 
 def home(request):
     """Public home page"""
-    from django.db.models import Avg
+    from django.db.models import Avg, Count
+    from datetime import datetime
     
-    # Trending content
-    trending_content = Content.objects.annotate(
+    current_year = datetime.now().year
+    
+    # Get the 8 most recently released content
+    newest_content = Content.objects.order_by('-release_date')[:8]
+    
+    # Get their IDs
+    newest_ids = [content.id for content in newest_content]
+    
+    # Fetch those same contents with ratings and sort by rating
+    trending_content = Content.objects.filter(
+        id__in=newest_ids
+    ).annotate(
         average_rating=Avg('ratings__rating_value')
-    ).order_by('-average_rating')[:8]
+    ).order_by('-average_rating', '-release_date')
     
-    # Recently added
+    # Add flag for "NEW" badge
+    for content in trending_content:
+        content.is_new_release = (content.release_date.year == current_year)
+    
+    # Recently added (any content, newest first)
     recent_content = Content.objects.order_by('-created_at')[:6]
     
     # Popular genres
@@ -127,6 +142,7 @@ def home(request):
         'recent_content': recent_content,
         'popular_genres': popular_genres,
         'total_content': Content.objects.count(),
+        'current_year': current_year,
     }
     return render(request, 'recommendox/home.html', context)
 

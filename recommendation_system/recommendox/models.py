@@ -43,8 +43,8 @@ class Content(models.Model):
     duration = models.CharField(max_length=20, blank=True, null=True)  # "2h 30m" or "Season 1"
     director = models.CharField(max_length=100, blank=True, null=True)
     cast = models.TextField(blank=True, null=True)
-    poster_url = models.URLField(max_length=10000, blank=True, null=True)
-    trailer_url = models.URLField(max_length=10000, blank=True, null=True)
+    poster_url = models.URLField(max_length=50000, blank=True, null=True)
+    trailer_url = models.URLField(max_length=50000, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -309,7 +309,7 @@ class ContentOTT(models.Model):
     
     content = models.ForeignKey(Content, on_delete=models.CASCADE, related_name='ott_platforms')
     platform_name = models.CharField(max_length=50, choices=OTT_CHOICES)
-    watch_url = models.URLField(max_length=1000, blank=True, null=True, help_text="URL to watch this content")
+    watch_url = models.URLField(max_length=50000, blank=True, null=True, help_text="URL to watch this content")
     is_free = models.BooleanField(default=False, help_text="Is it free?")
     
     class Meta:

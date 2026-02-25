@@ -26,15 +26,19 @@
     </div>
 </div>
 
-
-<div class="row mb-5">
-</div>
-
+<!-- TRENDING NOW - UPDATED SECTION -->
 <h2 class="section-title">🔥 Trending Now</h2>
 <div class="row mb-5">
     {% for content in trending_content %}
     <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-        <div class="card content-card h-100">
+        <div class="card content-card h-100 position-relative">
+            <!-- NEW RELEASE BADGE -->
+            {% if content.release_date.year == current_year %}
+            <span class="badge bg-danger position-absolute top-0 end-0 m-2" style="z-index: 10; font-size: 0.8rem; padding: 5px 10px;">
+                <i class="fas fa-fire"></i> NEW
+            </span>
+            {% endif %}
+            
             <img src="{{ content.poster_url|default:'https://via.placeholder.com/300x400?text=No+Image' }}" 
                  class="card-img-top content-poster" alt="{{ content.title }}">
             <div class="card-body">
@@ -42,7 +46,12 @@
                 <div class="d-flex justify-content-between mb-2">
                     <span class="genre-badge">{{ content.genre }}</span>
                     <span class="rating-badge">
-                        <i class="fas fa-star"></i> {{ content.avg_rating|default:"N/A" }}
+                        <i class="fas fa-star"></i> 
+                        {% if content.average_rating %}
+                            {{ content.average_rating|floatformat:1 }}
+                        {% else %}
+                            N/A
+                        {% endif %}
                     </span>
                 </div>
                 <p class="card-text small text-muted" style="height: 60px; overflow: hidden;">
@@ -50,17 +59,18 @@
                 </p>
                 <div class="d-flex justify-content-between">
                     <span class="badge bg-secondary">{{ content.language }}</span>
-                    <a href="{% url 'recommendox:content_detail' content.id %}" class="btn btn-sm btn-primary-custom">
-                        View Details
-                    </a>
+                    <span class="badge bg-info">{{ content.release_date|date:"M Y" }}</span>
                 </div>
+                <a href="{% url 'recommendox:content_detail' content.id %}" class="btn btn-sm btn-primary-custom w-100 mt-2">
+                    View Details
+                </a>
             </div>
         </div>
     </div>
     {% empty %}
     <div class="col-12 text-center py-4">
         <i class="fas fa-film fa-3x text-muted mb-3"></i>
-        <p class="text-muted">No content available yet.</p>
+        <p class="text-muted">No trending content available yet.</p>
         {% if user.is_staff %}
         <a href="{% url 'recommendox:manage_content' %}" class="btn btn-success">
             <i class="fas fa-plus"></i> Add Content
@@ -70,6 +80,7 @@
     {% endfor %}
 </div>
 
+<!-- RECENTLY ADDED - UPDATED SECTION -->
 <h2 class="section-title">🆕 Recently Added</h2>
 <div class="row mb-5">
     {% for content in recent_content %}
@@ -86,6 +97,12 @@
                 <p class="card-text small text-muted" style="height: 60px; overflow: hidden;">
                     {{ content.description|truncatechars:100 }}
                 </p>
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="badge bg-secondary">{{ content.language }}</span>
+                    <span class="rating-badge small">
+                        <i class="fas fa-star"></i> {{ content.avg_rating|default:"0"|floatformat:1 }}
+                    </span>
+                </div>
                 <a href="{% url 'recommendox:content_detail' content.id %}" class="btn btn-sm btn-primary-custom w-100">
                     <i class="fas fa-info-circle"></i> Details
                 </a>
@@ -95,6 +112,7 @@
     {% endfor %}
 </div>
 
+<!-- CALL TO ACTION SECTION -->
 <div class="text-center py-5 mt-5" style="background: #f8f9fa; border-radius: 10px;">
     <h2 class="mb-3">Ready to Discover?</h2>
     <p class="lead mb-4">Join thousands of users who find their perfect movies and series</p>
