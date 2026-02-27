@@ -483,7 +483,6 @@ def manage_content(request):
     }
     return render(request, 'recommendox/manage_content.html', context)
 
-
 @content_creator_required
 def edit_content(request, content_id):
     """Edit content"""
@@ -494,10 +493,10 @@ def edit_content(request, content_id):
         if form.is_valid():
             form.save()
             
-            # Update OTT platform (delete old, create new)
+            # Update OTT platform
+            from .models import ContentOTT
             ContentOTT.objects.filter(content=content).delete()
             
-            # Create new OTT entry
             platform = request.POST.get('ott_platform')
             url = request.POST.get('ott_url')
             is_free = request.POST.get('ott_free') == 'True'
@@ -514,7 +513,8 @@ def edit_content(request, content_id):
             return redirect('recommendox:manage_content')
     else:
         form = ContentForm(instance=content)
-        # Get existing OTT data for the form
+        # Get existing OTT data
+        from .models import ContentOTT
         ott = ContentOTT.objects.filter(content=content).first()
     
     context = {
@@ -522,6 +522,7 @@ def edit_content(request, content_id):
         'content': content,
         'ott': ott,
     }
+    # Make sure this template exists and is the styled one
     return render(request, 'recommendox/edit_content.html', context)
 
 

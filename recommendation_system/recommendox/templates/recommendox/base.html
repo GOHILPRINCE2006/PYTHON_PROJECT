@@ -24,10 +24,19 @@
             --dark-bg: #1a1a2e;
         }
         
+        /* FLEXBOX LAYOUT FOR STICKY FOOTER */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        
         body {
             background-color: var(--light-bg);
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding-top: 76px;  /* Increased from 70px to account for navbar height */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
         
         .navbar {
@@ -35,6 +44,7 @@
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             padding: 0.5rem 1rem;
             min-height: 60px;
+            flex-shrink: 0;
         }
         
         .navbar-brand {
@@ -62,6 +72,23 @@
         .navbar-nav .nav-link.active {
             font-weight: bold;
             background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        /* MAIN CONTENT - EXPANDS TO PUSH FOOTER DOWN */
+        .main-content {
+            flex: 1 0 auto;
+            width: 100%;
+            padding: 20px 0;
+        }
+        
+        /* FOOTER - STAYS AT BOTTOM */
+        .footer {
+            background: var(--primary-color);
+            color: white;
+            padding: 30px 0;
+            flex-shrink: 0;
+            width: 100%;
+            margin-top: auto;
         }
         
         /* Badge styles */
@@ -100,13 +127,6 @@
             .navbar-nav .nav-link {
                 padding: 0.5rem 0;
             }
-        }
-        
-        .footer {
-            background: var(--primary-color);
-            color: white;
-            margin-top: 50px;
-            padding: 30px 0;
         }
         
         .content-card {
@@ -190,12 +210,32 @@
             background: #c0392b;
             color: white;
         }
+
+        /* Fix for button hover */
+        .btn-primary:hover {
+            background-color: #2980b9 !important;
+            transform: translateY(-2px);
+            transition: all 0.3s;
+        }
+
+        /* Ensure links are clickable */
+        a.btn, a.btn:visited, a.btn:link {
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn {
+            position: relative;
+            z-index: 10;
+            cursor: pointer !important;
+        }
     </style>
     
     {% block extra_css %}{% endblock %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="{% url 'recommendox:home' %}">
                 <i class="fas fa-film"></i> RecommendoX
@@ -206,28 +246,34 @@
             </button>
             
             <div class="collapse navbar-collapse" id="navbarNav">
-                <!-- Left side navigation - COMPACT VERSION -->
+                <!-- Left side navigation -->
                 <ul class="navbar-nav me-auto">
+                    <!-- HOME -->
                     <li class="nav-item">
-                        <a class="nav-link {% active request '^/$' %} {% active request '/home' %}" href="{% url 'recommendox:home' %}">
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" 
+                           href="{% url 'recommendox:home' %}">
                             <i class="fas fa-home"></i> Home
                         </a>
                     </li>
+                    
+                    <!-- BROWSE - Only active when on browse page -->
                     <li class="nav-item">
-                        <a class="nav-link {% active request '/browse/' %}" href="{% url 'recommendox:content_list' %}">
+                        <a class="nav-link {% if '/browse/' in request.path and not '/ott/' in request.path %}active{% endif %}" 
+                           href="{% url 'recommendox:content_list' %}">
                             <i class="fas fa-th-list"></i> Browse
                         </a>
                     </li>
                     
                     {% if user.is_authenticated %}
-                        <!-- Dashboard - Always show -->
+                        <!-- USER DASHBOARD - Only active when on user dashboard, not creator or golden -->
                         <li class="nav-item">
-                            <a class="nav-link {% active request '/dashboard/' %}" href="{% url 'recommendox:user_dashboard' %}">
+                            <a class="nav-link {% if '/dashboard/' in request.path and not '/creator/' in request.path and not '/golden/' in request.path %}active{% endif %}" 
+                               href="{% url 'recommendox:user_dashboard' %}">
                                 <i class="fas fa-user"></i> Dashboard
                             </a>
                         </li>
                         
-                        <!-- GOLDEN USER - CONDENSED VERSION -->
+                        <!-- GOLDEN USER -->
                         {% if user.profile.golden_profile %}
                             <li class="nav-item">
                                 <a class="nav-link {% if '/golden/' in request.path %}active{% endif %}" 
@@ -249,28 +295,26 @@
                             </li>
                         {% endif %}
                         
-                        <!-- OTT -->
+                        <!-- OTT - Only active when on OTT page -->
                         <li class="nav-item">
-                            <a class="nav-link {% if '/ott/browse/' in request.path %}active{% endif %}" 
+                            <a class="nav-link {% if '/ott/' in request.path %}active{% endif %}" 
                                href="{% url 'recommendox:ott_browse' %}">
                                 <i class="fas fa-tv"></i> OTT
                             </a>
                         </li>
 
-                        <!-- Creator -->
-                        {% if user.profile.creator_profile or user.is_staff %}
+                        <!-- CREATOR - Only active when on creator page -->
                         <li class="nav-item">
                             <a class="nav-link {% if '/creator/' in request.path %}active{% endif %}" 
                                href="{% url 'recommendox:creator_dashboard' %}">
                                 <i class="fas fa-pen-fancy"></i> Creator
                             </a>
                         </li>
-                        {% endif %}
 
-                        <!-- Admin -->
+                        <!-- ADMIN -->
                         {% if user.is_staff %}
                         <li class="nav-item">
-                            <a class="nav-link {% if '/admin' in request.path or '/manage-content' in request.path or '/manage-users' in request.path or '/moderate-reviews' in request.path %}active{% endif %}" 
+                            <a class="nav-link {% if '/admin' in request.path %}active{% endif %}" 
                                href="{% url 'recommendox:admin_dashboard' %}">
                                 <i class="fas fa-tachometer-alt"></i> Admin
                             </a>
@@ -317,12 +361,14 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link {% active request '/login/' %}" href="{% url 'recommendox:login' %}">
+                            <a class="nav-link {% if '/login/' in request.path %}active{% endif %}" 
+                               href="{% url 'recommendox:login' %}">
                                 <i class="fas fa-sign-in-alt"></i> Login
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {% active request '/register/' %}" href="{% url 'recommendox:register' %}">
+                            <a class="nav-link {% if '/register/' in request.path %}active{% endif %}" 
+                               href="{% url 'recommendox:register' %}">
                                 <i class="fas fa-user-plus"></i> Register
                             </a>
                         </li>
@@ -344,12 +390,14 @@
     </div>
     {% endif %}
 
-    <!-- Main Content - Added top margin for spacing -->
-    <main class="container" style="margin-top: 20px;">
-        {% block content %}{% endblock %}
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
     </main>
 
-    <!-- Footer -->
+    <!-- FOOTER -->
     <footer class="footer">
         <div class="container">   
             <div class="text-center">

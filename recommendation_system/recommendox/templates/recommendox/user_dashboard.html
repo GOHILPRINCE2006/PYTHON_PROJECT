@@ -178,19 +178,13 @@
             </div>
             <div class="card-body">
                 <div class="row g-3">
-                    <div class="col-md-6 col-sm-6">
+                    <div class="col-md-12 col-sm-6">
                         <a href="{% url 'recommendox:content_list' %}" class="btn btn-outline-primary w-100 h-100 py-3">
                             <i class="fas fa-th-list fa-2x mb-2"></i><br>
                             Browse All
                         </a>
                     </div>
-                    <div class="col-md-6 col-sm-6">
-                        <a href="{% url 'recommendox:content_list' %}?genre={{ profile.favorite_genres|default:'Action' }}" 
-                           class="btn btn-outline-success w-100 h-100 py-3">
-                            <i class="fas fa-heart fa-2x mb-2"></i><br>
-                            Favorite Genre
-                        </a>
-                    </div>
+                   
                 </div>
             </div>
         </div>

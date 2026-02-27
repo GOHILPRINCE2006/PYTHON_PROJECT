@@ -49,24 +49,13 @@
             </div>
             <div class="card-body">
                 <div class="row g-3">
-                    <div class="col-md-4">
+                    <div class="col-md-12">
                         <a href="{% url 'recommendox:manage_content' %}" class="btn btn-outline-primary w-100 py-3">
                             <i class="fas fa-plus-circle fa-2x mb-2"></i><br>
-                            Add New Content
+                            Manage Content
                         </a>
                     </div>
-                    <div class="col-md-4">
-                        <a href="{% url 'recommendox:manage_content' %}" class="btn btn-outline-warning w-100 py-3">
-                            <i class="fas fa-edit fa-2x mb-2"></i><br>
-                            Edit Content
-                        </a>
-                    </div>
-                    <div class="col-md-4">
-                        <a href="{% url 'recommendox:manage_content' %}" class="btn btn-outline-danger w-100 py-3">
-                            <i class="fas fa-trash fa-2x mb-2"></i><br>
-                            Delete Content
-                        </a>
-                    </div>
+                 
                 </div>
             </div>
         </div>
@@ -99,9 +88,9 @@
                         <td>{{ item.genre }}</td>
                         <td>{{ item.created_at|date:"M d, Y" }}</td>
                         <td>
-                            <a href="{% url 'recommendox:content_detail' item.id %}" class="btn btn-sm btn-outline-primary">
-                                <i class="fas fa-eye"></i>
-                            </a>
+                          <a href="{% url 'recommendox:edit_content' item.id %}" class="btn btn-sm btn-outline-success">="{% url 'recommendox:content_detail' item.id %}" class="btn btn-sm btn-outline-primary">
+                              <i class="fas fa-edit"></i> Editclass="fas fa-eye"></i>
+                          </a>
                             <a href="{% url 'recommendox:edit_content' item.id %}" class="btn btn-sm btn-outline-success">
                                 <i class="fas fa-edit"></i>
                             </a>
