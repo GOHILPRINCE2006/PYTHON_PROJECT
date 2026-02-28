@@ -8,7 +8,7 @@
 <div class="row mb-4">
     <div class="col-md-8">
         <h1><i class="fas fa-users"></i> Manage Users</h1>
-        <p class="text-muted">View, block, unblock, delete users and promote to reviewers or content creators</p>
+        <p class="text-muted">View, block, unblock, delete users and manage roles (Reviewer/Creator)</p>
     </div>
     <div class="col-md-4 text-end">
         <a href="{% url 'recommendox:admin_dashboard' %}" class="btn btn-outline-secondary">
@@ -17,6 +17,7 @@
     </div>
 </div>
 
+<!-- Search Bar -->
 <div class="card mb-4">
     <div class="card-body">
         <form method="GET" class="d-flex gap-2">
@@ -34,6 +35,7 @@
     </div>
 </div>
 
+<!-- Users Table -->
 <div class="card">
     <div class="card-header bg-dark text-white">
         <h5 class="mb-0"><i class="fas fa-list"></i> All Users ({{ users|length }})</h5>
@@ -73,72 +75,95 @@
                             {% endif %}
                         </td>
                         <td>
+                            <!-- Role Badges - Admin is always special -->
                             {% if u.is_superuser %}
-                            <span class="badge bg-danger">Admin</span>
-                            {% elif u.is_creator %}
-                            <span class="badge bg-info">
-                                <i class="fas fa-pen-fancy"></i> Creator
-                            </span>
-                            {% elif u.is_reviewer %}
-                            <span class="badge bg-success">
-                                <i class="fas fa-check-circle"></i> Reviewer
-                            </span>
+                                <span class="badge bg-danger">Admin</span>
                             {% else %}
-                            <span class="badge bg-secondary">Regular User</span>
+                                {% if u.is_creator %}
+                                    <span class="badge bg-info me-1">
+                                        <i class="fas fa-pen-fancy"></i> Creator
+                                    </span>
+                                {% endif %}
+                                {% if u.is_reviewer %}
+                                    <span class="badge bg-success me-1">
+                                        <i class="fas fa-check-circle"></i> Reviewer
+                                    </span>
+                                {% endif %}
+                                {% if not u.is_creator and not u.is_reviewer %}
+                                    <span class="badge bg-secondary">Regular User</span>
+                                {% endif %}
                             {% endif %}
                         </td>
                         <td>
                             <div class="btn-group btn-group-sm" style="gap: 5px; flex-wrap: wrap;">
-
-                                {% if not u.is_reviewer and not u.is_creator and not u.is_superuser %}
-                                <form method="POST" action="{% url 'recommendox:make_reviewer' u.id %}" class="d-inline">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-success" title="Make Reviewer">
-                                        <i class="fas fa-user-check"></i> Reviewer
-                                    </button>
-                                </form>
-                                {% endif %}
-                                
-                                {% if not u.is_creator and not u.is_reviewer and not u.is_superuser %}
-                                <form method="POST" action="{% url 'recommendox:make_creator' u.id %}" class="d-inline">
-                                    {% csrf_token %}
-                                    <button type="submit" class="btn btn-info" title="Make Content Creator">
-                                        <i class="fas fa-pen-fancy"></i> Creator
-                                    </button>
-                                </form>
-                                {% endif %}
-                                
-                                
-                                {% if u.is_active and not u.is_superuser %}
-                                <form method="POST" class="d-inline" onsubmit="return confirm('Block this user?');">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="user_id" value="{{ u.id }}">
-                                    <input type="hidden" name="action" value="block">
-                                    <button type="submit" class="btn btn-warning" title="Block User">
-                                        <i class="fas fa-ban"></i>
-                                    </button>
-                                </form>
-                                {% elif not u.is_superuser %}
-                                <form method="POST" class="d-inline">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="user_id" value="{{ u.id }}">
-                                    <input type="hidden" name="action" value="unblock">
-                                    <button type="submit" class="btn btn-success" title="Unblock User">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                </form>
-                                {% endif %}
-                                
-                                
                                 {% if not u.is_superuser %}
-                                <form method="POST" class="d-inline" onsubmit="return confirm('Delete this user? This cannot be undone!');">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="user_id" value="{{ u.id }}">
-                                    <input type="hidden" name="action" value="delete">
-                                    <button type="submit" class="btn btn-danger" title="Delete User">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
+                                    <!-- REVIEWER CONTROLS -->
+                                    {% if u.is_reviewer %}
+                                        <form method="POST" action="{% url 'recommendox:remove_reviewer' u.id %}" 
+                                              class="d-inline" onsubmit="return confirm('Remove reviewer role from {{ u.username }}?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-outline-warning" title="Remove Reviewer">
+                                                <i class="fas fa-user-minus"></i> Revoke Reviewer
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <form method="POST" action="{% url 'recommendox:make_reviewer' u.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-outline-success" title="Make Reviewer">
+                                                <i class="fas fa-user-check"></i> Make Reviewer
+                                            </button>
+                                        </form>
+                                    {% endif %}
+
+                                    <!-- CREATOR CONTROLS -->
+                                    {% if u.is_creator %}
+                                        <form method="POST" action="{% url 'recommendox:remove_creator' u.id %}" 
+                                              class="d-inline" onsubmit="return confirm('Remove creator role from {{ u.username }}?');">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-outline-info" title="Remove Creator">
+                                                <i class="fas fa-user-minus"></i> Revoke Creator
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <form method="POST" action="{% url 'recommendox:make_creator' u.id %}" class="d-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-outline-primary" title="Make Creator">
+                                                <i class="fas fa-pen-fancy"></i> Make Creator
+                                            </button>
+                                        </form>
+                                    {% endif %}
+
+                                    <!-- BLOCK/UNBLOCK CONTROLS -->
+                                    {% if u.is_active %}
+                                        <form method="POST" class="d-inline" onsubmit="return confirm('Block user {{ u.username }}?');">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="user_id" value="{{ u.id }}">
+                                            <input type="hidden" name="action" value="block">
+                                            <button type="submit" class="btn btn-outline-warning" title="Block User">
+                                                <i class="fas fa-ban"></i> Block
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <form method="POST" class="d-inline">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="user_id" value="{{ u.id }}">
+                                            <input type="hidden" name="action" value="unblock">
+                                            <button type="submit" class="btn btn-outline-success" title="Unblock User">
+                                                <i class="fas fa-check"></i> Unblock
+                                            </button>
+                                        </form>
+                                    {% endif %}
+
+                                    <!-- DELETE CONTROL -->
+                                    <form method="POST" class="d-inline" 
+                                          onsubmit="return confirm('Delete user {{ u.username }}? This cannot be undone!');">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="user_id" value="{{ u.id }}">
+                                        <input type="hidden" name="action" value="delete">
+                                        <button type="submit" class="btn btn-outline-danger" title="Delete User">
+                                            <i class="fas fa-trash"></i> Delete
+                                        </button>
+                                    </form>
                                 {% endif %}
                             </div>
                         </td>

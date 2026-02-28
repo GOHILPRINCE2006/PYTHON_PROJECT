@@ -30,10 +30,12 @@ urlpatterns = [
     path('review/edit/<int:review_id>/', views.edit_review, name='edit_review'),
     path('review/delete/<int:review_id>/', views.delete_review, name='delete_review'),
     path('admin/make-reviewer/<int:user_id>/', views.make_reviewer, name='make_reviewer'),
+    path('admin/remove-reviewer/<int:user_id>/', views.remove_reviewer, name='remove_reviewer'),
 
     #CONTENT-CREATOR
     path('creator/dashboard/', views.creator_dashboard, name='creator_dashboard'),
     path('admin/make-creator/<int:user_id>/', views.make_creator, name='make_creator'),
+    path('admin/remove-creator/<int:user_id>/', views.remove_creator, name='remove_creator'),
 
     #OTT
     path('ott/browse/', views.ott_browse, name='ott_browse'),

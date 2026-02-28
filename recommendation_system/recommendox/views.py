@@ -339,7 +339,6 @@ def rate_content(request, content_id):
     
     return redirect('recommendox:content_detail', content_id=content_id)
 
-
 @login_required
 def add_review(request, content_id):
     """Add review for content"""
@@ -348,34 +347,32 @@ def add_review(request, content_id):
     if request.method == 'POST':
         comment = request.POST.get('comment')
         if comment:
-            # Check if user is reviewer
-            user_is_reviewer = False
+            # Check if user is admin OR reviewer
+            is_admin = request.user.is_staff or request.user.is_superuser
+            is_reviewer = False
+            
             try:
-                user_is_reviewer = hasattr(request.user.profile, 'reviewer_profile') and request.user.profile.reviewer_profile.is_active
+                is_reviewer = hasattr(request.user.profile, 'reviewer_profile') and request.user.profile.reviewer_profile.is_active
             except:
                 pass
+            
+            # Auto-approve if user is admin OR reviewer
+            auto_approve = is_admin or is_reviewer
             
             review = Review.objects.create(
                 user=request.user,
                 content=content,
                 comment=comment,
-                is_approved=user_is_reviewer,
-                is_verified=user_is_reviewer
+                is_approved=auto_approve,  # Auto-approve for admin/reviewer
+                is_verified=auto_approve   # Mark as verified
             )
             
-            # Count user's reviews for this content
-            review_count = Review.objects.filter(
-                user=request.user, 
-                content=content
-            ).count()
-            
-            if user_is_reviewer:
-                messages.success(request, f'Your review has been posted! (Review #{review_count})')
+            if auto_approve:
+                messages.success(request, 'Your review has been posted!')
             else:
-                messages.success(request, f'Your review has been submitted for moderation. (Review #{review_count})')
+                messages.success(request, 'Your review has been submitted for moderation.')
     
     return redirect('recommendox:content_detail', content_id=content_id)
-
 
 @login_required
 def edit_review(request, review_id):
@@ -391,9 +388,18 @@ def edit_review(request, review_id):
         new_comment = request.POST.get('comment')
         if new_comment:
             review.comment = new_comment
-            # If reviewer, keep approved; if normal user, reset to pending
-            if not is_reviewer(request.user):
+            # If admin or reviewer, keep approved; if normal user, reset to pending
+            is_admin = request.user.is_staff or request.user.is_superuser
+            is_reviewer = False
+            
+            try:
+                is_reviewer = hasattr(request.user.profile, 'reviewer_profile') and request.user.profile.reviewer_profile.is_active
+            except:
+                pass
+            
+            if not (is_admin or is_reviewer):
                 review.is_approved = False
+            
             review.save()
             messages.success(request, 'Review updated successfully!')
             return redirect('recommendox:content_detail', content_id=review.content.id)
@@ -483,18 +489,20 @@ def manage_content(request):
     }
     return render(request, 'recommendox/manage_content.html', context)
 
-@content_creator_required
+@staff_member_required  # For admin
+@content_creator_required  # For creators
 def edit_content(request, content_id):
-    """Edit content"""
+    """Edit content - works for both admin and creators"""
     content = get_object_or_404(Content, id=content_id)
+    
+    from .models import ContentOTT
+    ott = ContentOTT.objects.filter(content=content).first()
     
     if request.method == 'POST':
         form = ContentForm(request.POST, instance=content)
         if form.is_valid():
             form.save()
             
-            # Update OTT platform
-            from .models import ContentOTT
             ContentOTT.objects.filter(content=content).delete()
             
             platform = request.POST.get('ott_platform')
@@ -513,18 +521,13 @@ def edit_content(request, content_id):
             return redirect('recommendox:manage_content')
     else:
         form = ContentForm(instance=content)
-        # Get existing OTT data
-        from .models import ContentOTT
-        ott = ContentOTT.objects.filter(content=content).first()
     
     context = {
         'form': form,
         'content': content,
-        'ott': ott,
+        'ott': ott,  
     }
-    # Make sure this template exists and is the styled one
     return render(request, 'recommendox/edit_content.html', context)
-
 
 @content_creator_required
 def delete_content(request, content_id):
@@ -631,17 +634,15 @@ def make_reviewer(request, user_id):
     profile, created = UserProfile.objects.get_or_create(user=user)
     
     # Check if already reviewer
-    try:
-        if profile.reviewer_profile:
-            messages.warning(request, f'{user.username} is already a reviewer!')
-            return redirect('recommendox:manage_users')
-    except:
+    if hasattr(profile, 'reviewer_profile'):
+        messages.warning(request, f'{user.username} is already a reviewer!')
+    else:
         # Create reviewer profile
         Reviewer.objects.create(
             user_profile=profile,
             is_active=True
         )
-        messages.success(request, f'{user.username} is now a reviewer! Their reviews will be auto-approved.')
+        messages.success(request, f'{user.username} is now a reviewer!')
     
     return redirect('recommendox:manage_users')
 
@@ -653,20 +654,52 @@ def make_creator(request, user_id):
     profile, created = UserProfile.objects.get_or_create(user=user)
     
     # Check if already creator
-    try:
-        if profile.creator_profile:
-            messages.warning(request, f'{user.username} is already a content creator!')
-            return redirect('recommendox:manage_users')
-    except:
+    if hasattr(profile, 'creator_profile'):
+        messages.warning(request, f'{user.username} is already a creator!')
+    else:
         # Create creator profile
         ContentCreator.objects.create(
             user_profile=profile,
             is_active=True
         )
-        messages.success(request, f'{user.username} is now a content creator! They can add/edit/delete content.')
+        messages.success(request, f'{user.username} is now a creator!')
     
     return redirect('recommendox:manage_users')
 
+@staff_member_required
+def remove_reviewer(request, user_id):
+    """Remove reviewer role from a user"""
+    user = get_object_or_404(User, id=user_id)
+    
+    try:
+        profile = user.profile
+        if hasattr(profile, 'reviewer_profile'):
+            profile.reviewer_profile.delete()
+            messages.success(request, f'Reviewer role removed from {user.username}.')
+        else:
+            messages.warning(request, f'{user.username} is not a reviewer.')
+    except:
+        messages.error(request, 'Error removing reviewer role.')
+    
+    return redirect('recommendox:manage_users')
+
+
+@staff_member_required
+def remove_creator(request, user_id):
+    """Remove creator role from a user"""
+    user = get_object_or_404(User, id=user_id)
+    
+    try:
+        profile = user.profile
+        if hasattr(profile, 'creator_profile'):
+            profile.creator_profile.delete()
+            messages.success(request, f'Creator role removed from {user.username}.')
+        else:
+            messages.warning(request, f'{user.username} is not a creator.')
+    except:
+        messages.error(request, 'Error removing creator role.')
+    
+    return redirect('recommendox:manage_users')
 
 @staff_member_required
 def moderate_reviews(request):
