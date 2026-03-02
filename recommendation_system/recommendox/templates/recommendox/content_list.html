@@ -52,16 +52,20 @@
                     <option value="">All Types</option>
                     <option value="Movie" {% if selected_type == 'Movie' %}selected{% endif %}>Movies</option>
                     <option value="Web Series" {% if selected_type == 'Web Series' %}selected{% endif %}>Web Series</option>
+                    <option value="TV Show" {% if selected_type == 'TV Show' %}selected{% endif %}>TV Shows</option>
+                    <option value="Documentary" {% if selected_type == 'Documentary' %}selected{% endif %}>Documentaries</option>
                 </select>
             </div>
             
+            <!-- FIX 1: SORT DROPDOWN - YEH HAI UPDATE -->
             <div class="col-md-3">
                 <label class="form-label">Sort By</label>
                 <select name="sort" class="form-select" onchange="this.form.submit()">
-                    <option value="-created_at" {% if request.GET.sort == '-created_at' %}selected{% endif %}>Newest First</option>
-                    <option value="title" {% if request.GET.sort == 'title' %}selected{% endif %}>Title A-Z</option>
-                    <option value="-ratings__rating_value" {% if request.GET.sort == '-ratings__rating_value' %}selected{% endif %}>Highest Rated</option>
-                    <option value="release_date" {% if request.GET.sort == 'release_date' %}selected{% endif %}>Release Date</option>
+                    <option value="newest" {% if sort_by == 'newest' or not sort_by %}selected{% endif %}>Newest First</option>
+                    <option value="oldest" {% if sort_by == 'oldest' %}selected{% endif %}>Oldest First</option>
+                    <option value="rating" {% if sort_by == 'rating' %}selected{% endif %}>Highest Rated</option>
+                    <option value="title_asc" {% if sort_by == 'title_asc' %}selected{% endif %}>Title A-Z</option>
+                    <option value="title_desc" {% if sort_by == 'title_desc' %}selected{% endif %}>Title Z-A</option>
                 </select>
             </div>
             
@@ -95,13 +99,20 @@
     <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
         <div class="card content-card h-100">
             <img src="{{ item.poster_url|default:'https://via.placeholder.com/300x400?text=No+Image' }}" 
-                 class="card-img-top content-poster" alt="{{ item.title }}">
+                 class="card-img-top content-poster" alt="{{ item.title }}" 
+                 style="width: 100%; height: 400px; object-fit: cover; border-radius: 8px 8px 0 0;">
             <div class="card-body">
                 <h5 class="card-title" style="height: 48px; overflow: hidden;">{{ item.title }}</h5>
                 <div class="d-flex justify-content-between mb-2">
                     <span class="badge bg-info">{{ item.content_type }}</span>
+                    <!-- FIX 3: RATING DISPLAY - YEH HAI UPDATE -->
                     <span class="badge bg-warning text-dark">
-                        <i class="fas fa-star"></i> {{ item.avg_rating|default:"N/A" }}
+                        <i class="fas fa-star"></i> 
+                        {% if item.rating_avg %}
+                            {{ item.rating_avg|floatformat:1 }}
+                        {% else %}
+                            {{ item.avg_rating|default:"0"|floatformat:1 }}
+                        {% endif %}
                     </span>
                 </div>
                 <div class="mb-2">
@@ -138,7 +149,7 @@
     <ul class="pagination justify-content-center">
         {% if content.has_previous %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ content.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}{% if request.GET.language %}&language={{ request.GET.language }}{% endif %}{% if request.GET.content_type %}&content_type={{ request.GET.content_type }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+            <a class="page-link" href="?page={{ content.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_language %}&language={{ selected_language }}{% endif %}{% if selected_type %}&content_type={{ selected_type }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
                 <i class="fas fa-chevron-left"></i> Previous
             </a>
         </li>
@@ -151,18 +162,18 @@
         {% for i in content.paginator.page_range %}
             {% if content.number == i %}
             <li class="page-item active">
-                <a class="page-link" href="#">{{ i }}</a>
+                <span class="page-link">{{ i }}</span>
             </li>
             {% else %}
             <li class="page-item">
-                <a class="page-link" href="?page={{ i }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}{% if request.GET.language %}&language={{ request.GET.language }}{% endif %}{% if request.GET.content_type %}&content_type={{ request.GET.content_type }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">{{ i }}</a>
+                <a class="page-link" href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_language %}&language={{ selected_language }}{% endif %}{% if selected_type %}&content_type={{ selected_type }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">{{ i }}</a>
             </li>
             {% endif %}
         {% endfor %}
         
         {% if content.has_next %}
         <li class="page-item">
-            <a class="page-link" href="?page={{ content.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}{% if request.GET.language %}&language={{ request.GET.language }}{% endif %}{% if request.GET.content_type %}&content_type={{ request.GET.content_type }}{% endif %}{% if request.GET.sort %}&sort={{ request.GET.sort }}{% endif %}">
+            <a class="page-link" href="?page={{ content.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if selected_genre %}&genre={{ selected_genre }}{% endif %}{% if selected_language %}&language={{ selected_language }}{% endif %}{% if selected_type %}&content_type={{ selected_type }}{% endif %}{% if sort_by %}&sort={{ sort_by }}{% endif %}">
                 Next <i class="fas fa-chevron-right"></i>
             </a>
         </li>

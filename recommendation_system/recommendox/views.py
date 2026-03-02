@@ -149,38 +149,61 @@ def home(request):
 
 def content_list(request):
     """Browse all content with filters"""
-    content_list = Content.objects.all()
+    from django.db.models import Avg, Q
     
-    # Filtering
+    # Get filter parameters
     genre = request.GET.get('genre')
     language = request.GET.get('language')
     content_type = request.GET.get('content_type')
     search = request.GET.get('search')
+    sort_by = request.GET.get('sort', 'newest')  # Default: newest
     
+    # Pehle unique IDs lo
+    content_ids = Content.objects.all().values_list('id', flat=True)
+    
+    # Filters apply karo
     if genre:
-        content_list = content_list.filter(genre=genre)
+        content_ids = content_ids.filter(genre=genre)
     if language:
-        content_list = content_list.filter(language=language)
+        content_ids = content_ids.filter(language=language)
     if content_type:
-        content_list = content_list.filter(content_type=content_type)
+        content_ids = content_ids.filter(content_type=content_type)
+    
+    # Search apply karo
     if search:
-        content_list = content_list.filter(
+        content_ids = content_ids.filter(
             Q(title__icontains=search) |
             Q(description__icontains=search) |
             Q(director__icontains=search) |
             Q(cast__icontains=search)
         )
     
-    # Sorting
-    sort_by = request.GET.get('sort', '-created_at')
-    content_list = content_list.order_by(sort_by)
+    # Distinct IDs
+    content_ids = content_ids.distinct()
     
-    # Pagination (this is for dividing our content list in 12 different pages)
+    # Ab content lo
+    content_list = Content.objects.filter(id__in=content_ids)
+    
+    # SORTING - EK NUMBER
+    if sort_by == 'rating':
+        content_list = content_list.annotate(
+            rating_avg=Avg('ratings__rating_value')
+        ).order_by('-rating_avg', '-release_date')
+    elif sort_by == 'oldest':
+        content_list = content_list.order_by('release_date')
+    elif sort_by == 'title_asc':
+        content_list = content_list.order_by('title')
+    elif sort_by == 'title_desc':
+        content_list = content_list.order_by('-title')
+    else:  # 'newest' or anything else
+        content_list = content_list.order_by('-release_date')
+    
+    # Pagination
     paginator = Paginator(content_list, 12)
     page = request.GET.get('page')
     content = paginator.get_page(page)
     
-    # Get unique values for filters
+    # Filters ke liye unique values
     genres = Content.objects.values_list('genre', flat=True).distinct()
     languages = Content.objects.values_list('language', flat=True).distinct()
     
@@ -192,6 +215,7 @@ def content_list(request):
         'selected_language': language,
         'selected_type': content_type,
         'search_query': search,
+        'sort_by': sort_by,
     }
     return render(request, 'recommendox/content_list.html', context)
 

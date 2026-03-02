@@ -55,13 +55,13 @@
         <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
             <div class="card content-card h-100">
                 <img src="{{ content.poster_url|default:'https://via.placeholder.com/300x400?text=No+Image' }}" 
-                     class="card-img-top content-poster" alt="{{ content.title }}">
+                     class="card-img-top content-poster" alt="{{ content.title }}" style="width: 100%; height: 400px; object-fit: cover; border-radius: 8px 8px 0 0;">
                 <div class="card-body">
                     <h5 class="card-title" style="height: 48px; overflow: hidden;">{{ content.title }}</h5>
                     <div class="d-flex justify-content-between mb-2">
                         <span class="genre-badge">{{ content.genre }}</span>
                         <span class="rating-badge">
-                            <i class="fas fa-star"></i> {{ content.avg_rating|default:"N/A" }}
+                            <i class="fas fa-star"></i> {{ content.avg_rating|floatformat:1|default:"N/A" }}
                         </span>
                     </div>
                     <p class="card-text small text-muted" style="height: 60px; overflow: hidden;">
@@ -106,7 +106,7 @@
                             <div class="d-flex gap-1 mb-2">
                                 <small class="text-muted">{{ content.genre }}</small>
                                 <small class="text-warning">
-                                    <i class="fas fa-star"></i> {{ content.avg_rating|default:"N/A" }}
+                                    <i class="fas fa-star"></i> {{ content.avg_rating|floatformat:1|default:"N/A" }}
                                 </small>
                             </div>
                         </div>
