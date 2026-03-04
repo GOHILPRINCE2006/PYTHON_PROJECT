@@ -17,7 +17,6 @@
     </div>
 </div>
 
-<!-- Stats Cards -->
 <div class="row mb-4">
     <div class="col-md-3">
         <div class="stats-card text-center bg-warning text-dark">
@@ -49,7 +48,6 @@
     </div>
 </div>
 
-<!-- Filter Tabs -->
 <div class="card mb-4">
     <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs">
@@ -73,7 +71,6 @@
     </div>
 </div>
 
-<!-- Applications List -->
 <div class="row">
     {% for app in applications %}
     <div class="col-md-6 mb-4">
@@ -142,7 +139,6 @@
                     </button>
                 </div>
                 
-                <!-- Verify Modal -->
                 <div class="modal fade" id="verifyModal{{ app.id }}" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -170,7 +166,6 @@
                     </div>
                 </div>
                 
-                <!-- Reject Modal -->
                 <div class="modal fade" id="rejectModal{{ app.id }}" tabindex="-1">
                     <div class="modal-dialog">
                         <div class="modal-content">

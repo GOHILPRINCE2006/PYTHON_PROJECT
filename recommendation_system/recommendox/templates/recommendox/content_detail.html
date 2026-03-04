@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="row min-vh-100">
-    <!-- Main Content -->
+
     <div class="col-lg-8">
         <div class="card mb-4">
             <div class="row g-0">
@@ -55,11 +55,10 @@
                             <p class="card-text">{{ content.cast }}</p>
                         </div>
                         {% endif %}
-                        
-                        <!-- Action Buttons -->
+                    
                         <div class="d-flex flex-wrap gap-2 mt-4">
                             {% if user.is_authenticated %}
-                            <!-- Watchlist Button -->
+                            
                             <form action="{% url 'recommendox:manage_watchlist' %}" method="POST" class="d-inline">
                                 {% csrf_token %}
                                 <input type="hidden" name="content_id" value="{{ content.id }}">
@@ -74,12 +73,10 @@
                                 {% endif %}
                             </form>
                             
-                            <!-- Rating Button -->
                             <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#ratingModal">
                                 <i class="fas fa-star"></i> Rate
                             </button>
-                            
-                            <!-- Review Button -->
+                           
                             <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#reviewModal">
                                 <i class="fas fa-comment"></i> Review
                             </button>
@@ -96,7 +93,6 @@
             </div>
         </div>
 
-        <!-- OTT AVAILABILITY SECTION - MOVED OUTSIDE ACTION BUTTONS -->
         {% if content.ott_platforms.exists %}
         <div class="card mb-4">
             <div class="card-header bg-info text-white">
@@ -125,8 +121,7 @@
             </div>
         </div>
         {% endif %}
-        
-        <!-- Reviews Section -->
+      
         <div class="card mb-4">
             <div class="card-header">
                 <h5 class="mb-0"><i class="fas fa-comments"></i> User Reviews</h5>
@@ -171,10 +166,8 @@
             </div>
         </div>
     </div>
-    
-    <!-- Sidebar -->
+  
     <div class="col-lg-4">
-        <!-- User Rating -->
         {% if user.is_authenticated %}
         <div class="card mb-4">
             <div class="card-header">
@@ -204,8 +197,7 @@
             </div>
         </div>
         {% endif %}
-        
-        <!-- Similar Content -->
+     
         <div class="card mb-4">
             <div class="card-header">
                 <h6 class="mb-0">Similar Contents</h6>
@@ -239,7 +231,6 @@
     </div>
 </div>
 
-<!-- Rating Modal -->
 {% if user.is_authenticated %}
 <div class="modal fade" id="ratingModal" tabindex="-1">
     <div class="modal-dialog">
@@ -271,7 +262,6 @@
     </div>
 </div>
 
-<!-- Review Modal -->
 <div class="modal fade" id="reviewModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -301,7 +291,6 @@
 {% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Rating stars interaction
     const stars = document.querySelectorAll('.rating-star');
     const selectedRating = document.getElementById('selectedRating');
     const ratingText = document.getElementById('ratingText');

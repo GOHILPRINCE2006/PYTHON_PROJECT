@@ -17,7 +17,6 @@
     </div>
 </div>
 
-<!-- Search Bar -->
 <div class="card mb-4">
     <div class="card-body">
         <form method="GET" class="d-flex gap-2">
@@ -35,7 +34,6 @@
     </div>
 </div>
 
-<!-- Users Table -->
 <div class="card">
     <div class="card-header bg-dark text-white">
         <h5 class="mb-0"><i class="fas fa-list"></i> All Users ({{ users|length }})</h5>
@@ -75,7 +73,6 @@
                             {% endif %}
                         </td>
                         <td>
-                            <!-- Role Badges - Admin is always special -->
                             {% if u.is_superuser %}
                                 <span class="badge bg-danger">Admin</span>
                             {% else %}
@@ -97,7 +94,6 @@
                         <td>
                             <div class="btn-group btn-group-sm" style="gap: 5px; flex-wrap: wrap;">
                                 {% if not u.is_superuser %}
-                                    <!-- REVIEWER CONTROLS -->
                                     {% if u.is_reviewer %}
                                         <form method="POST" action="{% url 'recommendox:remove_reviewer' u.id %}" 
                                               class="d-inline" onsubmit="return confirm('Remove reviewer role from {{ u.username }}?');">
@@ -115,7 +111,6 @@
                                         </form>
                                     {% endif %}
 
-                                    <!-- CREATOR CONTROLS -->
                                     {% if u.is_creator %}
                                         <form method="POST" action="{% url 'recommendox:remove_creator' u.id %}" 
                                               class="d-inline" onsubmit="return confirm('Remove creator role from {{ u.username }}?');">
@@ -133,7 +128,6 @@
                                         </form>
                                     {% endif %}
 
-                                    <!-- BLOCK/UNBLOCK CONTROLS -->
                                     {% if u.is_active %}
                                         <form method="POST" class="d-inline" onsubmit="return confirm('Block user {{ u.username }}?');">
                                             {% csrf_token %}
@@ -154,7 +148,6 @@
                                         </form>
                                     {% endif %}
 
-                                    <!-- DELETE CONTROL -->
                                     <form method="POST" class="d-inline" 
                                           onsubmit="return confirm('Delete user {{ u.username }}? This cannot be undone!');">
                                         {% csrf_token %}

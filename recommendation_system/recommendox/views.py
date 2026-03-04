@@ -18,7 +18,6 @@ from .models import (
 )
 
 #HELPER FUNCTIONS 
-
 def is_reviewer(user):
     """Check if user has reviewer role"""
     if not user.is_authenticated:
@@ -27,7 +26,6 @@ def is_reviewer(user):
         return hasattr(user.profile, 'reviewer_profile') and user.profile.reviewer_profile.is_active
     except:
         return False
-
 
 def is_content_creator(user):
     """Check if user has content creator role"""
@@ -38,14 +36,13 @@ def is_content_creator(user):
     except:
         return False
 
-
 def content_creator_required(view_func):
     """Decorator to check if user is content creator"""
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('recommendox:login')
         
-        if request.user.is_staff:  # Admin can also access
+        if request.user.is_staff:  
             return view_func(request, *args, **kwargs)
         
         if is_content_creator(request.user):
@@ -55,28 +52,23 @@ def content_creator_required(view_func):
         return redirect('recommendox:user_dashboard')
     return wrapper
 
-
 def get_personalized_recommendations(user):
     """Generate personalized recommendations based on user activity"""
     recommendations = []
-    seen_ids = set()  # Track content IDs to avoid duplicates
-    
-    # Get user's favorite genres from ratings
+    seen_ids = set()  
+   
     user_ratings = Rating.objects.filter(user=user)
     if user_ratings.exists():
-        # Find highest rated genres
         from collections import Counter
         genre_counter = Counter()
         
         for rating in user_ratings:
-            if rating.rating_value >= 4:  # Only consider high ratings
+            if rating.rating_value >= 4: 
                 genre_counter[rating.content.genre] += rating.rating_value
         
         if genre_counter:
-            # Get top 2 genres
             top_genres = [genre for genre, count in genre_counter.most_common(2)]
-            
-            # Recommend content from top genres not yet rated
+           
             for genre in top_genres:
                 genre_content = Content.objects.filter(
                     genre=genre
@@ -85,14 +77,13 @@ def get_personalized_recommendations(user):
                 ).order_by('-ratings__rating_value')[:3]
                 
                 for content in genre_content:
-                    if content.id not in seen_ids:  # Check for duplicates
+                    if content.id not in seen_ids: 
                         recommendations.append(content)
                         seen_ids.add(content.id)
-    
-    # If not enough recommendations, add popular content
+   
     if len(recommendations) < 6:
         additional = Content.objects.exclude(
-            id__in=seen_ids  # Exclude already added
+            id__in=seen_ids 
         ).order_by('-ratings__rating_value')[:6-len(recommendations)]
         
         for content in additional:
@@ -100,39 +91,29 @@ def get_personalized_recommendations(user):
                 recommendations.append(content)
                 seen_ids.add(content.id)
     
-    return recommendations[:6]  # Return max 6 recommendations
+    return recommendations[:6] 
 
 
 #PUBLIC VIEWS
-
 def home(request):
     """Public home page"""
     from django.db.models import Avg, Count
     from datetime import datetime
     
     current_year = datetime.now().year
-    
-    # Get the 8 most recently released content
     newest_content = Content.objects.order_by('-release_date')[:8]
-    
-    # Get their IDs
     newest_ids = [content.id for content in newest_content]
-    
-    # Fetch those same contents with ratings and sort by rating
     trending_content = Content.objects.filter(
         id__in=newest_ids
     ).annotate(
         average_rating=Avg('ratings__rating_value')
     ).order_by('-average_rating', '-release_date')
     
-    # Add flag for "NEW" badge
     for content in trending_content:
         content.is_new_release = (content.release_date.year == current_year)
-    
-    # Recently added (any content, newest first)
+
     recent_content = Content.objects.order_by('-created_at')[:6]
     
-    # Popular genres
     popular_genres = Content.objects.values('genre').annotate(
         count=Count('id')
     ).order_by('-count')[:5]
@@ -151,25 +132,21 @@ def content_list(request):
     """Browse all content with filters"""
     from django.db.models import Avg, Q
     
-    # Get filter parameters
     genre = request.GET.get('genre')
     language = request.GET.get('language')
     content_type = request.GET.get('content_type')
     search = request.GET.get('search')
-    sort_by = request.GET.get('sort', 'newest')  # Default: newest
-    
-    # Pehle unique IDs lo
+    sort_by = request.GET.get('sort', 'newest') 
+  
     content_ids = Content.objects.all().values_list('id', flat=True)
-    
-    # Filters apply karo
+   
     if genre:
         content_ids = content_ids.filter(genre=genre)
     if language:
         content_ids = content_ids.filter(language=language)
     if content_type:
         content_ids = content_ids.filter(content_type=content_type)
-    
-    # Search apply karo
+   
     if search:
         content_ids = content_ids.filter(
             Q(title__icontains=search) |
@@ -178,13 +155,8 @@ def content_list(request):
             Q(cast__icontains=search)
         )
     
-    # Distinct IDs
     content_ids = content_ids.distinct()
-    
-    # Ab content lo
     content_list = Content.objects.filter(id__in=content_ids)
-    
-    # SORTING - EK NUMBER
     if sort_by == 'rating':
         content_list = content_list.annotate(
             rating_avg=Avg('ratings__rating_value')
@@ -195,15 +167,13 @@ def content_list(request):
         content_list = content_list.order_by('title')
     elif sort_by == 'title_desc':
         content_list = content_list.order_by('-title')
-    else:  # 'newest' or anything else
+    else:  
         content_list = content_list.order_by('-release_date')
     
-    # Pagination
     paginator = Paginator(content_list, 12)
     page = request.GET.get('page')
     content = paginator.get_page(page)
     
-    # Filters ke liye unique values
     genres = Content.objects.values_list('genre', flat=True).distinct()
     languages = Content.objects.values_list('language', flat=True).distinct()
     
@@ -223,8 +193,6 @@ def content_list(request):
 def content_detail(request, content_id):
     """Content detail page"""
     content = get_object_or_404(Content, id=content_id)
-    
-    # Get user's rating if logged in
     user_rating = None
     in_watchlist = False
     if request.user.is_authenticated:
@@ -234,15 +202,12 @@ def content_detail(request, content_id):
             pass
         
         in_watchlist = Watchlist.objects.filter(user=request.user, content=content).exists()
-    
-    # Get similar content (same genre) 
     similar_content = Content.objects.filter(
         genre=content.genre
     ).exclude(id=content_id).annotate(
         rating_avg=Avg('ratings__rating_value')  
     ).order_by('-rating_avg')[:4]
     
-    # Get approved reviews
     reviews = Review.objects.filter(content=content, is_approved=True).order_by('-review_date')
     
     context = {
@@ -297,23 +262,19 @@ def user_logout(request):
 
 
 #USER VIEWS
-
 @login_required
 def user_dashboard(request):
     """User dashboard"""
     user = request.user
-    profile, created = UserProfile.objects.get_or_create(user=user)
-    # Check if user is reviewer
+    profile, created = UserProfile.objects.get_or_create(user=user)  
     user_is_reviewer = is_reviewer(user)
-    # User's watchlist
+
     watchlist = Content.objects.filter(
         id__in=Watchlist.objects.filter(user=user).values_list('content_id', flat=True)
     )[:6]
-    # User's ratings
-    user_ratings = Rating.objects.filter(user=user).order_by('-rating_date')[:5]
-    # User's reviews
-    user_reviews = Review.objects.filter(user=user).order_by('-review_date')[:5]
-    # Personalized recommendations
+ 
+    user_ratings = Rating.objects.filter(user=user).order_by('-rating_date')[:5]   
+    user_reviews = Review.objects.filter(user=user).order_by('-review_date')[:5]   
     recommendations = get_personalized_recommendations(user)
     
     context = {
@@ -371,7 +332,6 @@ def add_review(request, content_id):
     if request.method == 'POST':
         comment = request.POST.get('comment')
         if comment:
-            # Check if user is admin OR reviewer
             is_admin = request.user.is_staff or request.user.is_superuser
             is_reviewer = False
             
@@ -380,15 +340,14 @@ def add_review(request, content_id):
             except:
                 pass
             
-            # Auto-approve if user is admin OR reviewer
             auto_approve = is_admin or is_reviewer
             
             review = Review.objects.create(
                 user=request.user,
                 content=content,
                 comment=comment,
-                is_approved=auto_approve,  # Auto-approve for admin/reviewer
-                is_verified=auto_approve   # Mark as verified
+                is_approved=auto_approve, 
+                is_verified=auto_approve  
             )
             
             if auto_approve:
@@ -402,8 +361,7 @@ def add_review(request, content_id):
 def edit_review(request, review_id):
     """Edit user's own review"""
     review = get_object_or_404(Review, id=review_id)
-    
-    # Check if user owns this review
+   
     if review.user != request.user:
         messages.error(request, 'You can only edit your own reviews!')
         return redirect('recommendox:content_detail', content_id=review.content.id)
@@ -412,7 +370,7 @@ def edit_review(request, review_id):
         new_comment = request.POST.get('comment')
         if new_comment:
             review.comment = new_comment
-            # If admin or reviewer, keep approved; if normal user, reset to pending
+          
             is_admin = request.user.is_staff or request.user.is_superuser
             is_reviewer = False
             
@@ -436,7 +394,6 @@ def delete_review(request, review_id):
     """Delete user's own review"""
     review = get_object_or_404(Review, id=review_id)
     
-    # Check if user owns this review or is admin
     if review.user != request.user and not request.user.is_staff:
         messages.error(request, 'You can only delete your own reviews!')
         return redirect('recommendox:content_detail', content_id=review.content.id)
@@ -449,22 +406,27 @@ def delete_review(request, review_id):
     
     return render(request, 'recommendox/confirm_delete.html', {'review': review})
 
-
-#CONTENT CREATOR VIEWS
+def is_content_creator(user):
+    """Check if user has content creator role"""
+    if not user.is_authenticated:
+        return False
+    try:
+        return hasattr(user.profile, 'creator_profile') and user.profile.creator_profile.is_active
+    except:
+        return False
 
 @content_creator_required
 def creator_dashboard(request):
     """Content Creator Dashboard"""
     user = request.user
-    
-    # Get creator profile
+   
     creator = None
     try:
         creator = user.profile.creator_profile
     except:
         pass
     recent_content = Content.objects.order_by('-created_at')[:10]
-    # Get statistics
+   
     total_content = Content.objects.count()
     recent_count = Content.objects.filter(created_at__gte=timezone.now() - timedelta(days=7)).count()
     
@@ -483,10 +445,9 @@ def manage_content(request):
     if request.method == 'POST':
         form = ContentForm(request.POST)
         if form.is_valid():
-            # Save the content first
+          
             content = form.save()
-            
-            # Save ONE OTT platform
+          
             platform = request.POST.get('ott_platform')
             url = request.POST.get('ott_url')
             is_free = request.POST.get('ott_free') == 'True'
@@ -513,8 +474,8 @@ def manage_content(request):
     }
     return render(request, 'recommendox/manage_content.html', context)
 
-@staff_member_required  # For admin
-@content_creator_required  # For creators
+@staff_member_required 
+@content_creator_required  
 def edit_content(request, content_id):
     """Edit content - works for both admin and creators"""
     content = get_object_or_404(Content, id=content_id)
@@ -566,11 +527,10 @@ def delete_content(request, content_id):
 
 
 #ADMIN VIEWS
-
 @staff_member_required
 def admin_dashboard(request):
     """Admin dashboard"""
-    # Statistics
+   
     total_users = User.objects.count()
     total_content = Content.objects.count()
     total_reviews = Review.objects.count()
@@ -578,11 +538,9 @@ def admin_dashboard(request):
     approved_reviews = Review.objects.filter(is_approved=True).count()
     total_reviewers = Reviewer.objects.count()
     total_creators = ContentCreator.objects.count()
-    
-    # ADD THIS - Golden User stats
+  
     pending_golden = GoldenUser.objects.filter(verification_status='Pending').count()
     
-    # Recent activity
     recent_content = Content.objects.order_by('-created_at')[:5]
     recent_reviews = Review.objects.order_by('-review_date')[:5]
     
@@ -594,12 +552,11 @@ def admin_dashboard(request):
         'approved_reviews': approved_reviews,
         'total_reviewers': total_reviewers,
         'total_creators': total_creators,
-        'pending_golden': pending_golden,  # ADD THIS
+        'pending_golden': pending_golden,  
         'recent_content': recent_content,
         'recent_reviews': recent_reviews,
     }
     return render(request, 'recommendox/admin_dashboard.html', context)
-
 
 @staff_member_required
 def manage_users(request):
@@ -631,8 +588,7 @@ def manage_users(request):
             username = user.username
             user.delete()
             messages.success(request, f'User "{username}" deleted.')
-    
-    # Get reviewer status and creator status for each user
+
     for user in users:
         try:
             user.is_reviewer = hasattr(user.profile, 'reviewer_profile') and user.profile.reviewer_profile.is_active
@@ -656,12 +612,10 @@ def make_reviewer(request, user_id):
     """Upgrade a user to reviewer role"""
     user = get_object_or_404(User, id=user_id)
     profile, created = UserProfile.objects.get_or_create(user=user)
-    
-    # Check if already reviewer
+   
     if hasattr(profile, 'reviewer_profile'):
         messages.warning(request, f'{user.username} is already a reviewer!')
     else:
-        # Create reviewer profile
         Reviewer.objects.create(
             user_profile=profile,
             is_active=True
@@ -676,12 +630,10 @@ def make_creator(request, user_id):
     """Upgrade a user to content creator role"""
     user = get_object_or_404(User, id=user_id)
     profile, created = UserProfile.objects.get_or_create(user=user)
-    
-    # Check if already creator
+   
     if hasattr(profile, 'creator_profile'):
         messages.warning(request, f'{user.username} is already a creator!')
     else:
-        # Create creator profile
         ContentCreator.objects.create(
             user_profile=profile,
             is_active=True
@@ -707,7 +659,6 @@ def remove_reviewer(request, user_id):
     
     return redirect('recommendox:manage_users')
 
-
 @staff_member_required
 def remove_creator(request, user_id):
     """Remove creator role from a user"""
@@ -728,7 +679,6 @@ def remove_creator(request, user_id):
 @staff_member_required
 def moderate_reviews(request):
     """Review moderation for admin"""
-    # Get filter from request
     filter_type = request.GET.get('filter', 'pending')
     
     if filter_type == 'pending':
@@ -755,8 +705,7 @@ def moderate_reviews(request):
             messages.success(request, 'Review deleted successfully!')
         
         return redirect('recommendox:moderate_reviews')
-    
-    # Get counts for dashboard
+ 
     pending_count = Review.objects.filter(is_approved=False).count()
     approved_count = Review.objects.filter(is_approved=True).count()
     total_count = Review.objects.count()
@@ -772,24 +721,18 @@ def moderate_reviews(request):
 
 
 #OTT VIEWS
-
 def ott_browse(request):
     """Browse content by OTT platform"""
     platform = request.GET.get('platform', '')
     free_only = request.GET.get('free_only') == 'True'
     
-    # Get all content that has OTT platforms
     content_list = Content.objects.filter(ott_platforms__isnull=False).distinct()
     
     if platform:
-        # Filter by specific platform
         content_list = content_list.filter(ott_platforms__platform_name=platform)
     
     if free_only:
-        # Filter by free content
         content_list = content_list.filter(ott_platforms__is_free=True)
-    
-    # Pagination
     paginator = Paginator(content_list, 12)
     page = request.GET.get('page')
     contents = paginator.get_page(page)
@@ -801,9 +744,6 @@ def ott_browse(request):
     }
     return render(request, 'recommendox/ott_browse.html', context)
 
-# recommendox/views.py - Add these views
-
-# Helper function to check if user is golden user
 def is_golden_user(user):
     """Check if user has golden user profile"""
     if not user.is_authenticated:
@@ -813,14 +753,13 @@ def is_golden_user(user):
     except:
         return False
 
-# Decorator for golden user access
 def golden_user_required(view_func):
     """Decorator to check if user is golden user"""
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('recommendox:login')
         
-        if request.user.is_staff:  # Admin can also access
+        if request.user.is_staff: 
             return view_func(request, *args, **kwargs)
         
         if is_golden_user(request.user):
@@ -835,7 +774,6 @@ def become_golden_user(request):
     """Apply to become a golden user"""
     user = request.user
     
-    # Check if already golden user
     try:
         if hasattr(user.profile, 'golden_profile'):
             golden = user.profile.golden_profile
@@ -846,19 +784,17 @@ def become_golden_user(request):
                 messages.success(request, 'You are already a verified Golden User!')
                 return redirect('recommendox:golden_dashboard')
             elif golden.verification_status == 'Rejected':
-                # Allow re-application if rejected
+              
                 messages.warning(request, 'Your previous application was rejected. You can apply again.')
-                # Delete old rejected profile so they can reapply
+               
                 golden.delete()
     except AttributeError:
-        # User has no profile or golden_profile attribute
         pass
     except:
-        # Other errors - just continue to application form
         pass
     
     if request.method == 'POST':
-        # Get form data
+        
         profession = request.POST.get('profession')
         bio = request.POST.get('bio')
         years_experience = request.POST.get('years_experience', 0)
@@ -866,24 +802,20 @@ def become_golden_user(request):
         website = request.POST.get('website', '')
         notable_works = request.POST.get('notable_works', '')
         awards = request.POST.get('awards', '')
-        
-        # Handle social media links
+     
         social_media = {
             'twitter': request.POST.get('twitter', ''),
             'instagram': request.POST.get('instagram', ''),
             'linkedin': request.POST.get('linkedin', ''),
             'imdb': request.POST.get('imdb', ''),
         }
-        
-        # Handle file uploads
+      
         profile_image = request.FILES.get('profile_image')
         cover_image = request.FILES.get('cover_image')
         verification_docs = request.FILES.get('verification_docs')
-        
-        # Get or create user profile
+       
         profile, created = UserProfile.objects.get_or_create(user=user)
         
-        # Create golden user profile
         golden_user = GoldenUser.objects.create(
             user_profile=profile,
             profession=profession,
@@ -902,8 +834,7 @@ def become_golden_user(request):
         
         messages.success(request, 'Your Golden User application has been submitted for verification!')
         return redirect('recommendox:golden_dashboard')
-    
-    # GET request - show application form
+   
     professions = GoldenUser.PROFESSION_CHOICES
     return render(request, 'recommendox/become_golden.html', {'professions': professions})
 
@@ -914,33 +845,26 @@ def golden_dashboard(request):
     user = request.user
     golden = user.profile.golden_profile
     
-    # If pending verification, show pending message
     if golden.verification_status == 'Pending':
         return render(request, 'recommendox/golden_pending.html', {'golden': golden})
-    
-    # If rejected, show rejection message
+   
     if golden.verification_status == 'Rejected':
         return render(request, 'recommendox/golden_rejected.html', {'golden': golden})
-    
-    # Only verified users see the full dashboard
+   
     from django.db.models import Count, Avg, Q
     from .models import Content, Review, Rating, ContentOTT
     
-    # Get all content with analytics
     content_stats = Content.objects.annotate(
         total_ratings=Count('ratings'),
         rating_avg=Avg('ratings__rating_value'),
         total_reviews=Count('reviews')
     ).order_by('-total_ratings')[:20]
     
-    # Get OTT availability info for each content
     for content in content_stats:
         content.ott_platforms_list = ContentOTT.objects.filter(content=content)
-    
-    # Get recent reviews from all users
+   
     recent_reviews = Review.objects.select_related('user', 'content').order_by('-review_date')[:10]
     
-    # Get platform popularity
     platform_stats = ContentOTT.objects.values('platform_name').annotate(
         total_content=Count('content'),
         free_content=Count('id', filter=Q(is_free=True))
@@ -961,8 +885,7 @@ def golden_dashboard(request):
 def golden_content_analytics(request, content_id):
     """Detailed analytics for specific content"""
     content = get_object_or_404(Content, id=content_id)
-    
-    # Track that golden user viewed this
+   
     golden = request.user.profile.golden_profile
     golden.increment_content_views()
     
@@ -997,18 +920,15 @@ def golden_content_analytics(request, content_id):
 def verify_golden_users(request):
     """Admin view to verify golden user applications - R.3 Verification"""
     
-    # Filter applications
     status_filter = request.GET.get('status', 'Pending')
     
-    # Base queryset with select_related for efficiency
     base_qs = GoldenUser.objects.select_related('user_profile__user')
     
     if status_filter == 'All':
         applications = base_qs.all()
     else:
         applications = base_qs.filter(verification_status=status_filter)
-    
-    # Handle POST request for verification/rejection
+   
     if request.method == 'POST':
         golden_id = request.POST.get('golden_id')
         action = request.POST.get('action')
@@ -1038,8 +958,7 @@ def verify_golden_users(request):
         
         golden.save()
         return redirect('recommendox:verify_golden_users')
-    
-    # Get counts for dashboard
+  
     pending_count = GoldenUser.objects.filter(verification_status='Pending').count()
     verified_count = GoldenUser.objects.filter(verification_status='Verified').count()
     rejected_count = GoldenUser.objects.filter(verification_status='Rejected').count()
@@ -1061,7 +980,7 @@ def edit_golden_profile(request):
     golden = request.user.profile.golden_profile
     
     if request.method == 'POST':
-        # Update profile fields
+      
         golden.profession = request.POST.get('profession', golden.profession)
         golden.bio = request.POST.get('bio', golden.bio)
         golden.years_of_experience = request.POST.get('years_experience', golden.years_of_experience)
@@ -1070,7 +989,6 @@ def edit_golden_profile(request):
         golden.notable_works = request.POST.get('notable_works', golden.notable_works)
         golden.awards = request.POST.get('awards', golden.awards)
         
-        # Update social media
         social_media = {
             'twitter': request.POST.get('twitter', ''),
             'instagram': request.POST.get('instagram', ''),
@@ -1078,8 +996,7 @@ def edit_golden_profile(request):
             'imdb': request.POST.get('imdb', ''),
         }
         golden.social_media_links = social_media
-        
-        # Handle image uploads
+       
         if request.FILES.get('profile_image'):
             golden.profile_image = request.FILES['profile_image']
         if request.FILES.get('cover_image'):
@@ -1089,7 +1006,6 @@ def edit_golden_profile(request):
         messages.success(request, 'Your professional profile has been updated!')
         return redirect('recommendox:golden_dashboard')
     
-    # GET request - show edit form
     professions = GoldenUser.PROFESSION_CHOICES
     social = golden.social_media_links or {}
     

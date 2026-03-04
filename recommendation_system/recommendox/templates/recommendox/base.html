@@ -304,12 +304,14 @@
                         </li>
 
                         <!-- CREATOR - Only active when on creator page -->
+                        {% if user.is_authenticated and user.profile.creator_profile or user.is_staff %}
                         <li class="nav-item">
                             <a class="nav-link {% if '/creator/' in request.path %}active{% endif %}" 
-                               href="{% url 'recommendox:creator_dashboard' %}">
+                            href="{% url 'recommendox:creator_dashboard' %}">
                                 <i class="fas fa-pen-fancy"></i> Creator
                             </a>
                         </li>
+                        {% endif %}
 
                         <!-- ADMIN -->
                         {% if user.is_staff %}

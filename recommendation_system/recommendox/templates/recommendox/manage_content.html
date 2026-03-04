@@ -17,7 +17,6 @@
     </div>
 </div>
 
-<!-- Add New Content Form -->
 <div class="card mb-4">
     <div class="card-header bg-primary text-white">
         <h5 class="mb-0"><i class="fas fa-plus-circle"></i> Add New Content</h5>
@@ -38,8 +37,7 @@
                 </ul>
             </div>
             {% endif %}
-            
-            <!-- Row 1: Title, Content Type, Genre -->
+        
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Title *</label>
@@ -73,8 +71,7 @@
                     </select>
                 </div>
             </div>
-            
-            <!-- Row 2: Language, Release Date, Duration -->
+           
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Language *</label>
@@ -108,8 +105,7 @@
                     </small>
                 </div>
             </div>
-            
-            <!-- Row 3: Director and Cast -->
+           
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Director</label>
@@ -122,14 +118,12 @@
                            value="{{ form.cast.value|default:'' }}">
                 </div>
             </div>
-            
-            <!-- Description -->
+           
             <div class="mb-3">
                 <label class="form-label">Description *</label>
                 <textarea name="description" class="form-control" rows="4" required>{{ form.description.value|default:'' }}</textarea>
             </div>
-            
-            <!-- OTT Availability Card -->
+           
             <div class="card mb-3">
                 <div class="card-header bg-info text-white">
                     <h6 class="mb-0"><i class="fas fa-tv"></i> OTT Availability (Optional)</h6>
@@ -165,7 +159,6 @@
                 </div>
             </div>
 
-            <!-- Poster and Trailer URLs -->
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Poster URL</label>
@@ -179,8 +172,7 @@
                            value="{{ form.trailer_url.value|default:'' }}">
                 </div>
             </div>
-            
-            <!-- Submit Button -->
+           
             <div class="text-end">
                 <button type="submit" class="btn btn-primary btn-lg px-5">
                     <i class="fas fa-save"></i> Save Content
@@ -190,7 +182,6 @@
     </div>
 </div>
 
-<!-- Existing Content List -->
 <div class="card">
     <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
         <h5 class="mb-0"><i class="fas fa-list"></i> Existing Content ({{ content_list|length }})</h5>
@@ -232,7 +223,7 @@
                         <td>{{ content.release_date|date:"Y-m-d" }}</td>
                         <td>
                             <span class="badge bg-warning text-dark">
-                                <i class="fas fa-star"></i> {{ content.avg_rating|default:"0" }}
+                                <i class="fas fa-star"></i> {{ content.avg_rating|floatformat:1|default:"0" }}
                             </span>
                         </td>
                         <td>
@@ -267,7 +258,6 @@
     </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -293,7 +283,7 @@
 
 {% block extra_js %}
 <script>
-// Search functionality
+
 document.getElementById('searchContent').addEventListener('keyup', function() {
     const searchText = this.value.toLowerCase();
     const tableRows = document.querySelectorAll('#contentTable tbody tr');
@@ -311,7 +301,6 @@ document.getElementById('searchContent').addEventListener('keyup', function() {
     });
 });
 
-// Delete function
 function deleteContent(contentId, contentTitle) {
     document.getElementById('deleteTitle').textContent = contentTitle;
     document.getElementById('deleteForm').action = `/admin/manage-content/delete/${contentId}/`;
@@ -319,7 +308,6 @@ function deleteContent(contentId, contentTitle) {
     deleteModal.show();
 }
 
-// Content type change handler
 const contentTypeSelect = document.querySelector('select[name="content_type"]');
 const durationLabel = document.getElementById('durationLabel');
 const durationInput = document.getElementById('durationInput');
@@ -353,7 +341,6 @@ function updateDurationField() {
     }
 }
 
-// Initial call
 if (contentTypeSelect) {
     contentTypeSelect.addEventListener('change', updateDurationField);
     updateDurationField();

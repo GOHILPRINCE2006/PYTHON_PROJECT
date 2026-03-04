@@ -48,7 +48,6 @@ class Content(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
-    # Calculated field
     @property
     def avg_rating(self):
         ratings = self.ratings.all()
@@ -134,8 +133,6 @@ class UserProfile(models.Model):
             setattr(self, key, value)
         self.save()
 
-# recommendox/models.py - Add/Update GoldenUser model
-
 class GoldenUser(models.Model):
     """Golden User - Industry professional with verified status"""
     
@@ -160,7 +157,6 @@ class GoldenUser(models.Model):
     
     user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name='golden_profile')
     
-    # Professional details
     profession = models.CharField(max_length=50, choices=PROFESSION_CHOICES)
     bio = models.TextField(max_length=1000, blank=True, null=True, help_text="Your professional background")
     years_of_experience = models.IntegerField(default=0)
@@ -168,27 +164,22 @@ class GoldenUser(models.Model):
     website = models.URLField(max_length=500, blank=True, null=True)
     social_media_links = models.JSONField(default=dict, blank=True, help_text="JSON of social media URLs")
     
-    # Profile media
     profile_image = models.ImageField(upload_to='golden_profiles/', blank=True, null=True)
     cover_image = models.ImageField(upload_to='golden_covers/', blank=True, null=True)
     
-    # Verification
     verification_status = models.CharField(max_length=20, choices=VERIFICATION_STATUS, default='Pending')
     verification_documents = models.FileField(upload_to='verification_docs/', blank=True, null=True)
     verification_notes = models.TextField(blank=True, null=True, help_text="Admin notes on verification")
     verified_at = models.DateTimeField(blank=True, null=True)
     verified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='verified_golden_users')
     
-    # Professional portfolio
     notable_works = models.TextField(blank=True, null=True, help_text="List of notable works/projects")
     awards = models.TextField(blank=True, null=True, help_text="Awards and recognitions")
     
-    # Stats
     total_content_views = models.IntegerField(default=0)
     total_reviews_given = models.IntegerField(default=0)
     followers_count = models.IntegerField(default=0)
     
-    # Timestamps
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
@@ -290,7 +281,7 @@ class Analytics(models.Model):
     def __str__(self):
         return f"Analytics for {self.content.title}"
     
-    def update_views(self):  # ADD THIS
+    def update_views(self):  
         self.total_views += 1
         self.save()
 

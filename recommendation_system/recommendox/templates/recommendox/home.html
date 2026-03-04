@@ -26,13 +26,12 @@
     </div>
 </div>
 
-<!-- TRENDING NOW - UPDATED SECTION -->
+<!-- TRENDING NOW -->
 <h2 class="section-title">🔥 Trending Now</h2>
 <div class="row mb-5">
     {% for content in trending_content %}
     <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
         <div class="card content-card h-100 position-relative">
-            <!-- NEW RELEASE BADGE -->
             {% if content.release_date.year == current_year %}
             <span class="badge bg-danger position-absolute top-0 end-0 m-2" style="z-index: 10; font-size: 0.8rem; padding: 5px 10px;">
                 <i class="fas fa-fire"></i> NEW
@@ -80,7 +79,7 @@
     {% endfor %}
 </div>
 
-<!-- RECENTLY ADDED - UPDATED SECTION -->
+<!-- RECENTLY ADDED -->
 <h2 class="section-title">🆕 Recently Added</h2>
 <div class="row mb-5">
     {% for content in recent_content %}

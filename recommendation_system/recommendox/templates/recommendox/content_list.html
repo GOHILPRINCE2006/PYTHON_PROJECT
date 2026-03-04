@@ -56,8 +56,7 @@
                     <option value="Documentary" {% if selected_type == 'Documentary' %}selected{% endif %}>Documentaries</option>
                 </select>
             </div>
-            
-            <!-- FIX 1: SORT DROPDOWN - YEH HAI UPDATE -->
+           
             <div class="col-md-3">
                 <label class="form-label">Sort By</label>
                 <select name="sort" class="form-select" onchange="this.form.submit()">
@@ -85,7 +84,6 @@
     </div>
 </div>
 
-<!-- Results Count -->
 <p class="text-muted mb-3">
     Showing {{ content.start_index }} - {{ content.end_index }} of {{ content.paginator.count }} results
     {% if search_query %}
@@ -93,7 +91,6 @@
     {% endif %}
 </p>
 
-<!-- Content Grid -->
 <div class="row">
     {% for item in content %}
     <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
@@ -105,7 +102,6 @@
                 <h5 class="card-title" style="height: 48px; overflow: hidden;">{{ item.title }}</h5>
                 <div class="d-flex justify-content-between mb-2">
                     <span class="badge bg-info">{{ item.content_type }}</span>
-                    <!-- FIX 3: RATING DISPLAY - YEH HAI UPDATE -->
                     <span class="badge bg-warning text-dark">
                         <i class="fas fa-star"></i> 
                         {% if item.rating_avg %}
@@ -143,7 +139,6 @@
     {% endfor %}
 </div>
 
-<!-- Pagination -->
 {% if content.has_other_pages %}
 <nav aria-label="Page navigation" class="mt-4">
     <ul class="pagination justify-content-center">

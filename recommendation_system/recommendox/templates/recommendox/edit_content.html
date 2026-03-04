@@ -37,8 +37,7 @@
                 </ul>
             </div>
             {% endif %}
-            
-            <!-- Row 1: Title, Content Type, Genre -->
+           
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Title *</label>
@@ -72,7 +71,6 @@
                 </div>
             </div>
             
-            <!-- Row 2: Language, Release Date, Duration/Season -->
             <div class="row">
                 <div class="col-md-4 mb-3">
                     <label class="form-label">Language *</label>
@@ -112,7 +110,6 @@
                 </div>
             </div>
             
-            <!-- Row 3: Director and Cast -->
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Director</label>
@@ -124,13 +121,11 @@
                 </div>
             </div>
             
-            <!-- Description -->
             <div class="mb-3">
                 <label class="form-label">Description *</label>
                 <textarea name="description" class="form-control" rows="4" required>{{ content.description }}</textarea>
             </div>
             
-            <!-- OTT Availability - FIXED: This was missing! -->
             <div class="card mb-3">
                 <div class="card-header bg-info text-white">
                     <h6 class="mb-0"><i class="fas fa-tv"></i> OTT Availability</h6>
@@ -165,7 +160,6 @@
                 </div>
             </div>
 
-            <!-- Poster and Trailer URLs -->
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Poster URL</label>
@@ -177,8 +171,7 @@
                     <input type="text" name="trailer_url" class="form-control" value="{{ content.trailer_url }}">
                 </div>
             </div>
-            
-            <!-- Buttons -->
+          
             <div class="d-flex gap-2">
                 <a href="{% url 'recommendox:manage_content' %}" class="btn btn-secondary">
                     <i class="fas fa-times"></i> Cancel
@@ -191,7 +184,6 @@
     </div>
 </div>
 
-<!-- JavaScript for dynamic fields -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const editContentType = document.getElementById('editContentType');

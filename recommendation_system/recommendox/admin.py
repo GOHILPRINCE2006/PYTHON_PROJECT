@@ -5,7 +5,6 @@ from .models import (
     Watchlist, Rating, Review, Analytics, Message, Reviewer, ContentOTT, ContentCreator
 )
 
-# Register your models here
 @admin.register(Content)
 class ContentAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'content_type', 'genre', 'language', 'release_date')
@@ -27,8 +26,6 @@ class EpisodeAdmin(admin.ModelAdmin):
 class UserProfileAdmin(admin.ModelAdmin):
     list_display = ('id', 'user', 'is_premium', 'created_at')
     search_fields = ('user__username', 'user__email')
-
-# recommendox/admin.py - Update GoldenUserAdmin
 
 @admin.register(GoldenUser)
 class GoldenUserAdmin(admin.ModelAdmin):
@@ -94,7 +91,7 @@ class RatingAdmin(admin.ModelAdmin):
     list_filter = ('rating_value',)
 
 @admin.register(Review)
-class ReviewAdmin(admin.ModelAdmin):  # Make sure this is here
+class ReviewAdmin(admin.ModelAdmin):  
     list_display = ('id', 'user', 'content', 'is_approved', 'is_verified', 'review_date')
     list_filter = ('is_approved', 'is_verified', 'review_date')
     search_fields = ('comment', 'user__username', 'content__title')
@@ -129,7 +126,6 @@ class ContentOTTAdmin(admin.ModelAdmin):
     list_display = ('id', 'content', 'platform_name', 'is_free')
     list_filter = ('platform_name', 'is_free')
     search_fields = ('content__title',)
-
 
 @admin.register(ContentCreator)
 class ContentCreatorAdmin(admin.ModelAdmin):

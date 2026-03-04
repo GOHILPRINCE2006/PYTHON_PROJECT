@@ -8,6 +8,33 @@
 .nav-link {
     display: none !important;
 }
+
+.password-requirements {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+    opacity: 0;
+    margin-top: 0;
+}
+
+.password-requirements.visible {
+    max-height: 200px;  
+    opacity: 1;
+    margin-top: 0.5rem;
+}
+
+.text-success {
+    color: #28a745 !important;
+    transition: color 0.2s;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.fa-check-circle, .fa-times-circle {
+    margin-right: 5px;
+}
 </style>
 
 <div class="row justify-content-center align-items-center" style="min-height: 80vh;">
@@ -22,7 +49,7 @@
 
             <div class="card-body p-4">
 
-                <form method="post" action="{% url 'recommendox:register' %}">
+                <form method="post" action="{% url 'recommendox:register' %}" id="registerForm">
                     {% csrf_token %}
                     
                     {% if form.errors %}
@@ -54,6 +81,7 @@
                         <input type="email" name="email" class="form-control" 
                                id="id_email" required
                                value="{{ form.email.value|default:'' }}">
+                        <div id="emailFeedback" class="mt-1 small"></div>
                     </div>
            
                     <div class="mb-3">
@@ -70,10 +98,22 @@
                                 <i class="fas fa-eye" id="toggleIcon1"></i>
                             </button>
                         </div>
-                        <div class="form-text">
-                            Password must be at least 8 characters.
+                        
+                        <div class="password-requirements" id="passwordRequirements">
+                            <div class="p-2 bg-light rounded">
+                                <small>
+                                    <div id="lengthCheck" class="text-danger">
+                                        <i class="fas fa-times-circle"></i> Min 8 characters
+                                    </div>
+                                    <div id="digitCheck" class="text-danger">
+                                        <i class="fas fa-times-circle"></i> At least 1 digit (0-9)
+                                    </div>
+                                    <div id="letterCheck" class="text-danger">
+                                        <i class="fas fa-times-circle"></i> At least 1 letter
+                                    </div>
+                                </small>
+                            </div>
                         </div>
-                        <div id="passwordStrength" class="mt-1"></div>
                     </div>
                     
                     <div class="mb-4">
@@ -90,11 +130,11 @@
                                 <i class="fas fa-eye" id="toggleIcon2"></i>
                             </button>
                         </div>
-                        <div id="passwordMatch" class="mt-1"></div>
+                        <div id="passwordMatch" class="mt-1 small"></div>
                     </div>
                     
                     <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary btn-lg" style="background: #2c5d7c;">
+                        <button type="submit" class="btn btn-primary btn-lg" style="background: #2c5d7c;" id="submitBtn">
                             <i class="fas fa-user-plus"></i> Create Account
                         </button>
                     </div>
@@ -127,66 +167,122 @@ document.addEventListener('DOMContentLoaded', function() {
     
     const password1 = document.getElementById('id_password1');
     const password2 = document.getElementById('id_password2');
-
-    function checkPasswordStrength() {
-        const password = password1.value;
-        let indicator = document.getElementById('passwordStrength');
-
-        if (!indicator) {
-            indicator = document.createElement('div');
-            indicator.id = 'passwordStrength';
-            indicator.className = 'mt-2';
-            password1.parentNode.parentNode.appendChild(indicator);
+    const emailInput = document.getElementById('id_email');
+    const emailFeedback = document.getElementById('emailFeedback');
+    const passwordRequirements = document.getElementById('passwordRequirements');
+    
+    function validateEmail() {
+        const email = emailInput.value;
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        
+        if (email === '') {
+            emailFeedback.innerHTML = '';
+            return false;
         }
-
-        if (password.length === 0) {
-            indicator.innerHTML = '';
-            return;
+        
+        if (!email.includes('@')) {
+            emailFeedback.innerHTML = '<span class="text-danger"><i class="fas fa-times"></i> Must contain @ symbol</span>';
+            return false;
         }
-
-        if (password.length < 8) {
-            indicator.innerHTML = '<small class="text-danger"><i class="fas fa-times-circle"></i> Too short (min 8 characters)</small>';
+        
+        const atIndex = email.indexOf('@');
+        const domain = email.substring(atIndex + 1);
+        if (!domain.includes('.')) {
+            emailFeedback.innerHTML = '<span class="text-danger"><i class="fas fa-times"></i> Domain must contain .</span>';
+            return false;
+        }
+        
+        const dotIndex = domain.indexOf('.');
+        if (dotIndex <= 0) {
+            emailFeedback.innerHTML = '<span class="text-danger"><i class="fas fa-times"></i> Must have characters between @ and .</span>';
+            return false;
+        }
+        
+        if (emailRegex.test(email)) {
+            emailFeedback.innerHTML = '<span class="text-success"><i class="fas fa-check-circle"></i> Valid email</span>';
+            return true;
         } else {
-            indicator.innerHTML = '<small class="text-success"><i class="fas fa-check-circle"></i> Valid password</small>';
+            emailFeedback.innerHTML = '<span class="text-danger"><i class="fas fa-times"></i> Invalid email format</span>';
+            return false;
         }
     }
-
-    function checkPasswordMatch() {
-        let indicator = document.getElementById('passwordMatch');
-
-        if (!indicator) {
-            indicator = document.createElement('div');
-            indicator.id = 'passwordMatch';
-            indicator.className = 'mt-2';
-            password2.parentNode.parentNode.appendChild(indicator);
+    
+    if (emailInput) {
+        emailInput.addEventListener('keyup', validateEmail);
+    }
+    
+    const lengthCheck = document.getElementById('lengthCheck');
+    const digitCheck = document.getElementById('digitCheck');
+    const letterCheck = document.getElementById('letterCheck');
+    
+    function validatePassword() {
+        const password = password1.value;
+        
+        if (password.length > 0) {
+            passwordRequirements.classList.add('visible');
+        } else {
+            passwordRequirements.classList.remove('visible');
+            lengthCheck.className = 'text-danger';
+            lengthCheck.innerHTML = '<i class="fas fa-times-circle"></i> Min 8 characters';
+            digitCheck.className = 'text-danger';
+            digitCheck.innerHTML = '<i class="fas fa-times-circle"></i> At least 1 digit (0-9)';
+            letterCheck.className = 'text-danger';
+            letterCheck.innerHTML = '<i class="fas fa-times-circle"></i> At least 1 letter';
+            return false;
         }
+        
+        if (password.length >= 8) {
+            lengthCheck.className = 'text-success';
+            lengthCheck.innerHTML = '<i class="fas fa-check-circle"></i> Min 8 characters ✓';
+        } else {
+            lengthCheck.className = 'text-danger';
+            lengthCheck.innerHTML = '<i class="fas fa-times-circle"></i> Min 8 characters';
+        }
+        
+        if (/\d/.test(password)) {
+            digitCheck.className = 'text-success';
+            digitCheck.innerHTML = '<i class="fas fa-check-circle"></i> At least 1 digit ✓';
+        } else {
+            digitCheck.className = 'text-danger';
+            digitCheck.innerHTML = '<i class="fas fa-times-circle"></i> At least 1 digit (0-9)';
+        }
+        
+        if (/[a-zA-Z]/.test(password)) {
+            letterCheck.className = 'text-success';
+            letterCheck.innerHTML = '<i class="fas fa-check-circle"></i> At least 1 letter ✓';
+        } else {
+            letterCheck.className = 'text-danger';
+            letterCheck.innerHTML = '<i class="fas fa-times-circle"></i> At least 1 letter';
+        }
+        
+        return password.length >= 8 && /\d/.test(password) && /[a-zA-Z]/.test(password);
+    }
+    
+    function checkPasswordMatch() {
+        const matchDiv = document.getElementById('passwordMatch');
 
         if (password2.value === '') {
-            indicator.innerHTML = '';
-            return;
+            matchDiv.innerHTML = '';
+            return false;
         }
 
         if (password1.value === password2.value) {
-            indicator.innerHTML = '<small class="text-success"><i class="fas fa-check-circle"></i> Passwords match</small>';
+            matchDiv.innerHTML = '<span class="text-success"><i class="fas fa-check-circle"></i> Passwords match</span>';
+            return true;
         } else {
-            indicator.innerHTML = '<small class="text-danger"><i class="fas fa-times-circle"></i> Passwords do not match</small>';
+            matchDiv.innerHTML = '<span class="text-danger"><i class="fas fa-times-circle"></i> Passwords do not match</span>';
+            return false;
         }
     }
-
+    
     const togglePassword1 = document.getElementById('togglePassword1');
     const toggleIcon1 = document.getElementById('toggleIcon1');
     
     togglePassword1.addEventListener('click', function() {
         const type = password1.getAttribute('type') === 'password' ? 'text' : 'password';
         password1.setAttribute('type', type);
-        
-        if (type === 'text') {
-            toggleIcon1.classList.remove('fa-eye');
-            toggleIcon1.classList.add('fa-eye-slash');
-        } else {
-            toggleIcon1.classList.remove('fa-eye-slash');
-            toggleIcon1.classList.add('fa-eye');
-        }
+        toggleIcon1.classList.toggle('fa-eye');
+        toggleIcon1.classList.toggle('fa-eye-slash');
     });
 
     const togglePassword2 = document.getElementById('togglePassword2');
@@ -195,19 +291,35 @@ document.addEventListener('DOMContentLoaded', function() {
     togglePassword2.addEventListener('click', function() {
         const type = password2.getAttribute('type') === 'password' ? 'text' : 'password';
         password2.setAttribute('type', type);
-        
-        if (type === 'text') {
-            toggleIcon2.classList.remove('fa-eye');
-            toggleIcon2.classList.add('fa-eye-slash');
-        } else {
-            toggleIcon2.classList.remove('fa-eye-slash');
-            toggleIcon2.classList.add('fa-eye');
-        }
+        toggleIcon2.classList.toggle('fa-eye');
+        toggleIcon2.classList.toggle('fa-eye-slash');
     });
 
-    password1.addEventListener('input', checkPasswordStrength);
-    password1.addEventListener('input', checkPasswordMatch);
+    password1.addEventListener('input', function() {
+        validatePassword();
+        checkPasswordMatch();
+    });
+    
     password2.addEventListener('input', checkPasswordMatch);
+    const registerForm = document.getElementById('registerForm');
+    
+    if (registerForm) {
+        registerForm.addEventListener('submit', function(e) {
+            const isEmailValid = emailInput.value ? validateEmail() : true;
+            const isPasswordValid = password1.value ? validatePassword() : false;
+            const isConfirmValid = password2.value ? checkPasswordMatch() : false;
+            
+            if (!isEmailValid || !isPasswordValid || !isConfirmValid) {
+                e.preventDefault();
+                
+                if (!password1.value) {
+                    passwordRequirements.classList.add('visible');
+                }
+                
+                alert('Please fill all fields correctly!');
+            }
+        });
+    }
 });
 </script>
 {% endblock %}
