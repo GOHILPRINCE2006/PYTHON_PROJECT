@@ -47,6 +47,7 @@ class Content(models.Model):
     trailer_url = models.URLField(max_length=50000, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    views_count = models.IntegerField(default=0, help_text="Number of times content details viewed")
     
     @property
     def avg_rating(self):
@@ -137,16 +138,13 @@ class GoldenUser(models.Model):
     """Golden User - Industry professional with verified status"""
     
     PROFESSION_CHOICES = [
-        ('Actor', 'Actor'),
-        ('Director', 'Director'),
-        ('Producer', 'Producer'),
-        ('Writer', 'Writer'),
-        ('Cinematographer', 'Cinematographer'),
-        ('Editor', 'Editor'),
-        ('Music Director', 'Music Director'),
-        ('Critic', 'Film Critic'),
-        ('Journalist', 'Entertainment Journalist'),
-        ('Other', 'Other'),
+    ('Actor', 'Actor'),
+    ('Actress', 'Actress'), 
+    ('Director', 'Director'),
+    ('Producer', 'Producer'),
+    ('Writer', 'Writer'),
+    ('Critic', 'Film Critic'),
+    ('Journalist', 'Entertainment Journalist'),
     ]
     
     VERIFICATION_STATUS = [

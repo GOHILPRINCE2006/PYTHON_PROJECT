@@ -17,6 +17,7 @@
     </div>
 </div>
 
+<!-- Content Info Card -->
 <div class="card mb-4">
     <div class="row g-0">
         <div class="col-md-2">
@@ -40,8 +41,41 @@
     </div>
 </div>
 
+<!-- Stats Cards - ADDED VIEWS COUNT -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="stats-card text-center bg-primary text-white">
+            <i class="fas fa-star"></i>
+            <h3>{{ avg_rating|floatformat:1 }}</h3>
+            <p>Avg Rating</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card text-center bg-success text-white">
+            <i class="fas fa-users"></i>
+            <h3>{{ total_ratings }}</h3>
+            <p>Total Ratings</p>
+        </div>
+    </div>
+    <!-- NEW: Views Count Card -->
+    <div class="col-md-3">
+        <div class="stats-card text-center bg-info text-white">
+            <i class="fas fa-eye"></i>
+            <h3>{{ total_views|default:"0" }}</h3>
+            <p>Total Views</p>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stats-card text-center bg-warning text-dark">
+            <i class="fas fa-comment"></i>
+            <h3>{{ total_reviews }}</h3>
+            <p>Total Reviews</p>
+        </div>
+    </div>
+</div>
+
 <div class="row">
-   
+    <!-- Rating Distribution -->
     <div class="col-md-6 mb-4">
         <div class="card h-100">
             <div class="card-header bg-primary text-white">
@@ -71,6 +105,7 @@
         </div>
     </div>
 
+    <!-- OTT Availability -->
     <div class="col-md-6 mb-4">
         <div class="card h-100">
             <div class="card-header bg-info text-white">
@@ -101,6 +136,7 @@
     </div>
 </div>
 
+<!-- User Reviews -->
 <div class="card mb-4">
     <div class="card-header bg-success text-white">
         <h5 class="mb-0"><i class="fas fa-comments"></i> User Reviews ({{ total_reviews }})</h5>
@@ -122,6 +158,7 @@
     </div>
 </div>
 
+<!-- Similar Content -->
 <div class="card">
     <div class="card-header bg-secondary text-white">
         <h5 class="mb-0"><i class="fas fa-film"></i> Similar Content</h5>

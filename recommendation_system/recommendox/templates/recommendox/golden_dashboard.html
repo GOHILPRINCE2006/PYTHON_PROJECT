@@ -1,35 +1,41 @@
-<!-- templates/recommendox/golden_dashboard.html -->
 {% extends 'recommendox/base.html' %}
 {% load static %}
 
 {% block title %}Golden User Dashboard{% endblock %}
 
 {% block content %}
+
 <div class="row mb-4">
     <div class="col-12">
         <div class="card bg-dark text-white">
-            {% if golden.cover_image %}
-            <img src="{{ golden.cover_image.url }}" class="card-img" style="height: 200px; object-fit: cover; opacity: 0.5;">
+            
+            {% if golden.cover_image and golden.cover_image.url %}
+                <img src="{{ golden.cover_image.url }}" 
+                     style="height: 150px; width: 100%; object-fit: cover;">
             {% else %}
-            <div style="height: 200px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                <div style="height: 150px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
             {% endif %}
             
             <div class="card-img-overlay d-flex align-items-end">
                 <div class="d-flex align-items-center">
-                    {% if golden.profile_image %}
-                    <img src="{{ golden.profile_image.url }}" class="rounded-circle border border-3 border-white" 
-                         style="width: 100px; height: 100px; object-fit: cover;">
+                
+                    {% if golden.profile_image and golden.profile_image.url %}
+                        <img src="{{ golden.profile_image.url }}" 
+                             class="rounded-circle border border-3 border-white" 
+                             style="width: 80px; height: 80px; object-fit: cover;">
                     {% else %}
-                    <div class="bg-secondary rounded-circle border border-3 border-white d-flex align-items-center justify-content-center"
-                         style="width: 100px; height: 100px;">
-                        <i class="fas fa-user fa-3x text-white"></i>
-                    </div>
+                        <div class="bg-secondary rounded-circle border border-3 border-white d-flex align-items-center justify-content-center"
+                             style="width: 80px; height: 80px;">
+                            <i class="fas fa-user fa-3x text-white"></i>
+                        </div>
                     {% endif %}
-                    
+                  
                     <div class="ms-3">
                         <h2 class="mb-0">{{ user.username }}</h2>
                         <p class="mb-0">{{ golden.profession }}</p>
-                        {{ golden.get_verification_badge|safe }}
+                        <span class="badge bg-success">
+                            <i class="fas fa-check-circle"></i> Verified Professional
+                        </span>
                     </div>
                 </div>
             </div>
@@ -37,151 +43,200 @@
     </div>
 </div>
 
-
+<!-- MY STATS CARDS -->
+{% if profession != 'Critic' and profession != 'Journalist' %}
 <div class="row mb-4">
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="stats-card text-center bg-primary text-white">
             <i class="fas fa-film"></i>
-            <h3>{{ total_content }}</h3>
-            <p>Total Content</p>
+            <h3>{{ my_stats.total_content }}</h3>
+            <p>My Content</p>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="stats-card text-center bg-success text-white">
             <i class="fas fa-star"></i>
-            <h3>{{ avg_rating_all|floatformat:1 }}</h3>
-            <p>Average Rating</p>
+            <h3>{{ my_stats.avg_rating|floatformat:1 }}</h3>
+            <p>My Avg Rating</p>
         </div>
     </div>
-    <div class="col-md-3">
+    <div class="col-md-4">
         <div class="stats-card text-center bg-info text-white">
             <i class="fas fa-comment"></i>
-            <h3>{{ total_reviews }}</h3>
-            <p>Total Reviews</p>
+            <h3>{{ my_stats.total_reviews }}</h3>
+            <p>Reviews on My Content</p>
         </div>
     </div>
-    <div class="col-md-3">
-        <div class="stats-card text-center bg-warning text-dark">
-            <i class="fas fa-tv"></i>
-            <h3>{{ platform_stats|length }}</h3>
-            <p>OTT Platforms</p>
+</div>
+{% endif %}
+
+<!-- MY CONTENT SECTION (only for this type of proffetion -> Actors/Directors/Producers/Writers) -->
+{% if profession != 'Critic' and profession != 'Journalist' %}
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0"><i class="fas fa-film"></i> My Content</h5>
+    </div>
+    <div class="card-body">
+        {% if my_content %}
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Type</th>
+                            <th>Genre</th>
+                            <th>Rating</th>
+                            <th>OTT</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in my_content %}
+                        <tr>
+                            <td><strong>{{ item.title }}</strong></td>
+                            <td>{{ item.content_type }}</td>
+                            <td>{{ item.genre }}</td>
+                            <td>
+                                <span class="badge bg-warning">
+                                    {{ item.avg_rating|floatformat:1 }}/5
+                                </span>
+                            </td>
+                            <td>
+                                {% for ott in item.ott_platforms.all %}
+                                    <span class="badge bg-info">{{ ott.platform_name }}</span>
+                                {% endfor %}
+                            </td>
+                            <td>
+                                <a href="{% url 'recommendox:golden_content_analytics' item.id %}" 
+                                   class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-chart-line"></i> VIEW ANALYTICS
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <p class="text-muted">No content found for your profession.</p>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+<!-- MY REVIEWS SECTION (FOR CRITICS/JOURNALISTS) -->
+{% if profession == 'Critic' or profession == 'Journalist' %}
+<div class="card mb-4">
+    <div class="card-header bg-success text-white">
+        <h5 class="mb-0"><i class="fas fa-pen"></i> My Recent Reviews</h5>
+    </div>
+    <div class="card-body">
+        {% if my_reviews %}
+            {% for review in my_reviews %}
+            <div class="border-bottom mb-3 pb-2">
+                <div class="d-flex justify-content-between">
+                    <strong>{{ review.content.title }}</strong>
+                    <span class="badge bg-warning">{{ review.content.avg_rating|floatformat:1 }}/5</span>
+                </div>
+                <p class="mb-1">{{ review.comment|truncatechars:100 }}</p>
+                <small class="text-muted">{{ review.review_date|date:"M d, Y" }}</small>
+                <a href="{% url 'recommendox:content_detail' review.content.id %}" class="btn btn-sm btn-link">View</a>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">You haven't written any reviews yet.</p>
+        {% endif %}
+    </div>
+</div>
+{% endif %}
+
+<!-- TRENDING IN MY GENRE -->
+<div class="card mb-4">
+    <div class="card-header bg-info text-white">
+        <h5 class="mb-0"><i class="fas fa-fire"></i> Trending in Your Genre</h5>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            {% for item in trending_in_genre %}
+            <div class="col-md-3 mb-3">
+                <div class="card h-100">
+                    <img src="{{ item.poster_url|default:'https://via.placeholder.com/150x200' }}" 
+                         class="card-img-top" style="height: 150px; object-fit: cover;">
+                    <div class="card-body p-2">
+                        <h6 class="card-title">{{ item.title }}</h6>
+                        <span class="badge bg-warning">{{ item.rating_avg|floatformat:1 }}/5</span>
+                        <span class="badge bg-secondary">{{ item.content_type }}</span>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p class="text-muted">No trending content in your genre.</p>
+            {% endfor %}
         </div>
     </div>
 </div>
 
+<!-- GENRE-WISE AVERAGE RATINGS -->
 <div class="row">
-    <div class="col-md-8">
-        <div class="card mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0"><i class="fas fa-chart-bar"></i> Content Analytics</h5>
-            </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Title</th>
-                                <th>Type</th>
-                                <th>Ratings</th>
-                                <th>Avg Rating</th>
-                                <th>Reviews</th>
-                                <th>OTT</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for content in content_stats %}
-                            <tr>
-                                <td>{{ content.title }}</td>
-                                <td>{{ content.content_type }}</td>
-                                <td>{{ content.total_ratings }}</td>
-                                <td>
-                                    <span class="badge bg-warning">
-                                        {{ content.rating_avg|floatformat:1 }}/5
-                                    </span>
-                                </td>
-                                <td>{{ content.total_reviews }}</td>
-                                <td>
-                                    {% for ott in content.ott_platforms_list %}
-                                    <span class="badge bg-info">{{ ott.platform_name }}</span>
-                                    {% empty %}
-                                    <span class="badge bg-secondary">None</span>
-                                    {% endfor %}
-                                </td>
-                                <td>
-                                    <a href="{% url 'recommendox:golden_content_analytics' content.id %}" 
-                                       class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-chart-line"></i> View
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        
-        <div class="card mb-4">
-            <div class="card-header bg-info text-white">
-                <h5 class="mb-0"><i class="fas fa-tv"></i> OTT Platform Availability</h5>
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-warning">
+                <h5 class="mb-0"><i class="fas fa-chart-pie"></i> Genre Average Ratings</h5>
             </div>
             <div class="card-body">
                 <div class="row">
-                    {% for platform in platform_stats %}
-                    <div class="col-md-4 mb-3">
-                        <div class="card">
-                            <div class="card-body text-center">
-                                <h5>{{ platform.platform_name }}</h5>
-                                <h3>{{ platform.total_content }}</h3>
-                                <p>Content Available</p>
-                                <span class="badge bg-success">{{ platform.free_content }} Free</span>
-                            </div>
+                    {% for genre in genre_stats %}
+                    <div class="col-md-6 mb-2">
+                        <div class="d-flex justify-content-between">
+                            <span>{{ genre.genre }}:</span>
+                            <span class="badge bg-primary">{{ genre.avg_rating|floatformat:1 }}/5</span>
                         </div>
                     </div>
-                    {% empty %}
-                    <p class="text-muted">No platform data available.</p>
                     {% endfor %}
                 </div>
             </div>
         </div>
     </div>
-    
-    <div class="col-md-4">
-        <div class="card mb-4">
-            <div class="card-header bg-success text-white">
-                <h5 class="mb-0"><i class="fas fa-comments"></i> Recent Audience Feedback</h5>
-            </div>
-            <div class="card-body" style="max-height: 500px; overflow-y: auto;">
-                {% for review in recent_reviews %}
-                <div class="border-bottom mb-3 pb-3">
-                    <div class="d-flex justify-content-between">
-                        <strong>{{ review.user.username }}</strong>
-                        <small class="text-muted">{{ review.review_date|date:"M d, Y" }}</small>
-                    </div>
-                    <p class="mb-1">{{ review.comment|truncatechars:100 }}</p>
-                    <small class="text-muted">on <strong>{{ review.content.title }}</strong></small>
-                </div>
-                {% empty %}
-                <p class="text-muted">No recent reviews.</p>
-                {% endfor %}
-            </div>
-        </div>
-        
-        <div class="card">
-            <div class="card-header bg-warning text-dark">
-                <h5 class="mb-0"><i class="fas fa-id-card"></i> Professional Info</h5>
+
+    <!-- OTT PLATFORM AVERAGE RATINGS -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0"><i class="fas fa-tv"></i> OTT Platform Ratings</h5>
             </div>
             <div class="card-body">
-                <p><strong>Profession:</strong> {{ golden.profession }}</p>
-                <p><strong>Experience:</strong> {{ golden.years_of_experience }} years</p>
-                {% if golden.company %}<p><strong>Company:</strong> {{ golden.company }}</p>{% endif %}
-                <p><strong>Notable Works:</strong> {{ golden.notable_works|truncatechars:100 }}</p>
-                <p><strong>Content Views:</strong> {{ golden.total_content_views }}</p>
-                <p><strong>Reviews Given:</strong> {{ golden.total_reviews_given }}</p>
-                <p><strong>Joined:</strong> {{ golden.created_at|date:"M d, Y" }}</p>
+                <div class="row">
+                    {% for ott in ott_stats %}
+                    <div class="col-md-6 mb-2">
+                        <div class="d-flex justify-content-between">
+                            <span>{{ ott.platform_name }}:</span>
+                            <span class="badge bg-info">{{ ott.avg_rating|floatformat:1 }}/5</span>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-muted">No OTT data available.</p>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<!-- RECENT FEEDBACK ON MY CONTENT -->
+{% if recent_feedback %}
+<div class="card mb-4">
+    <div class="card-header bg-secondary text-white">
+        <h5 class="mb-0"><i class="fas fa-comments"></i> Recent Feedback on Your Content</h5>
+    </div>
+    <div class="card-body">
+        {% for review in recent_feedback %}
+        <div class="border-bottom mb-2 pb-2">
+            <strong>{{ review.user.username }}</strong> on <em>{{ review.content.title }}</em>
+            <p class="mb-0">{{ review.comment|truncatechars:150 }}</p>
+            <small class="text-muted">{{ review.review_date|date:"M d, Y" }}</small>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
 {% endblock %}

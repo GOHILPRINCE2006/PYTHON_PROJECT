@@ -195,6 +195,7 @@ def content_detail(request, content_id):
     content = get_object_or_404(Content, id=content_id)
     user_rating = None
     in_watchlist = False
+    increment_content_views(content)
     if request.user.is_authenticated:
         try:
             user_rating = Rating.objects.get(user=request.user, content=content)
@@ -219,6 +220,11 @@ def content_detail(request, content_id):
     }
     return render(request, 'recommendox/content_detail.html', context)
 
+def increment_content_views(content):
+    """Increment view count for content"""
+    content.views_count += 1
+    content.save(update_fields=['views_count'])
+    return content.views_count
 
 def register(request):
     """User registration"""
@@ -406,15 +412,6 @@ def delete_review(request, review_id):
     
     return render(request, 'recommendox/confirm_delete.html', {'review': review})
 
-def is_content_creator(user):
-    """Check if user has content creator role"""
-    if not user.is_authenticated:
-        return False
-    try:
-        return hasattr(user.profile, 'creator_profile') and user.profile.creator_profile.is_active
-    except:
-        return False
-
 @content_creator_required
 def creator_dashboard(request):
     """Content Creator Dashboard"""
@@ -524,7 +521,6 @@ def delete_content(request, content_id):
         messages.success(request, f'"{title}" deleted successfully!')
     
     return redirect('recommendox:manage_content')
-
 
 #ADMIN VIEWS
 @staff_member_required
@@ -784,17 +780,14 @@ def become_golden_user(request):
                 messages.success(request, 'You are already a verified Golden User!')
                 return redirect('recommendox:golden_dashboard')
             elif golden.verification_status == 'Rejected':
-              
                 messages.warning(request, 'Your previous application was rejected. You can apply again.')
-               
-                golden.delete()
+                golden.delete() 
     except AttributeError:
         pass
-    except:
+    except Exception:
         pass
     
     if request.method == 'POST':
-        
         profession = request.POST.get('profession')
         bio = request.POST.get('bio')
         years_experience = request.POST.get('years_experience', 0)
@@ -802,19 +795,29 @@ def become_golden_user(request):
         website = request.POST.get('website', '')
         notable_works = request.POST.get('notable_works', '')
         awards = request.POST.get('awards', '')
-     
+
         social_media = {
             'twitter': request.POST.get('twitter', ''),
             'instagram': request.POST.get('instagram', ''),
             'linkedin': request.POST.get('linkedin', ''),
             'imdb': request.POST.get('imdb', ''),
         }
-      
+        
         profile_image = request.FILES.get('profile_image')
         cover_image = request.FILES.get('cover_image')
         verification_docs = request.FILES.get('verification_docs')
-       
+        
         profile, created = UserProfile.objects.get_or_create(user=user)
+        
+        if user.is_staff or user.is_superuser:
+            verification_status = 'Verified'
+            from django.utils import timezone
+            verified_at = timezone.now()
+            verified_by = user 
+        else:
+            verification_status = 'Pending'
+            verified_at = None
+            verified_by = None
         
         golden_user = GoldenUser.objects.create(
             user_profile=profile,
@@ -829,55 +832,108 @@ def become_golden_user(request):
             profile_image=profile_image,
             cover_image=cover_image,
             verification_documents=verification_docs,
-            verification_status='Pending'
+            verification_status=verification_status,
+            verified_at=verified_at,
+            verified_by=verified_by,
         )
         
-        messages.success(request, 'Your Golden User application has been submitted for verification!')
+        if verification_status == 'Verified':
+            messages.success(request, 'You are now a verified Golden User!')
+        else:
+            messages.success(request, 'Your Golden User application has been submitted for verification!')
+            
         return redirect('recommendox:golden_dashboard')
-   
+    
+    # GET request - show application form
     professions = GoldenUser.PROFESSION_CHOICES
     return render(request, 'recommendox/become_golden.html', {'professions': professions})
 
-
+@login_required
 @golden_user_required
 def golden_dashboard(request):
-    """Golden User Dashboard - Shows different content based on verification status"""
+    """Golden User Dashboard - New Design"""
     user = request.user
     golden = user.profile.golden_profile
+    profession = golden.profession
+    user_name = user.get_full_name() or user.username
     
-    if golden.verification_status == 'Pending':
-        return render(request, 'recommendox/golden_pending.html', {'golden': golden})
-   
-    if golden.verification_status == 'Rejected':
-        return render(request, 'recommendox/golden_rejected.html', {'golden': golden})
-   
-    from django.db.models import Count, Avg, Q
-    from .models import Content, Review, Rating, ContentOTT
+    if profession in ['Actor', 'Actress']:
+        my_content = Content.objects.filter(cast__icontains=user_name)
+    elif profession == 'Director':
+        my_content = Content.objects.filter(director__icontains=user_name)
+    elif profession == 'Producer':
+        my_content = Content.objects.filter(
+            Q(director__icontains=user_name) |
+            Q(description__icontains=f"produced by {user_name}") |
+            Q(description__icontains=f"producer {user_name}")
+        )
+    elif profession == 'Writer':
+        my_content = Content.objects.filter(
+            Q(director__icontains=user_name) |
+            Q(description__icontains=f"written by {user_name}") |
+            Q(description__icontains=f"writer {user_name}")
+        )
+    elif profession in ['Critic', 'Journalist']:
+        my_content = None  
+        my_reviews = Review.objects.filter(user=user).order_by('-review_date')[:10]
+    else:
+        my_content = Content.objects.none()
     
-    content_stats = Content.objects.annotate(
-        total_ratings=Count('ratings'),
-        rating_avg=Avg('ratings__rating_value'),
-        total_reviews=Count('reviews')
-    ).order_by('-total_ratings')[:20]
+    my_content_ids = my_content.values_list('id', flat=True) if my_content else []
     
-    for content in content_stats:
-        content.ott_platforms_list = ContentOTT.objects.filter(content=content)
-   
-    recent_reviews = Review.objects.select_related('user', 'content').order_by('-review_date')[:10]
     
-    platform_stats = ContentOTT.objects.values('platform_name').annotate(
-        total_content=Count('content'),
-        free_content=Count('id', filter=Q(is_free=True))
-    ).order_by('-total_content')
+    my_stats = {
+        'total_content': my_content.count() if my_content else 0,
+        'total_reviews': Review.objects.filter(content__in=my_content_ids).count() if my_content_ids else 0,
+        'avg_rating': Rating.objects.filter(content__in=my_content_ids).aggregate(avg=Avg('rating_value'))['avg'] or 0,
+    }
+    
+    
+    if profession in ['Critic', 'Journalist']:
+        my_genres = Content.objects.values('genre').annotate(
+            count=Count('id')
+        ).order_by('-count')[:5]
+        my_genre_list = [g['genre'] for g in my_genres]
+    else:
+        my_genre_list = list(my_content.values_list('genre', flat=True).distinct())
+    
+    
+    trending_in_genre = Content.objects.filter(
+        genre__in=my_genre_list
+    ).exclude(
+        id__in=my_content_ids
+    ).annotate(
+        rating_avg=Avg('ratings__rating_value')
+    ).order_by('-rating_avg')[:8]
+    
+    
+    genre_stats = Content.objects.values('genre').annotate(
+        avg_rating=Avg('ratings__rating_value')
+    ).order_by('genre')
+    
+    
+    ott_stats = ContentOTT.objects.values('platform_name').annotate(
+        avg_rating=Avg('content__ratings__rating_value')
+    ).order_by('-avg_rating')
+    
+    
+    if my_content_ids:
+        recent_feedback = Review.objects.filter(
+            content__in=my_content_ids
+        ).select_related('user', 'content').order_by('-review_date')[:10]
+    else:
+        recent_feedback = []
     
     context = {
         'golden': golden,
-        'content_stats': content_stats,
-        'recent_reviews': recent_reviews,
-        'platform_stats': platform_stats,
-        'total_content': Content.objects.count(),
-        'total_reviews': Review.objects.count(),
-        'avg_rating_all': Rating.objects.aggregate(avg=Avg('rating_value'))['avg'] or 0,
+        'profession': profession,
+        'my_content': my_content,
+        'my_reviews': my_reviews if profession in ['Critic', 'Journalist'] else None,
+        'my_stats': my_stats,
+        'trending_in_genre': trending_in_genre,
+        'genre_stats': genre_stats,
+        'ott_stats': ott_stats,
+        'recent_feedback': recent_feedback,
     }
     return render(request, 'recommendox/golden_dashboard.html', context)
 
@@ -889,18 +945,16 @@ def golden_content_analytics(request, content_id):
     golden = request.user.profile.golden_profile
     golden.increment_content_views()
     
-    # Get rating distribution (count of each star)
+    increment_content_views(content)
+
     rating_stats = Rating.objects.filter(content=content).values('rating_value').annotate(
         count=Count('id')
     ).order_by('rating_value')
     
-    # Get all approved reviews
     reviews = Review.objects.filter(content=content, is_approved=True).select_related('user')
     
-    # Get OTT platform availability
     ott_availability = ContentOTT.objects.filter(content=content)
     
-    # Similar content recommendations
     similar_content = Content.objects.filter(genre=content.genre).exclude(id=content_id)[:5]
     
     context = {
@@ -910,6 +964,7 @@ def golden_content_analytics(request, content_id):
         'avg_rating': content.avg_rating,
         'reviews': reviews,
         'total_reviews': reviews.count(),
+        'total_views': content.views_count,
         'ott_availability': ott_availability,
         'similar_content': similar_content,
         'golden': golden,
@@ -918,7 +973,7 @@ def golden_content_analytics(request, content_id):
 
 @staff_member_required
 def verify_golden_users(request):
-    """Admin view to verify golden user applications - R.3 Verification"""
+    """Admin view to verify golden user applications """
     
     status_filter = request.GET.get('status', 'Pending')
     
@@ -974,44 +1029,44 @@ def verify_golden_users(request):
     }
     return render(request, 'recommendox/verify_golden.html', context)
 
-@golden_user_required
-def edit_golden_profile(request):
-    """Edit golden user professional profile - R.1 Profile Management"""
-    golden = request.user.profile.golden_profile
+# @golden_user_required
+# def edit_golden_profile(request):
+#     """Edit golden user professional profile - R.1 Profile Management"""
+#     golden = request.user.profile.golden_profile
     
-    if request.method == 'POST':
+#     if request.method == 'POST':
       
-        golden.profession = request.POST.get('profession', golden.profession)
-        golden.bio = request.POST.get('bio', golden.bio)
-        golden.years_of_experience = request.POST.get('years_experience', golden.years_of_experience)
-        golden.company = request.POST.get('company', golden.company)
-        golden.website = request.POST.get('website', golden.website)
-        golden.notable_works = request.POST.get('notable_works', golden.notable_works)
-        golden.awards = request.POST.get('awards', golden.awards)
+#         golden.profession = request.POST.get('profession', golden.profession)
+#         golden.bio = request.POST.get('bio', golden.bio)
+#         golden.years_of_experience = request.POST.get('years_experience', golden.years_of_experience)
+#         golden.company = request.POST.get('company', golden.company)
+#         golden.website = request.POST.get('website', golden.website)
+#         golden.notable_works = request.POST.get('notable_works', golden.notable_works)
+#         golden.awards = request.POST.get('awards', golden.awards)
         
-        social_media = {
-            'twitter': request.POST.get('twitter', ''),
-            'instagram': request.POST.get('instagram', ''),
-            'linkedin': request.POST.get('linkedin', ''),
-            'imdb': request.POST.get('imdb', ''),
-        }
-        golden.social_media_links = social_media
+#         social_media = {
+#             'twitter': request.POST.get('twitter', ''),
+#             'instagram': request.POST.get('instagram', ''),
+#             'linkedin': request.POST.get('linkedin', ''),
+#             'imdb': request.POST.get('imdb', ''),
+#         }
+#         golden.social_media_links = social_media
        
-        if request.FILES.get('profile_image'):
-            golden.profile_image = request.FILES['profile_image']
-        if request.FILES.get('cover_image'):
-            golden.cover_image = request.FILES['cover_image']
+#         if request.FILES.get('profile_image'):
+#             golden.profile_image = request.FILES['profile_image']
+#         if request.FILES.get('cover_image'):
+#             golden.cover_image = request.FILES['cover_image']
         
-        golden.save()
-        messages.success(request, 'Your professional profile has been updated!')
-        return redirect('recommendox:golden_dashboard')
+#         golden.save()
+#         messages.success(request, 'Your professional profile has been updated!')
+#         return redirect('recommendox:golden_dashboard')
     
-    professions = GoldenUser.PROFESSION_CHOICES
-    social = golden.social_media_links or {}
+#     professions = GoldenUser.PROFESSION_CHOICES
+#     social = golden.social_media_links or {}
     
-    context = {
-        'golden': golden,
-        'professions': professions,
-        'social': social,
-    }
-    return render(request, 'recommendox/edit_golden_profile.html', context)
+#     context = {
+#         'golden': golden,
+#         'professions': professions,
+#         'social': social,
+#     }
+#     return render(request, 'recommendox/edit_golden_profile.html', context)
