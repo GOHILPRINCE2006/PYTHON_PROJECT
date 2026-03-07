@@ -17,7 +17,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'recommendox',  
+    'recommendox',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
 ]
 
 MIDDLEWARE = [
@@ -28,6 +33,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = 'recommendation_project.urls'
@@ -35,8 +41,8 @@ ROOT_URLCONF = 'recommendation_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],  
-        'APP_DIRS': True, 
+        'DIRS': [],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
@@ -53,9 +59,14 @@ WSGI_APPLICATION = 'recommendation_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',  
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -83,3 +94,33 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+# ===== ALLAUTH SETTINGS - PURE GOOGLE LOGIN =====
+SITE_ID = 1
+
+# Account settings (updated for latest allauth)
+ACCOUNT_LOGIN_METHODS = {'email'}
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
+ACCOUNT_EMAIL_VERIFICATION = 'none'  # Required for SOCIALACCOUNT_ONLY
+
+# Social account settings
+SOCIALACCOUNT_ONLY = True
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_LOGIN_ON_GET = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': ['profile', 'email'],
+        'AUTH_PARAMS': {'access_type': 'online'},
+        'EMAIL_AUTHENTICATION': True,
+        'VERIFIED_EMAIL': True,
+    }
+}
+
+SOCIALACCOUNT_ADAPTER = 'recommendox.adapter.CustomSocialAccountAdapter'
+
+# Redirects
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/accounts/google/login/'
+ACCOUNT_LOGOUT_REDIRECT_URL = '/'
