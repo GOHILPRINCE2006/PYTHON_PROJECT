@@ -473,7 +473,6 @@ def manage_content(request):
     return render(request, 'recommendox/manage_content.html', context)
 
 @staff_member_required 
-@content_creator_required  
 def edit_content(request, content_id):
     """Edit content - works for both admin and creators"""
     content = get_object_or_404(Content, id=content_id)
@@ -694,7 +693,6 @@ def remove_creator(request, user_id):
 def admin_manage_reviews(request):
     """Admin can view and delete any review"""
     
-    # Get all reviews with filters
     filter_by = request.GET.get('filter', 'all')
     
     if filter_by == 'reviewer':
@@ -704,7 +702,6 @@ def admin_manage_reviews(request):
     else:
         reviews = Review.objects.all().order_by('-review_date')
     
-    # Handle deletion
     if request.method == 'POST':
         review_id = request.POST.get('review_id')
         review = get_object_or_404(Review, id=review_id)
@@ -762,18 +759,18 @@ def is_golden_user(user):
         return False
 
 def golden_user_required(view_func):
-    """Decorator to check if user is golden user"""
+    """Decorator to check if user has golden user profile"""
     def wrapper(request, *args, **kwargs):
         if not request.user.is_authenticated:
             return redirect('recommendox:login')
-        
-        if request.user.is_staff: 
+      
+        if request.user.is_staff:
             return view_func(request, *args, **kwargs)
         
         if is_golden_user(request.user):
             return view_func(request, *args, **kwargs)
         
-        messages.error(request, 'This section is only for verified Golden Users.')
+        messages.error(request, 'This section is only for Golden Users.')
         return redirect('recommendox:user_dashboard')
     return wrapper
 
@@ -782,24 +779,24 @@ def become_golden_user(request):
     """Apply to become a golden user"""
     user = request.user
     
+    # Check if user already has a golden profile
     try:
         if hasattr(user.profile, 'golden_profile'):
             golden = user.profile.golden_profile
             if golden.verification_status == 'Pending':
                 messages.info(request, 'Your Golden User application is pending verification.')
-                return redirect('recommendox:golden_dashboard')
+                return redirect('recommendox:golden_pending.html')
             elif golden.verification_status == 'Verified':
                 messages.success(request, 'You are already a verified Golden User!')
                 return redirect('recommendox:golden_dashboard')
             elif golden.verification_status == 'Rejected':
                 messages.warning(request, 'Your previous application was rejected. You can apply again.')
-                golden.delete() 
-    except AttributeError:
-        pass
-    except Exception:
+                golden.delete()
+    except:
         pass
     
     if request.method == 'POST':
+       
         profession = request.POST.get('profession')
         bio = request.POST.get('bio')
         years_experience = request.POST.get('years_experience', 0)
@@ -807,30 +804,31 @@ def become_golden_user(request):
         website = request.POST.get('website', '')
         notable_works = request.POST.get('notable_works', '')
         awards = request.POST.get('awards', '')
-
+  
         social_media = {
             'twitter': request.POST.get('twitter', ''),
             'instagram': request.POST.get('instagram', ''),
             'linkedin': request.POST.get('linkedin', ''),
             'imdb': request.POST.get('imdb', ''),
         }
-        
+  
         profile_image = request.FILES.get('profile_image')
         cover_image = request.FILES.get('cover_image')
         verification_docs = request.FILES.get('verification_docs')
-        
+     
         profile, created = UserProfile.objects.get_or_create(user=user)
         
         if user.is_staff or user.is_superuser:
             verification_status = 'Verified'
             from django.utils import timezone
             verified_at = timezone.now()
-            verified_by = user 
+            verified_by = user
         else:
-            verification_status = 'Pending'
+            verification_status = 'Pending' 
             verified_at = None
             verified_by = None
         
+        # Create golden user profile
         golden_user = GoldenUser.objects.create(
             user_profile=profile,
             profession=profession,
@@ -866,9 +864,16 @@ def golden_dashboard(request):
     """Golden User Dashboard - New Design"""
     user = request.user
     golden = user.profile.golden_profile
+  
+    if golden.verification_status == 'Pending':
+        return render(request, 'recommendox/golden_pending.html', {'golden': golden})
+    
+    if golden.verification_status == 'Rejected':
+        return render(request, 'recommendox/golden_rejected.html', {'golden': golden})
+    
     profession = golden.profession
     user_name = user.get_full_name() or user.username
-    
+  
     if profession in ['Actor', 'Actress']:
         my_content = Content.objects.filter(cast__icontains=user_name)
     elif profession == 'Director':
@@ -893,14 +898,12 @@ def golden_dashboard(request):
     
     my_content_ids = my_content.values_list('id', flat=True) if my_content else []
     
-    
     my_stats = {
         'total_content': my_content.count() if my_content else 0,
         'total_reviews': Review.objects.filter(content__in=my_content_ids).count() if my_content_ids else 0,
         'avg_rating': Rating.objects.filter(content__in=my_content_ids).aggregate(avg=Avg('rating_value'))['avg'] or 0,
     }
-    
-    
+   
     if profession in ['Critic', 'Journalist']:
         my_genres = Content.objects.values('genre').annotate(
             count=Count('id')
@@ -908,7 +911,6 @@ def golden_dashboard(request):
         my_genre_list = [g['genre'] for g in my_genres]
     else:
         my_genre_list = list(my_content.values_list('genre', flat=True).distinct())
-    
     
     trending_in_genre = Content.objects.filter(
         genre__in=my_genre_list
@@ -918,16 +920,13 @@ def golden_dashboard(request):
         rating_avg=Avg('ratings__rating_value')
     ).order_by('-rating_avg')[:8]
     
-    
     genre_stats = Content.objects.values('genre').annotate(
         avg_rating=Avg('ratings__rating_value')
     ).order_by('genre')
-    
-    
+  
     ott_stats = ContentOTT.objects.values('platform_name').annotate(
         avg_rating=Avg('content__ratings__rating_value')
     ).order_by('-avg_rating')
-    
     
     if my_content_ids:
         recent_feedback = Review.objects.filter(

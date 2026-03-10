@@ -111,9 +111,8 @@ class Episode(models.Model):
     description = models.TextField(blank=True, null=True)
     
     class Meta:
-        unique_together = ['season', 'episode_number']  # ADD THIS
-        ordering = ['episode_number']  # ADD THIS
-    
+        unique_together = ['season', 'episode_number']  
+        ordering = ['episode_number']  
     def __str__(self):
         return f"S{self.season.season_number}E{self.episode_number}: {self.title}"
 

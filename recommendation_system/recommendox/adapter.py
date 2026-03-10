@@ -18,22 +18,19 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
         This runs BEFORE allauth processes the social login.
         We check if email exists and connect automatically.
         """
-        # Get email from Google
         email = sociallogin.account.extra_data.get('email')
         if not email:
             return
-        
-        # Check if user exists with this email
+        # email exist
         try:
             user = User.objects.get(email=email)
             
-            # If user exists but social account not connected
+            # no socially connected
             if not sociallogin.is_existing:
                 # Connect this social account to existing user
                 sociallogin.connect(request, user)
                 
         except User.DoesNotExist:
-            # New user - will be created automatically
             pass
     
     def is_open_for_signup(self, request, sociallogin):
@@ -47,8 +44,5 @@ class CustomSocialAccountAdapter(DefaultSocialAccountAdapter):
         Customize user creation
         """
         user = super().save_user(request, sociallogin, form)
-        
-        # You can add custom logic here
-        # For example: set user as active, add to a group, etc.
         
         return user

@@ -100,7 +100,7 @@ SITE_ID = 1
 # Account settings (updated for latest allauth)
 ACCOUNT_LOGIN_METHODS = {'email'}
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'password1*', 'password2*']
-ACCOUNT_EMAIL_VERIFICATION = 'none'  # Required for SOCIALACCOUNT_ONLY
+ACCOUNT_EMAIL_VERIFICATION = 'none'  
 
 # Social account settings
 SOCIALACCOUNT_ONLY = True
