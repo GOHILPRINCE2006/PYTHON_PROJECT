@@ -22,16 +22,18 @@ urlpatterns = [
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('admin-manage-content/', views.manage_content, name='manage_content'),
     path('admin-manage-users/', views.manage_users, name='manage_users'),
-    path('admin-moderate-reviews/', views.moderate_reviews, name='moderate_reviews'),
     path('admin/manage-content/edit/<int:content_id>/', views.edit_content, name='edit_content'),
     path('admin/manage-content/delete/<int:content_id>/', views.delete_content, name='delete_content'),
+    path('admin/verify-golden/', views.verify_golden_users, name='verify_golden_users'),
 
     # REVIEW
     path('review/edit/<int:review_id>/', views.edit_review, name='edit_review'),
     path('review/delete/<int:review_id>/', views.delete_review, name='delete_review'),
     path('admin/make-reviewer/<int:user_id>/', views.make_reviewer, name='make_reviewer'),
     path('admin/remove-reviewer/<int:user_id>/', views.remove_reviewer, name='remove_reviewer'),
-
+    path('admin/manage-reviews/', views.admin_manage_reviews, name='admin_manage_reviews'),
+    path('admin/fix-reviewer/', views.fix_admin_reviewer, name='fix_admin_reviewer'),
+    
     # CONTENT-CREATOR
     path('creator/dashboard/', views.creator_dashboard, name='creator_dashboard'),
     path('admin/make-creator/<int:user_id>/', views.make_creator, name='make_creator'),
@@ -44,8 +46,5 @@ urlpatterns = [
     path('golden/become/', views.become_golden_user, name='become_golden'),
     path('golden/dashboard/', views.golden_dashboard, name='golden_dashboard'),
     path('golden/analytics/<int:content_id>/', views.golden_content_analytics, name='golden_content_analytics'),
-    #path('golden/edit-profile/', views.edit_golden_profile, name='edit_golden_profile'),
 
-    # Admin verification URLs
-    path('admin/verify-golden/', views.verify_golden_users, name='verify_golden_users'),
 ]

@@ -22,10 +22,10 @@
                 <li><a class="dropdown-item" href="{% url 'recommendox:manage_users' %}">
                     <i class="fas fa-users"></i> Manage Users
                 </a></li>
-                <li><a class="dropdown-item" href="{% url 'recommendox:moderate_reviews' %}">
-                    <i class="fas fa-comment"></i> Moderate Reviews
+             
+                <li><a class="dropdown-item" href="{% url 'recommendox:admin_manage_reviews' %}">
+                    <i class="fas fa-comments"></i> Manage Reviews
                 </a></li>
-            
                 <li><a class="dropdown-item" href="{% url 'recommendox:verify_golden_users' %}">
                     <i class="fas fa-crown"></i> Verify Golden Users
                 </a></li>
@@ -38,6 +38,7 @@
     </div>
 </div>
 
+<!-- Stats Cards -->
 <div class="row mb-5">
     <div class="col-md-3 col-sm-6 mb-3">
         <div class="stats-card text-center bg-primary text-white">
@@ -69,8 +70,9 @@
     </div>
 </div>
 
+<!-- Two Column Layout -->
 <div class="row">
-    
+    <!-- Recent Content -->
     <div class="col-md-6 mb-4">
         <div class="card h-100">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -108,12 +110,13 @@
             </div>
         </div>
     </div>
-  
+    
+    <!-- Recent Reviews - FIXED -->
     <div class="col-md-6 mb-4">
         <div class="card h-100">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h5 class="mb-0"><i class="fas fa-comments"></i> Recent Reviews</h5>
-                <a href="{% url 'recommendox:moderate_reviews' %}" class="btn btn-sm btn-primary">Moderate All</a>
+                <a href="{% url 'recommendox:admin_manage_reviews' %}" class="btn btn-sm btn-primary">Manage All</a>
             </div>
             <div class="card-body">
                 {% if recent_reviews %}
@@ -125,21 +128,19 @@
                                 <span class="badge bg-secondary ms-2">{{ review.content.title|truncatechars:20 }}</span>
                             </div>
                             <div>
-                                {% if review.is_approved %}
-                                <span class="badge bg-success">Approved</span>
+                                {% if review.is_verified %}
+                                <span class="badge bg-success">Verified</span>
                                 {% else %}
-                                <span class="badge bg-warning text-dark">Pending</span>
+                                <span class="badge bg-secondary">Regular</span>
                                 {% endif %}
                             </div>
                         </div>
                         <p class="mb-2 small">{{ review.comment|truncatechars:100 }}</p>
                         <div class="d-flex justify-content-between">
                             <small class="text-muted">{{ review.review_date|date:"M d, Y H:i" }}</small>
-                            <div>
-                                <a href="{% url 'recommendox:moderate_reviews' %}" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-edit"></i> Moderate
-                                </a>
-                            </div>
+                            <a href="{% url 'recommendox:admin_manage_reviews' %}" class="btn btn-sm btn-outline-info">
+                                <i class="fas fa-eye"></i> Details
+                            </a>
                         </div>
                     </div>
                     {% endfor %}
@@ -151,6 +152,7 @@
     </div>
 </div>
 
+<!-- Quick Admin Actions - FIXED -->
 <div class="row mt-4">
     <div class="col-12">
         <div class="card">
@@ -171,14 +173,15 @@
                             Manage Users
                         </a>
                     </div>
+                   
                     <div class="col-md-3 col-sm-6">
-                        <a href="{% url 'recommendox:moderate_reviews' %}" class="btn btn-warning w-100 h-100 py-4">
-                            <i class="fas fa-comment fa-2x mb-2"></i><br>
-                            Moderate Reviews
+                        <a href="{% url 'recommendox:admin_manage_reviews' %}" class="btn btn-info w-100 h-100 py-4">
+                            <i class="fas fa-comments fa-2x mb-2"></i><br>
+                            Manage Reviews
                         </a>
                     </div>
                     <div class="col-md-3 col-sm-6">
-                        <a href="{% url 'recommendox:verify_golden_users' %}" class="btn btn-info w-100 h-100 py-4">
+                        <a href="{% url 'recommendox:verify_golden_users' %}" class="btn btn-warning w-100 h-100 py-4">
                             <i class="fas fa-crown fa-2x mb-2"></i><br>
                             Verify Golden
                         </a>
@@ -189,6 +192,7 @@
     </div>
 </div>
 
+<!-- Advanced -->
 <div class="row mt-4">
     <div class="col-12">
         <div class="card">

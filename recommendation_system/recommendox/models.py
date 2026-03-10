@@ -241,7 +241,7 @@ class Review(models.Model):
     content = models.ForeignKey(Content, on_delete=models.CASCADE, related_name='reviews')
     comment = models.TextField()
     review_date = models.DateTimeField(auto_now_add=True)
-    is_approved = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False) 
     
     class Meta:

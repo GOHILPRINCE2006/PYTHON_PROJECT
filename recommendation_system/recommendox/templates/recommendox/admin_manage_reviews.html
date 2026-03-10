@@ -1,0 +1,98 @@
+<!-- templates/recommendox/admin_manage_reviews.html -->
+{% extends 'recommendox/base.html' %}
+
+{% block title %}Manage Reviews - Admin{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1><i class="fas fa-comments"></i> Manage Reviews</h1>
+        <p class="text-muted">View and delete any review</p>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'recommendox:admin_dashboard' %}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+    </div>
+</div>
+
+<!-- Stats -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="stats-card text-center bg-primary text-white">
+            <i class="fas fa-comments"></i>
+            <h3>{{ total_reviews }}</h3>
+            <p>Total Reviews</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stats-card text-center bg-success text-white">
+            <i class="fas fa-check-circle"></i>
+            <h3>{{ reviewer_count }}</h3>
+            <p>Reviewer Reviews</p>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="stats-card text-center bg-info text-white">
+            <i class="fas fa-user"></i>
+            <h3>{{ regular_count }}</h3>
+            <p>Regular Reviews</p>
+        </div>
+    </div>
+</div>
+
+<!-- Filter Tabs -->
+<div class="card mb-4">
+    <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+            <li class="nav-item">
+                <a class="nav-link {% if filter == 'all' %}active{% endif %}" href="?filter=all">All</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if filter == 'reviewer' %}active{% endif %}" href="?filter=reviewer">Reviewers</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if filter == 'regular' %}active{% endif %}" href="?filter=regular">Regular</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- Reviews List -->
+<div class="card">
+    <div class="card-body">
+        {% if reviews %}
+            {% for review in reviews %}
+            <div class="border-bottom mb-3 pb-3 {% if review.is_verified %}bg-light{% endif %}">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <strong>{{ review.user.username }}</strong>
+                                {% if review.is_verified %}
+                                <span class="badge bg-success">Reviewer</span>
+                                {% endif %}
+                                <span class="badge bg-secondary">on {{ review.content.title }}</span>
+                            </div>
+                            <small class="text-muted">{{ review.review_date|date:"M d, Y H:i" }}</small>
+                        </div>
+                        <p class="mt-2">{{ review.comment }}</p>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <form method="POST" onsubmit="return confirm('Delete this review?');">
+                            {% csrf_token %}
+                            <input type="hidden" name="review_id" value="{{ review.id }}">
+                            <button type="submit" class="btn btn-sm btn-danger">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted text-center py-5">No reviews found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

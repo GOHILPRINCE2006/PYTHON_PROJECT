@@ -93,7 +93,6 @@ def get_personalized_recommendations(user):
     
     return recommendations[:6] 
 
-
 #PUBLIC VIEWS
 def home(request):
     """Public home page"""
@@ -191,11 +190,13 @@ def content_list(request):
 
 
 def content_detail(request, content_id):
-    """Content detail page"""
+    """Content detail page with prioritized reviews"""
     content = get_object_or_404(Content, id=content_id)
+    
+    increment_content_views(content)
+    
     user_rating = None
     in_watchlist = False
-    increment_content_views(content)
     if request.user.is_authenticated:
         try:
             user_rating = Rating.objects.get(user=request.user, content=content)
@@ -203,20 +204,27 @@ def content_detail(request, content_id):
             pass
         
         in_watchlist = Watchlist.objects.filter(user=request.user, content=content).exists()
+  
     similar_content = Content.objects.filter(
         genre=content.genre
     ).exclude(id=content_id).annotate(
-        rating_avg=Avg('ratings__rating_value')  
+        rating_avg=Avg('ratings__rating_value')
     ).order_by('-rating_avg')[:4]
     
-    reviews = Review.objects.filter(content=content, is_approved=True).order_by('-review_date')
+    all_reviews = Review.objects.filter(content=content).select_related('user')
+    
+    reviewer_reviews = all_reviews.filter(is_verified=True).order_by('-review_date')
+    regular_reviews = all_reviews.filter(is_verified=False).order_by('-review_date')
+    
+    from itertools import chain
+    reviews = list(chain(reviewer_reviews, regular_reviews))
     
     context = {
         'content': content,
         'user_rating': user_rating,
         'in_watchlist': in_watchlist,
-        'similar_content': similar_content, 
-        'reviews': reviews,
+        'similar_content': similar_content,
+        'reviews': reviews,  
     }
     return render(request, 'recommendox/content_detail.html', context)
 
@@ -332,34 +340,27 @@ def rate_content(request, content_id):
 
 @login_required
 def add_review(request, content_id):
-    """Add review for content"""
+    """Add review for content - Auto-approved for everyone"""
     content = get_object_or_404(Content, id=content_id)
     
     if request.method == 'POST':
         comment = request.POST.get('comment')
         if comment:
-            is_admin = request.user.is_staff or request.user.is_superuser
             is_reviewer = False
-            
             try:
                 is_reviewer = hasattr(request.user.profile, 'reviewer_profile') and request.user.profile.reviewer_profile.is_active
             except:
                 pass
-            
-            auto_approve = is_admin or is_reviewer
-            
+   
             review = Review.objects.create(
                 user=request.user,
                 content=content,
                 comment=comment,
-                is_approved=auto_approve, 
-                is_verified=auto_approve  
+                is_approved=True,          
+                is_verified=is_reviewer      
             )
-            
-            if auto_approve:
-                messages.success(request, 'Your review has been posted!')
-            else:
-                messages.success(request, 'Your review has been submitted for moderation.')
+          
+            messages.success(request, 'Your review has been posted!')
     
     return redirect('recommendox:content_detail', content_id=content_id)
 
@@ -620,6 +621,23 @@ def make_reviewer(request, user_id):
     
     return redirect('recommendox:manage_users')
 
+@staff_member_required
+def fix_admin_reviewer(request):
+    """Temporary view to fix admin reviewer status"""
+    admin = User.objects.get(username='admin')
+    profile, _ = UserProfile.objects.get_or_create(user=admin)
+    
+    reviewer, created = Reviewer.objects.get_or_create(
+        user_profile=profile,
+        defaults={'is_active': True}
+    )
+    
+    if created:
+        messages.success(request, 'Admin is now a reviewer again!')
+    else:
+        messages.info(request, 'Admin was already a reviewer.')
+    
+    return redirect('recommendox:admin_dashboard')
 
 @staff_member_required
 def make_creator(request, user_id):
@@ -673,47 +691,41 @@ def remove_creator(request, user_id):
     return redirect('recommendox:manage_users')
 
 @staff_member_required
-def moderate_reviews(request):
-    """Review moderation for admin"""
-    filter_type = request.GET.get('filter', 'pending')
+def admin_manage_reviews(request):
+    """Admin can view and delete any review"""
     
-    if filter_type == 'pending':
-        reviews = Review.objects.filter(is_approved=False).order_by('-review_date')
-    elif filter_type == 'approved':
-        reviews = Review.objects.filter(is_approved=True).order_by('-review_date')
+    # Get all reviews with filters
+    filter_by = request.GET.get('filter', 'all')
+    
+    if filter_by == 'reviewer':
+        reviews = Review.objects.filter(is_verified=True).order_by('-review_date')
+    elif filter_by == 'regular':
+        reviews = Review.objects.filter(is_verified=False).order_by('-review_date')
     else:
         reviews = Review.objects.all().order_by('-review_date')
     
+    # Handle deletion
     if request.method == 'POST':
         review_id = request.POST.get('review_id')
-        action = request.POST.get('action')
         review = get_object_or_404(Review, id=review_id)
-        
-        if action == 'approve':
-            review.is_approved = True
-            review.save()
-            messages.success(request, 'Review approved successfully!')
-        elif action == 'reject':
-            review.delete()
-            messages.success(request, 'Review rejected and deleted!')
-        elif action == 'delete':
-            review.delete()
-            messages.success(request, 'Review deleted successfully!')
-        
-        return redirect('recommendox:moderate_reviews')
- 
-    pending_count = Review.objects.filter(is_approved=False).count()
-    approved_count = Review.objects.filter(is_approved=True).count()
-    total_count = Review.objects.count()
+        content_title = review.content.title
+        username = review.user.username
+        review.delete()
+        messages.success(request, f'Review by {username} on "{content_title}" deleted.')
+        return redirect('recommendox:admin_manage_reviews')
+   
+    total_reviews = Review.objects.count()
+    reviewer_count = Review.objects.filter(is_verified=True).count()
+    regular_count = Review.objects.filter(is_verified=False).count()
     
     context = {
         'reviews': reviews,
-        'pending_count': pending_count,
-        'approved_count': approved_count,
-        'total_count': total_count,
-        'filter_type': filter_type,
+        'total_reviews': total_reviews,
+        'reviewer_count': reviewer_count,
+        'regular_count': regular_count,
+        'filter': filter_by,
     }
-    return render(request, 'recommendox/moderate_reviews.html', context)
+    return render(request, 'recommendox/admin_manage_reviews.html', context)
 
 
 #OTT VIEWS
@@ -1028,45 +1040,3 @@ def verify_golden_users(request):
         'total_count': total_count,
     }
     return render(request, 'recommendox/verify_golden.html', context)
-
-# @golden_user_required
-# def edit_golden_profile(request):
-#     """Edit golden user professional profile - R.1 Profile Management"""
-#     golden = request.user.profile.golden_profile
-    
-#     if request.method == 'POST':
-      
-#         golden.profession = request.POST.get('profession', golden.profession)
-#         golden.bio = request.POST.get('bio', golden.bio)
-#         golden.years_of_experience = request.POST.get('years_experience', golden.years_of_experience)
-#         golden.company = request.POST.get('company', golden.company)
-#         golden.website = request.POST.get('website', golden.website)
-#         golden.notable_works = request.POST.get('notable_works', golden.notable_works)
-#         golden.awards = request.POST.get('awards', golden.awards)
-        
-#         social_media = {
-#             'twitter': request.POST.get('twitter', ''),
-#             'instagram': request.POST.get('instagram', ''),
-#             'linkedin': request.POST.get('linkedin', ''),
-#             'imdb': request.POST.get('imdb', ''),
-#         }
-#         golden.social_media_links = social_media
-       
-#         if request.FILES.get('profile_image'):
-#             golden.profile_image = request.FILES['profile_image']
-#         if request.FILES.get('cover_image'):
-#             golden.cover_image = request.FILES['cover_image']
-        
-#         golden.save()
-#         messages.success(request, 'Your professional profile has been updated!')
-#         return redirect('recommendox:golden_dashboard')
-    
-#     professions = GoldenUser.PROFESSION_CHOICES
-#     social = golden.social_media_links or {}
-    
-#     context = {
-#         'golden': golden,
-#         'professions': professions,
-#         'social': social,
-#     }
-#     return render(request, 'recommendox/edit_golden_profile.html', context)
