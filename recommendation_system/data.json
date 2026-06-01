@@ -1,0 +1,3547 @@
+[
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2026-02-18T16:29:08.425Z",
+    "user": 1,
+    "content_type": 18,
+    "object_id": "4",
+    "object_repr": "nkahir",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Is premium\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2026-02-19T04:46:10.850Z",
+    "user": 1,
+    "content_type": 18,
+    "object_id": "1",
+    "object_repr": "admin",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Is premium\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2026-02-22T16:15:15.668Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "18",
+    "object_repr": "Breaking Bad (2008)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Poster url\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2026-02-24T12:45:21.939Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "1",
+    "object_repr": "Golden User: admin - Director",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Verification status\", \"Verification documents\", \"Verification notes\", \"Verified at\", \"Verified by\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2026-02-24T14:06:41.399Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "1",
+    "object_repr": "Golden User: admin - Director",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Cover image\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2026-02-24T14:07:40.521Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "2",
+    "object_repr": "Golden User: nirav - Director",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Verification status\", \"Verification documents\", \"Verification notes\", \"Verified at\", \"Verified by\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2026-02-24T14:09:55.626Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "3",
+    "object_repr": "Golden User: ahir - Producer",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Verification status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2026-02-24T14:31:46.834Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "1",
+    "object_repr": "Golden User: admin - Director",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Verification status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 9,
+  "fields": {
+    "action_time": "2026-03-04T12:48:27.017Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "3",
+    "object_repr": "Golden User: ahir - Producer",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Verification documents\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2026-03-04T13:13:04.358Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "6",
+    "object_repr": "user",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Email address\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2026-03-04T13:13:27.092Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "7",
+    "object_repr": "user1",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Email address\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2026-03-04T13:18:28.755Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "8",
+    "object_repr": "Golden User: user1 - Writer",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Verification status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2026-03-06T11:21:53.118Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "4",
+    "object_repr": "Golden User: nirav - Editor",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Verification status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2026-03-06T11:34:40.543Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "9",
+    "object_repr": "Golden User: user - Director",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Verification status\", \"Verification notes\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 15,
+  "fields": {
+    "action_time": "2026-03-06T11:34:56.210Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "6",
+    "object_repr": "Golden User: prince - Actor",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Verification status\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 16,
+  "fields": {
+    "action_time": "2026-03-06T11:35:14.616Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "3",
+    "object_repr": "Golden User: ahir - Producer",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 17,
+  "fields": {
+    "action_time": "2026-03-06T11:35:21.130Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "9",
+    "object_repr": "Golden User: user - Director",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 18,
+  "fields": {
+    "action_time": "2026-03-06T11:35:32.029Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "8",
+    "object_repr": "Golden User: user1 - Writer",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 19,
+  "fields": {
+    "action_time": "2026-03-06T11:35:38.689Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "6",
+    "object_repr": "Golden User: prince - Actor",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 20,
+  "fields": {
+    "action_time": "2026-03-06T11:35:46.095Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "4",
+    "object_repr": "Golden User: nirav - Editor",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 21,
+  "fields": {
+    "action_time": "2026-03-06T12:12:07.355Z",
+    "user": 1,
+    "content_type": 18,
+    "object_id": "12",
+    "object_repr": "roger",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Is premium\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 22,
+  "fields": {
+    "action_time": "2026-03-06T12:12:14.009Z",
+    "user": 1,
+    "content_type": 18,
+    "object_id": "11",
+    "object_repr": "nolan",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Is premium\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 23,
+  "fields": {
+    "action_time": "2026-03-06T12:12:18.894Z",
+    "user": 1,
+    "content_type": 18,
+    "object_id": "10",
+    "object_repr": "cillian",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Is premium\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 24,
+  "fields": {
+    "action_time": "2026-03-06T12:12:29.759Z",
+    "user": 1,
+    "content_type": 18,
+    "object_id": "2",
+    "object_repr": "nirav",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Is premium\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 25,
+  "fields": {
+    "action_time": "2026-03-06T12:26:48.621Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "14",
+    "object_repr": "Golden User: admin - Critic",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 26,
+  "fields": {
+    "action_time": "2026-03-06T16:17:15.799Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "41",
+    "object_repr": "John Wick (2014)",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Content type\", \"Duration\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 27,
+  "fields": {
+    "action_time": "2026-03-07T10:35:43.120Z",
+    "user": 1,
+    "content_type": 20,
+    "object_id": "1",
+    "object_repr": "127.0.0.1:8000",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Domain name\", \"Display name\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 28,
+  "fields": {
+    "action_time": "2026-03-07T10:39:11.004Z",
+    "user": 1,
+    "content_type": 24,
+    "object_id": "1",
+    "object_repr": "Google Login",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 29,
+  "fields": {
+    "action_time": "2026-03-07T11:32:54.296Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "15",
+    "object_repr": "a1_ce013_gohilprince",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 30,
+  "fields": {
+    "action_time": "2026-03-07T11:33:18.997Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "13",
+    "object_repr": "gohil prince",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 31,
+  "fields": {
+    "action_time": "2026-03-07T11:33:27.426Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "14",
+    "object_repr": "gohil_prince",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 32,
+  "fields": {
+    "action_time": "2026-03-07T11:51:19.911Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "16",
+    "object_repr": "gohil_prince",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 33,
+  "fields": {
+    "action_time": "2026-03-07T11:56:00.972Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "18",
+    "object_repr": "gohil_prince6",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 34,
+  "fields": {
+    "action_time": "2026-03-07T12:34:04.170Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "20",
+    "object_repr": "nirav9",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 35,
+  "fields": {
+    "action_time": "2026-03-07T12:37:34.745Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "21",
+    "object_repr": "nirav1",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 36,
+  "fields": {
+    "action_time": "2026-03-07T12:38:26.881Z",
+    "user": 1,
+    "content_type": 4,
+    "object_id": "19",
+    "object_repr": "princeg",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 37,
+  "fields": {
+    "action_time": "2026-03-10T10:59:02.781Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "16",
+    "object_repr": "Golden User: nirav - Actor",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 38,
+  "fields": {
+    "action_time": "2026-03-10T10:59:16.937Z",
+    "user": 1,
+    "content_type": 18,
+    "object_id": "2",
+    "object_repr": "nirav",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Is premium\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 39,
+  "fields": {
+    "action_time": "2026-03-10T10:59:23.182Z",
+    "user": 1,
+    "content_type": 18,
+    "object_id": "4",
+    "object_repr": "nkahir",
+    "action_flag": 2,
+    "change_message": "[{\"changed\": {\"fields\": [\"Is premium\"]}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 40,
+  "fields": {
+    "action_time": "2026-03-10T11:09:39.452Z",
+    "user": 1,
+    "content_type": 12,
+    "object_id": "17",
+    "object_repr": "Golden User: nirav - Actor",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 41,
+  "fields": {
+    "action_time": "2026-03-26T07:04:02.364Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "4",
+    "object_repr": "Content Creator: prince",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$lwgr3NpeN9RTO7QmEvHU3T$qJrDqOL4G01vcaEdnmhkRAayQap08ePwllUD6dfMYk8=",
+    "last_login": "2026-03-26T07:15:03.490Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-02-18T15:13:46.493Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$zcXJRom3jEFitFyAcJ1sgd$4RALrFPT1nxb2D4InekIOBKVsvsQ8EDomMxrwzHZQhU=",
+    "last_login": "2026-03-10T11:16:40.153Z",
+    "is_superuser": false,
+    "username": "nirav",
+    "first_name": "",
+    "last_name": "",
+    "email": "nirav@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-02-18T16:23:05.649Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$zK971Wcko8mfldr1L8zH0E$h7AmlO7juPYxjmT6dkaTN5tw11k8zP+WE8C2wJ31T6c=",
+    "last_login": "2026-03-10T09:52:57.641Z",
+    "is_superuser": false,
+    "username": "ahir",
+    "first_name": "",
+    "last_name": "",
+    "email": "ahir@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-02-18T16:25:55.698Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$8IYLKEWmPvr84oxF0tXkoh$13K6pAwn5wZINNUM+TzBi/uXx+KKmFQQtKc0lAS4apc=",
+    "last_login": "2026-03-04T12:24:15.956Z",
+    "is_superuser": false,
+    "username": "nkahir",
+    "first_name": "",
+    "last_name": "",
+    "email": "nkahir@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-02-18T16:28:29.993Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$IZjPrG0vBnMEJU1ZKVcyvs$/aHSleiTHjaacBD+HQkDvuv0Ps4nMeAON3zJQcsXX1s=",
+    "last_login": "2026-03-26T07:34:45.022Z",
+    "is_superuser": false,
+    "username": "prince",
+    "first_name": "",
+    "last_name": "",
+    "email": "prince@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-02-24T16:27:13.581Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$3GSPtF22tX7jUyKsrq6Pbk$OSziRQeyDBJacD97Ke0l51O5P2dX8CfW7H2KZc0bcyI=",
+    "last_login": "2026-03-05T03:58:01.630Z",
+    "is_superuser": false,
+    "username": "user",
+    "first_name": "",
+    "last_name": "",
+    "email": "user@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-02-28T11:48:29Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$mcPwmCOp33uytENpTkwalR$CUwoHiWlhYW9ub5gcpwgfIrrynLY5Cfw3Z65htXrR7k=",
+    "last_login": "2026-03-10T09:43:10.498Z",
+    "is_superuser": false,
+    "username": "user1",
+    "first_name": "",
+    "last_name": "",
+    "email": "user1@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-03-02T16:56:20Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$QqiH5iZsuWRHZqoOfbqx1C$jDLJyCRmuC0OTVuo6MBwqwdYCsZmpCZel75szz6zjbQ=",
+    "last_login": "2026-03-04T12:02:05.539Z",
+    "is_superuser": false,
+    "username": "dhaval",
+    "first_name": "",
+    "last_name": "",
+    "email": "dhaval@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-03-04T11:55:11.542Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 9,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$MM2G79BUg1BjSFB3Dch5LL$lU1Dq2/vnc+t8qhtRjKoesA2c1ua/vkoPOkkIDv+Xnw=",
+    "last_login": "2026-03-06T11:19:24.328Z",
+    "is_superuser": false,
+    "username": "nka",
+    "first_name": "",
+    "last_name": "",
+    "email": "nka@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-03-04T12:11:38.750Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 10,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$OE9OHXjtPik6Tdud8WfFG1$6zQot9mmsuJhNABmsUl/SASwLpcpTtvguUuXhB119X8=",
+    "last_login": "2026-03-06T15:20:55.261Z",
+    "is_superuser": false,
+    "username": "cillian",
+    "first_name": "",
+    "last_name": "",
+    "email": "cillian@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-03-06T11:36:49.236Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 11,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$HXnFMGEshWaliiIe7CThnF$+zm0Ofh03RzuvU7wCCZ5UcjbEr4d/Jt2F0DI/lo9dQ4=",
+    "last_login": "2026-03-10T12:33:10.313Z",
+    "is_superuser": false,
+    "username": "nolan",
+    "first_name": "",
+    "last_name": "",
+    "email": "nolan@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-03-06T11:50:37.608Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 12,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$uM2h2GMWda8XFFQVf67JXb$AiJHzs2zvaO4uBnJWiOH27I5ok3yCAsTEvJ5nRBe9UE=",
+    "last_login": "2026-03-06T14:47:33.406Z",
+    "is_superuser": false,
+    "username": "roger",
+    "first_name": "",
+    "last_name": "",
+    "email": "roger@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-03-06T11:56:31.183Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 17,
+  "fields": {
+    "password": "pbkdf2_sha256$1200000$uwhhhfllQvPpy1zpbo1aru$HsPLmsxEz5DsvRNbsck2r8Znf+WpkSGg2/GN0k6LuWU=",
+    "last_login": "2026-03-07T11:52:06.590Z",
+    "is_superuser": false,
+    "username": "gohil_prince",
+    "first_name": "",
+    "last_name": "",
+    "email": "gohil@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-03-07T11:51:25.908Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 22,
+  "fields": {
+    "password": "!sqogA2jQHDxbWiMJ2mGwmyjNmSgCecHaVpuFuxho",
+    "last_login": "2026-03-10T11:31:15.151Z",
+    "is_superuser": false,
+    "username": "nirav1",
+    "first_name": "NIRAV",
+    "last_name": "AHIR",
+    "email": "niravkahir@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-03-10T11:30:43.784Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "00k8ltqg4lrbd1xmrrxo97h5m6clw1wc",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQAP9lz4a0PAR69N5vICzsStXQpLQn478bkh70OjOZN4R47CUcjbawZJhghMsvw5ieVLvIj1jvq0hr3bcFRU_EaZuY10yv29n-DUpsBSbwimWWzGxlVqyRiAySS16zx0SI0Q0ueb4SJT_mzqxXTg_KWOOUhc8XK805IQ:1vvwqI:gCSfA85e4-N52xk5pifp-O-3VMClbn4pJXF-5t_6CVU",
+    "expire_date": "2026-03-13T12:21:14.770Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "4dkzuhhoht4jjc4h1t2kuo45ap2jt2ay",
+  "fields": {
+    "session_data": ".eJxVjMEOwiAQRP-FsyEtUAGP3v0GwrK7UjWQlPZk_HdL0oMe582beYsQtzWHrdESZhQXMYrTL4OYnlR6gY9Y7lWmWtZlBtkVebRN3irS63q4fwc5tryvvWaFipmtQs0GiGgCcskb9pAIILphT3wmSn7EzqzXzgx6spPTVny-K805IQ:1vyqZC:rhpMJKYs3qtOMOpdSsdNNhuxYwdsqs0khLwsgxN3ro0",
+    "expire_date": "2026-03-21T12:15:34.238Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "4xcvywrgohwhp1y38g4d4gktm0fxnsqs",
+  "fields": {
+    "session_data": ".eJxVjDkOwjAQAP-yNbKy6_hISnreENnrNQ4gW8pRIf6OIqWAdmY0b5jCvpVpX2WZ5gQjIMLlF8bAT6mHSY9Q701xq9syR3Uk6rSrurUkr-vZ_g1KWAuMYCkQUe6j96KJ-5yjsz35IRsxRkwSchQzDsSd1gO7rH3gjq1HRLQEny_81zd2:1vzwGs:XtSDmDx2k87kdLLAZOq_r809iHXZMcPvEsRqd3S-ynk",
+    "expire_date": "2026-03-24T12:33:10.324Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "5ey2v7s9h8qxrztwk29wl79tmui1ex4u",
+  "fields": {
+    "session_data": ".eJxVjMEOwiAQRP-FsyEtUAGP3v0GwrK7UjWQlPZk_HdL0oMe582beYsQtzWHrdESZhQXMYrTL4OYnlR6gY9Y7lWmWtZlBtkVebRN3irS63q4fwc5tryvvWaFipmtQs0GiGgCcskb9pAIILphT3wmSn7EzqzXzgx6spPTVny-K805IQ:1vyqZF:sYaouIL_ZJx3s-vYYE_SdcJQ0HQkpRoFSRHCU1i8wbo",
+    "expire_date": "2026-03-21T12:15:37.049Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "93cnbmvexncegb2gy6a6t2gre2mxn3zg",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAUBf-FtSFAWy-4dO83kPugUjWQlHZl_HdD0oVuz8yct4q4bznuLa1xEXVRkzr9boT8TKUDeWC5V821bOtCuiv6oE3fqqTX9XD_DjK23GsCy9a50QxME3nnvWGiEFg8jckJyNlIYPYzWBq6i8kCEIIL6Gb1-QLwdjhW:1w5fEr:-satVOg9I0tFu-ZTiYW3VcrsexKCfvHmnKQxRUKQn7Y",
+    "expire_date": "2026-04-09T07:34:45.036Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "gbodyz9rpllxegs4llvufno6acg7r7k7",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQAP9lz4a0PAR69N5vICzsStXQpLQn478bkh70OjOZN4R47CUcjbawZJhghMsvw5ieVLvIj1jvq0hr3bcFRU_EaZuY10yv29n-DUpsBSbwimWWzGxlVqyRiAySS16zx0SI0Q0ueb4SJT_mzqxXTg_KWOOUhc8XK805IQ:1vy04Y:jVnCEWjhOdZfsVNiFz1HKlyA_gnbIIvO4gb1e33Hfbk",
+    "expire_date": "2026-03-19T04:12:26.427Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "oj8m5psxcx08lowofbsx9gehc7t2hpw1",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQAP-yZ0OWbSnQo3ffQNgFpGrapLQn499Nkx70OjOZN4S4bzXsLa9hSjACweWXcZRnng-RHnG-L0qWeVsnVkeiTtvUbUn5dT3bv0GNrcIIJuXBC2VxDm2XqU80SK-pGIMOqXhHzIw66WIsi3hjWXco7BEloofPF9jNN5I:1vutiE:cE1Na8M6_qozYN84Ssb_g_bEajqS7TNe1TiFtGtspF8",
+    "expire_date": "2026-03-10T14:48:34.504Z"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "txhs6xqukncmursn36sacabrd856lndd",
+  "fields": {
+    "session_data": ".eJxVjMsOwiAQAP9lz4a0PAR69N5vICzsStXQpLQn478bkh70OjOZN4R47CUcjbawZJhghMsvw5ieVLvIj1jvq0hr3bcFRU_EaZuY10yv29n-DUpsBSbwimWWzGxlVqyRiAySS16zx0SI0Q0ueb4SJT_mzqxXTg_KWOOUhc8XK805IQ:1vsuZT:zThJ2FQ_Y0oqZtP7j0iDj-LJ_6CQ6dlxJlMvhv83Al4",
+    "expire_date": "2026-03-05T03:19:19.572Z"
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 1,
+  "fields": {
+    "title": "The Boys",
+    "description": "A group of vigilantes set out to take down corrupt superheroes who abuse their superpowers.",
+    "genre": "Sci-Fi",
+    "language": "English",
+    "content_type": "Web Series",
+    "release_date": "2024-06-12",
+    "duration": "Season 1-4",
+    "director": "Eric Kripke",
+    "cast": "Karl Urban, Jack Quaid, Antony Starr",
+    "poster_url": "https://m.media-amazon.com/images/I/81ak3X4XqGL._AC_SY879_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=5SKP1_F7ReE",
+    "created_at": "2026-02-18T15:46:11.764Z",
+    "updated_at": "2026-03-02T16:11:42.489Z",
+    "views_count": 18
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 2,
+  "fields": {
+    "title": "Mission Impossible",
+    "description": "Ethan and his team take on their most impossible mission yet when they have to eradicate an international rogue organization as highly skilled as they are and committed to destroying the IMF.",
+    "genre": "Action",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2025-11-12",
+    "duration": "2h 34m",
+    "director": "Christopher McQuarrie",
+    "cast": "Tom Cruise,Rebecca Ferguson,Rebecca Ferguson",
+    "poster_url": "https://m.media-amazon.com/images/I/81fXlW2mQdL._SX679_.jpg",
+    "trailer_url": "http://youtube.com/watch?v=fsQgc9pCyDU",
+    "created_at": "2026-02-18T15:50:50.101Z",
+    "updated_at": "2026-03-02T13:28:48.058Z",
+    "views_count": 8
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 6,
+  "fields": {
+    "title": "peaky blinders",
+    "description": "A gangster family epic set in 1900s England, centering on a gang who sew razor blades in the peaks of their caps, and their fierce boss Thomas Shelby.",
+    "genre": "Drama",
+    "language": "English",
+    "content_type": "Web Series",
+    "release_date": "2024-06-04",
+    "duration": "Season 1-6",
+    "director": "Otto Bathurst & Tom Harper, Colm McCarthy,Tim Mielants",
+    "cast": "Cillian Murphy,Sam Neill,Helen McCrory,Paul Anderson,Annabelle Wallis",
+    "poster_url": "https://m.media-amazon.com/images/I/81trc3e3taL._SX679_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=oVzVdvGIC7U",
+    "created_at": "2026-02-18T16:18:29.232Z",
+    "updated_at": "2026-03-02T13:40:37.262Z",
+    "views_count": 14
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 8,
+  "fields": {
+    "title": "Minions",
+    "description": "this is comedy animation movie",
+    "genre": "Animation",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2015-06-09",
+    "duration": "1h 27m",
+    "director": "unknown",
+    "cast": "unknown",
+    "poster_url": "https://m.media-amazon.com/images/I/71Ows0k07PL._SY879_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=P9-FCC6I7u0",
+    "created_at": "2026-02-19T03:40:01.779Z",
+    "updated_at": "2026-02-19T03:40:01.779Z",
+    "views_count": 5
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 9,
+  "fields": {
+    "title": "3 idiots",
+    "description": "Two friends are searching for their long lost companion. They revisit their college days and recall the memories of their friend who inspired them to think differently, even as the rest of the world called them \"idiots\".",
+    "genre": "Comedy",
+    "language": "Hindi",
+    "content_type": "Movie",
+    "release_date": "2009-11-12",
+    "duration": "2h 44m",
+    "director": "Rajkumar Hirani",
+    "cast": "Aamir khan,R. madhavan,Sarman joshi",
+    "poster_url": "https://upload.wikimedia.org/wikipedia/en/d/df/3_idiots_poster.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=K0eDlFX9GMc",
+    "created_at": "2026-02-19T04:01:28.865Z",
+    "updated_at": "2026-03-02T13:22:30.442Z",
+    "views_count": 3
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 11,
+  "fields": {
+    "title": "Dhurandar",
+    "description": "A mysterious traveler slips into the heart of Karachi's underbelly and rises through its ranks with lethal precision, only to tear the notorious ISI-Underworld nexus apart from within.",
+    "genre": "Action",
+    "language": "Hindi",
+    "content_type": "Movie",
+    "release_date": "2025-12-10",
+    "duration": "3h 34m",
+    "director": "Aditya Dhar",
+    "cast": "Ranveer Singh, Akshay Khanna , Sanjay Dutt, Arjun Rampal, R. Madhavan",
+    "poster_url": "https://upload.wikimedia.org/wikipedia/en/c/ce/Dhurandhar_poster.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=BKOVzHcjEIo",
+    "created_at": "2026-02-19T04:35:47.279Z",
+    "updated_at": "2026-03-02T13:20:57.959Z",
+    "views_count": 13
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 12,
+  "fields": {
+    "title": "Stranger things",
+    "description": "In 1980s Indiana, a group of young friends witness supernatural forces and secret government exploits. As they search for answers, the children unravel a series of extraordinary mysteries.",
+    "genre": "Horror",
+    "language": "English",
+    "content_type": "Web Series",
+    "release_date": "2015-06-09",
+    "duration": "Season 1-5",
+    "director": "Duffer Brothers",
+    "cast": "millie bobby brown,Finn Wolfhard,Geten Matarazzo,Sadie Sink,Noah Schnapp",
+    "poster_url": "https://m.media-amazon.com/images/I/81U0-cRG34S._SY879_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=AfQ13jsLDms",
+    "created_at": "2026-02-19T04:52:37.585Z",
+    "updated_at": "2026-03-02T16:13:51.333Z",
+    "views_count": 8
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 14,
+  "fields": {
+    "title": "The Monkey",
+    "description": "The Monkey is a 2025 American comedy horror film Based on Stephen King's 1980 short story, the film main lead in a dual role as twin brothers whose lives are turned upside down by a cursed toy monkey that causes random horrific deaths around them.",
+    "genre": "Horror",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2025-01-07",
+    "duration": "1h 38m",
+    "director": "Osgood Perkins",
+    "cast": "Theo James, Tatiana Maslany, Christian Convery, Colin O'Brien, Rohan Campbell",
+    "poster_url": "https://m.media-amazon.com/images/I/71g48Atq-rL._SX385_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=3jfTApWPX7I&themeRefresh=1",
+    "created_at": "2026-02-22T06:15:51.832Z",
+    "updated_at": "2026-02-22T06:15:51.832Z",
+    "views_count": 14
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 15,
+  "fields": {
+    "title": "Sita Ramam",
+    "description": "A soldier receives a life-changing letter from a woman named Sita, leading to a beautiful romance. Their love story takes an unexpected turn when he returns to his military post in Kashmir and faces imprisonment.",
+    "genre": "Romance",
+    "language": "Hindi",
+    "content_type": "Movie",
+    "release_date": "2022-02-16",
+    "duration": "2h 38m",
+    "director": "Hanu Raghavapudi",
+    "cast": "Dulquer Salman ,Mrunal Thakur,Rashmika Mandana",
+    "poster_url": "https://upload.wikimedia.org/wikipedia/en/1/1d/Sita_Ramam.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=Ljk6tGZ1l3A",
+    "created_at": "2026-02-22T06:27:22.612Z",
+    "updated_at": "2026-03-02T13:19:24.643Z",
+    "views_count": 5
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 16,
+  "fields": {
+    "title": "Game of Thrones",
+    "description": "Nine noble families fight for control over the lands of Westeros, while an ancient enemy returns after being dormant for millennia.",
+    "genre": "Drama",
+    "language": "English",
+    "content_type": "TV Show",
+    "release_date": "2011-11-20",
+    "duration": "Season 1-8",
+    "director": "David Benioff, D.B Weiss",
+    "cast": "Peter Dinklage,Lena Headey,Kit Harington,Emilia Clarke,Maisie Williams",
+    "poster_url": "https://m.media-amazon.com/images/I/51wcHZjzCsL.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=KPLWWIOCOOQ",
+    "created_at": "2026-02-22T08:40:32.400Z",
+    "updated_at": "2026-02-22T08:40:32.400Z",
+    "views_count": 5
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 17,
+  "fields": {
+    "title": "The Last of Us",
+    "description": "After a global pandemic destroys civilization, a hardened survivor takes charge of a 14-year-old girl who may be humanity's last hope.",
+    "genre": "Drama",
+    "language": "English",
+    "content_type": "Web Series",
+    "release_date": "2023-10-20",
+    "duration": "Season 1-2",
+    "director": "Neil Druckmann,Craig Mazin",
+    "cast": "Bella Ramsey,Pedro Pascal,Isabela Merced,Kaitlyn Dever",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BYWI3ODJlMzktY2U5NC00ZjdlLWE1MGItNWQxZDk3NWNjN2RhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=uLtkt8BonwM",
+    "created_at": "2026-02-22T16:01:29.752Z",
+    "updated_at": "2026-03-02T12:58:27.027Z",
+    "views_count": 5
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 18,
+  "fields": {
+    "title": "Breaking Bad",
+    "description": "A high school chemistry teacher diagnosed with terminal lung cancer turns to manufacturing and selling methamphetamine to secure his family's future. As he descends deeper into the criminal world, he transforms from a desperate man into the ruthless drug kingpin known as Heisenberg.",
+    "genre": "Drama",
+    "language": "English",
+    "content_type": "Web Series",
+    "release_date": "2008-01-20",
+    "duration": "Season 1–5",
+    "director": "Vince Gilligan",
+    "cast": "Bryan Cranston, Aaron Paul, Anna Gunn, Dean Norris, Bob Odenkirk",
+    "poster_url": "https://image.tmdb.org/t/p/original/ggFHVNu6YYI5L9pCfOacjizRGt.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=HhesaQXLuRY",
+    "created_at": "2026-02-22T16:12:52.264Z",
+    "updated_at": "2026-02-22T16:15:15.663Z",
+    "views_count": 8
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 19,
+  "fields": {
+    "title": "The Shawshank Redemption",
+    "description": "A banker named Andy Dufresne is sentenced to life in Shawshank State Penitentiary for the murder of his wife and her lover, despite claiming his innocence. Over the years, he forms a deep friendship with fellow inmate Ellis “Red” Redding and quietly plans a brilliant escape while bringing hope to those around him.",
+    "genre": "Drama",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "1994-10-14",
+    "duration": "2h 22m",
+    "director": "Frank Darabont",
+    "cast": "Tim Robbins, Morgan Freeman, Bob Gunton, William Sadler, Clancy Brown",
+    "poster_url": "https://image.tmdb.org/t/p/w780/q6y0Go1tsGEsmtFryDOJo3dEmqu.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=6hB3S9bIaco",
+    "created_at": "2026-02-22T16:21:35.699Z",
+    "updated_at": "2026-02-22T16:21:35.699Z",
+    "views_count": 5
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 20,
+  "fields": {
+    "title": "The Conjuring",
+    "description": "Paranormal investigators Ed and Lorraine Warren are called to help a family terrorized by a dark presence in their farmhouse. As the haunting intensifies, they uncover a terrifying history that puts everyone’s lives at risk. Inspired by real case files of the Warrens.",
+    "genre": "Horror",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2013-07-19",
+    "duration": "1h 52m",
+    "director": "James Wan",
+    "cast": "Patrick Wilson, Vera Farmiga, Lili Taylor, Ron Livingston, Joey King",
+    "poster_url": "https://image.tmdb.org/t/p/w780/wVYREutTvI2tmxr6ujrHT704wGF.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=k10ETZ41q5o",
+    "created_at": "2026-02-22T16:26:29.873Z",
+    "updated_at": "2026-03-02T12:56:42.300Z",
+    "views_count": 5
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 21,
+  "fields": {
+    "title": "The Walking Dead",
+    "description": "After waking from a coma, former sheriff Rick Grimes discovers a world devastated by a zombie apocalypse. He joins a group of survivors struggling to stay alive while facing not only the undead but also dangerous human threats. The series explores survival, morality, leadership, and the cost of hope in a collapsing world.",
+    "genre": "Drama",
+    "language": "English",
+    "content_type": "Web Series",
+    "release_date": "2010-10-31",
+    "duration": "Season 1-11",
+    "director": "Frank Darabont",
+    "cast": "Andrew Lincoln, Norman Reedus, Lauren Cohan, Danai Gurira, Melissa McBride",
+    "poster_url": "https://image.tmdb.org/t/p/w780/rqeYMLryjcawh2JeRpCVUDXYM5b.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=sfAc2U20uyg",
+    "created_at": "2026-02-22T16:29:25.174Z",
+    "updated_at": "2026-02-22T16:29:25.174Z",
+    "views_count": 4
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 23,
+  "fields": {
+    "title": "Tumbbad",
+    "description": "Set in colonial India, the story follows Vinayak Rao, a man obsessed with uncovering a hidden treasure guarded by an ancient and terrifying entity named Hastar. As greed consumes him, the dark secrets of Tumbbad slowly unfold in a haunting tale of mythology, horror, and human ambition.",
+    "genre": "Horror",
+    "language": "Hindi",
+    "content_type": "Movie",
+    "release_date": "2018-10-12",
+    "duration": "1h 44m",
+    "director": "Rahi Anil Barve",
+    "cast": "Sohum Shah, Mohammad Samad, Jyoti Malshe, Anita Date",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BOTY0YzY3MTMtOWQ5Yi00ODY2LThhOGMtMzFlMjhlODcxOGU1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=O9CaB4J4VEI",
+    "created_at": "2026-02-22T16:41:10.931Z",
+    "updated_at": "2026-03-02T12:55:16.164Z",
+    "views_count": 4
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 24,
+  "fields": {
+    "title": "The Haunting of Hill House",
+    "description": "A fractured family confronts haunting memories of their old home and the terrifying events that drove them away years ago. As past and present collide, they must face the psychological and supernatural horrors that still linger within Hill House.",
+    "genre": "Horror",
+    "language": "English",
+    "content_type": "Web Series",
+    "release_date": "2018-10-12",
+    "duration": "Season 1",
+    "director": "Mike Flanagan,Nelson Cragg",
+    "cast": "Michiel Huisman, Elizabeth Reaser, Oliver Jackson-Cohen, Victoria Pedretti, Carla Gugino",
+    "poster_url": "https://m.media-amazon.com/images/I/91UiNfaICaS._AC_UL480_FMwebp_QL65_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=3eqxXqJDmcY",
+    "created_at": "2026-02-22T16:57:46.264Z",
+    "updated_at": "2026-02-22T16:58:57.949Z",
+    "views_count": 4
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 25,
+  "fields": {
+    "title": "Wrack it : Ralph",
+    "description": "Ralph is tired of playing the role of a bad guy and embarks on a journey to become a video game hero. But he accidentally lets loose a deadly enemy that threatens the entire arcade.",
+    "genre": "Animation",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2012-06-14",
+    "duration": "1h 41m",
+    "director": "Rich Moree",
+    "cast": "John C. Reilly, Jack McBrayer, Jane Lynch",
+    "poster_url": "https://m.media-amazon.com/images/I/61fuzqHgT+L._SY385_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=87E6N7ToCxs&themeRefresh=1",
+    "created_at": "2026-02-24T14:43:00.962Z",
+    "updated_at": "2026-03-02T12:45:35.687Z",
+    "views_count": 4
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 26,
+  "fields": {
+    "title": "Mirzapur",
+    "description": "Set in the lawless city of Mirzapur, the story revolves around crime lord Akhandanand Tripathi (Kaleen Bhaiya) and the power struggles that follow. As Guddu and Bablu get pulled into the world of guns, drugs, and politics, a brutal battle for control unfolds where loyalty is rare and revenge is everything.",
+    "genre": "Action",
+    "language": "Hindi",
+    "content_type": "Web Series",
+    "release_date": "2018-11-16",
+    "duration": "Season 1-3",
+    "director": "Karan Anshuman, Gurmeet Singh, Mihir Desai",
+    "cast": "Pankaj Tripathi, Ali Fazal, Divyendu Sharma, Shweta Tripathi, Rasika Dugal, Vikrant Massey",
+    "poster_url": "https://m.media-amazon.com/images/M/MV5BZTFjMzMxZTUtYTMyNy00OWNhLTk4ODQtNGI1NjI1NjJhMzc3XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=ZNeGF-PvRHY",
+    "created_at": "2026-02-24T16:37:53.737Z",
+    "updated_at": "2026-02-24T17:14:14.620Z",
+    "views_count": 4
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 27,
+  "fields": {
+    "title": "KGF: Chapter 2",
+    "description": "Rocky continues his rise as the feared ruler of the Kolar Gold Fields. While his enemies conspire to bring him down, including the ruthless Adheera and powerful political forces, Rocky must fight to maintain his empire and fulfill the promise he made to his mother. The battle for power becomes bigger, bloodier, and more intense than ever.",
+    "genre": "Action",
+    "language": "Hindi",
+    "content_type": "Movie",
+    "release_date": "2022-04-14",
+    "duration": "2h 48m",
+    "director": "Prashanth Neel",
+    "cast": "Yash, Sanjay Dutt, Raveena Tandon, Srinidhi Shetty, Prakash Raj",
+    "poster_url": "https://m.media-amazon.com/images/I/81n-pzWRKuL._AC_UY327_FMwebp_QL65_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=JKa05nyUmuQ",
+    "created_at": "2026-02-24T16:41:23.600Z",
+    "updated_at": "2026-02-24T17:16:01.486Z",
+    "views_count": 8
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 28,
+  "fields": {
+    "title": "Vikings",
+    "description": "Inspired by Norse legends, the series follows Ragnar Lothbrok, a fearless Viking warrior who rises from farmer to king through brutal battles and daring explorations. As he and his descendants expand their influence across England and beyond, power struggles, betrayals, and legendary wars shape the fate of the Viking world.",
+    "genre": "Action",
+    "language": "English",
+    "content_type": "Web Series",
+    "release_date": "2013-03-03",
+    "duration": "Season 1-6",
+    "director": "Ciarán Donnelly,Ken Girotti,Johan Renck",
+    "cast": "Travis Fimmel, Katheryn Winnick, Clive Standen, Gustaf Skarsgård, Alexander Ludwig, Alex Høgh Andersen",
+    "poster_url": "https://image.tmdb.org/t/p/w780/oktTNFM8PzdseiK1X0E0XhB6LvP.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=9GgxinPwAGc",
+    "created_at": "2026-02-24T17:08:37.579Z",
+    "updated_at": "2026-02-24T17:19:13.263Z",
+    "views_count": 2
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 29,
+  "fields": {
+    "title": "Titanic",
+    "description": "A young aristocrat, Rose, falls in love with a poor artist, Jack, aboard the ill-fated RMS Titanic. As the ship strikes an iceberg and begins to sink, their love story unfolds against one of the most tragic maritime disasters in history.",
+    "genre": "Romance",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "1997-12-19",
+    "duration": "3h 14m",
+    "director": "James Cameron",
+    "cast": "Leonardo DiCaprio, Kate Winslet, Billy Zane, Kathy Bates, Frances Fisher",
+    "poster_url": "https://image.tmdb.org/t/p/w780/9xjZS2rlVxm8SFx8kPC3aIGCOYQ.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=kVrqfYjkTdQ",
+    "created_at": "2026-02-25T03:59:31.777Z",
+    "updated_at": "2026-02-25T03:59:31.777Z",
+    "views_count": 5
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 30,
+  "fields": {
+    "title": "Dilwale Dulhania Le Jayenge",
+    "description": "Raj and Simran meet during a trip across Europe and fall in love. However, Simran is already promised to another man in India. Raj follows her to Punjab and tries to win over her strict father without eloping, determined to earn his blessing and marry her the right way.",
+    "genre": "Romance",
+    "language": "Hindi",
+    "content_type": "Movie",
+    "release_date": "1995-10-20",
+    "duration": "3h 09m",
+    "director": "Aditya Chopra",
+    "cast": "Shah Rukh Khan, Kajol, Amrish Puri, Farida Jalal, Anupam Kher",
+    "poster_url": "https://image.tmdb.org/t/p/w780/2CAL2433ZeIihfX1Hb2139CX0pW.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=cmax1C1p660",
+    "created_at": "2026-02-25T04:04:02.946Z",
+    "updated_at": "2026-02-25T04:04:02.946Z",
+    "views_count": 10
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 31,
+  "fields": {
+    "title": "Aashiqui 2",
+    "description": "A troubled singer at the peak of his career falls in love with a talented young woman and helps her rise to fame. As her success grows, his personal struggles with addiction threaten to destroy both their relationship and his own life in this tragic love story.",
+    "genre": "Romance",
+    "language": "Hindi",
+    "content_type": "Movie",
+    "release_date": "2013-04-26",
+    "duration": "2h 12m",
+    "director": "Mohit Suri",
+    "cast": "Aditya Roy Kapur, Shraddha Kapoor, Shaad Randhawa, Mahesh Thakur",
+    "poster_url": "https://m.media-amazon.com/images/I/81YRBXfMXSL._SX522_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=FY7XqX8sGqU",
+    "created_at": "2026-02-25T04:09:16.693Z",
+    "updated_at": "2026-03-02T12:51:56.638Z",
+    "views_count": 8
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 32,
+  "fields": {
+    "title": "College Romance",
+    "description": "A light-hearted web series that follows three best friends navigating love, friendships, heartbreaks, and chaos during their college years. From awkward crushes to dramatic misunderstandings, the show captures the fun and emotional rollercoaster of campus life.",
+    "genre": "Romance",
+    "language": "Hindi",
+    "content_type": "Web Series",
+    "release_date": "2018-08-07",
+    "duration": "Season 1–4",
+    "director": "Simarpreet Singh, Apoorv Singh Karki",
+    "cast": "Keshav Sadhna, Apoorva Arora, Gagan Arora, Shreya Mehta, Manjot Singh",
+    "poster_url": "https://assets.gadgets360cdn.com/pricee/assets/product/202209/College_Romance_Season_3-Poster_1662391647.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=ZJ1kY3ZsB3A",
+    "created_at": "2026-02-25T04:23:22.309Z",
+    "updated_at": "2026-02-25T04:24:47.508Z",
+    "views_count": 5
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 33,
+  "fields": {
+    "title": "Normal People",
+    "description": "A coming-of-age romantic drama based on Sally Rooney’s novel, Normal People follows the intense and evolving relationship between Marianne and Connell from secondary school through university as they navigate love, social pressures, personal growth, and heartache.",
+    "genre": "Romance",
+    "language": "English",
+    "content_type": "Web Series",
+    "release_date": "2020-04-26",
+    "duration": "Season 1",
+    "director": "Lenny Abrahamson, Hettie Macdonald",
+    "cast": "Daisy Edgar-Jones, Paul Mescal, Sarah Greene, Aislín McGuckin",
+    "poster_url": "https://m.media-amazon.com/images/I/61GTnGr3t1L._AC_UF894,1000_QL80_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=PZw7wMQyTvI",
+    "created_at": "2026-02-25T04:56:50.957Z",
+    "updated_at": "2026-02-25T04:56:50.957Z",
+    "views_count": 5
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 34,
+  "fields": {
+    "title": "Hera Pheri",
+    "description": "Baburao, Raju and Shyam, three unemployed men, get caught in a get-rich-quick scheme when they receive a ransom call. Their lives turn upside down as they try to outwit a cunning criminal.",
+    "genre": "Comedy",
+    "language": "Hindi",
+    "content_type": "Movie",
+    "release_date": "2000-03-31",
+    "duration": "2h 36m",
+    "director": "Priyadarshan",
+    "cast": "Akshay Kumar, Suniel Shetty, Paresh Rawal, Tabu",
+    "poster_url": "https://upload.wikimedia.org/wikipedia/en/a/a5/Hera_Pheri_2000_poster.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=Im_lCAsA27Q",
+    "created_at": "2026-03-01T05:10:56.218Z",
+    "updated_at": "2026-03-02T12:44:35.072Z",
+    "views_count": 5
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 36,
+  "fields": {
+    "title": "Golmaal: Fun Unlimited",
+    "description": "Four lazy conmen trick a blind couple into believing they are their long-lost grandsons. Chaos ensues as they try to maintain the charade while dealing with a real grandson.",
+    "genre": "Comedy",
+    "language": "Hindi",
+    "content_type": "Movie",
+    "release_date": "2006-07-14",
+    "duration": "2h 25m",
+    "director": "Rohit Shetty",
+    "cast": "Ajay Devgn, Arshad Warsi, Sharman Joshi, Tusshar Kapoor, Rimi Sen",
+    "poster_url": "https://upload.wikimedia.org/wikipedia/en/b/b4/Golmaal-Fun_Unlimited.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=3fO1f9TndAM",
+    "created_at": "2026-03-01T05:39:20.604Z",
+    "updated_at": "2026-03-02T12:43:12.957Z",
+    "views_count": 4
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 37,
+  "fields": {
+    "title": "Dhamaal",
+    "description": "Four friends discover a hidden treasure map and embark on a hilarious journey filled with ridiculous situations, betrayals, and unexpected twists as they race to find the loot.",
+    "genre": "Comedy",
+    "language": "Hindi",
+    "content_type": "Movie",
+    "release_date": "2007-09-07",
+    "duration": "2h 15m",
+    "director": "Indra Kumar",
+    "cast": "Sanjay Dutt, Riteish Deshmukh, Arshad Warsi, Aashish Chaudhary",
+    "poster_url": "https://upload.wikimedia.org/wikipedia/en/6/60/Dhamaal_2007.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=zkIfgcl0sG0",
+    "created_at": "2026-03-01T05:53:03.687Z",
+    "updated_at": "2026-03-02T12:44:05.363Z",
+    "views_count": 3
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 38,
+  "fields": {
+    "title": "Andaz Apna Apna",
+    "description": "Aamir Khan, Salman Khan, Raveena Tandon, Karisma Kapoor, Paresh Rawal",
+    "genre": "Comedy",
+    "language": "Hindi",
+    "content_type": "Movie",
+    "release_date": "1994-11-04",
+    "duration": "2h 40m",
+    "director": "Rajkumar Santoshi",
+    "cast": "Aamir Khan, Salman Khan, Raveena Tandon, Karisma Kapoor, Paresh Rawal",
+    "poster_url": "https://upload.wikimedia.org/wikipedia/en/1/15/Andaz_Apna_Apna.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=ggGMb7oVEHc",
+    "created_at": "2026-03-01T06:06:35.929Z",
+    "updated_at": "2026-03-01T06:06:35.929Z",
+    "views_count": 6
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 39,
+  "fields": {
+    "title": "The Hangover",
+    "description": "Three friends wake up after a wild bachelor party in Las Vegas to find the groom missing and no memory of the night before. They must retrace their steps to find him before the wedding.",
+    "genre": "Comedy",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2009-06-05",
+    "duration": "1h 40m",
+    "director": "Todd Phillips",
+    "cast": "Bradley Cooper, Ed Helms, Zach Galifianakis, Justin Bartha",
+    "poster_url": "https://upload.wikimedia.org/wikipedia/en/b/b9/Hangoverposter09.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=tlize92ffnY",
+    "created_at": "2026-03-01T06:14:51.598Z",
+    "updated_at": "2026-03-01T06:14:51.598Z",
+    "views_count": 2
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 40,
+  "fields": {
+    "title": "Deadpool",
+    "description": "A wisecracking mercenary with a twisted sense of humor undergoes an experiment that leaves him with accelerated healing powers, using his new abilities to hunt down the man who ruined his life.",
+    "genre": "Comedy",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2016-02-12",
+    "duration": "1h 48m",
+    "director": "Tim Miller",
+    "cast": "Ryan Reynolds, Morena Baccarin, Ed Skrein, T.J. Miller",
+    "poster_url": "https://upload.wikimedia.org/wikipedia/en/2/23/Deadpool_%282016_poster%29.png",
+    "trailer_url": "https://www.youtube.com/watch?v=Xithigfg7dA",
+    "created_at": "2026-03-01T06:21:55.012Z",
+    "updated_at": "2026-03-01T06:21:55.012Z",
+    "views_count": 4
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 41,
+  "fields": {
+    "title": "John Wick",
+    "description": "An ex-hitman comes out of retirement to track down the gangsters who killed his dog and stole his car, unleashing a brutal rampage through the New York criminal underworld.",
+    "genre": "Action",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2014-10-24",
+    "duration": "1h 57m",
+    "director": "Chad Stahelski",
+    "cast": "Keanu Reeves, Michael Nyqvist, Alfie Allen, Willem Dafoe",
+    "poster_url": "https://upload.wikimedia.org/wikipedia/en/d/d0/John_Wick_-_Chapter_4_promotional_poster.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=FSeJwaACdXE",
+    "created_at": "2026-03-01T06:35:47.498Z",
+    "updated_at": "2026-03-06T16:17:15.795Z",
+    "views_count": 7
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 42,
+  "fields": {
+    "title": "The Dark Knight",
+    "description": "When the menace known as the Joker wreaks havoc and chaos on the people of Gotham, Batman must accept one of the greatest psychological and physical tests of his ability to fight injustice.",
+    "genre": "Action",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2008-07-18",
+    "duration": "2h 32m",
+    "director": "Christopher Nolan",
+    "cast": "Christian Bale, Heath Ledger, Aaron Eckhart, Michael Caine",
+    "poster_url": "https://upload.wikimedia.org/wikipedia/en/1/1c/The_Dark_Knight_%282008_film%29.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=GokKUqLcvD8",
+    "created_at": "2026-03-01T06:43:04.570Z",
+    "updated_at": "2026-03-01T06:43:04.570Z",
+    "views_count": 10
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 43,
+  "fields": {
+    "title": "Frozen",
+    "description": "A fearless princess Anna sets off on a journey with an iceman, his reindeer, and a snowman to find her sister Elsa, whose icy powers have trapped their kingdom in eternal winter.",
+    "genre": "Animation",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2013-11-27",
+    "duration": "1h 42m",
+    "director": "Chris Buck, Jennifer Lee",
+    "cast": "Kristen Bell, Idina Menzel, Josh Gad",
+    "poster_url": "https://m.media-amazon.com/images/I/61Mrhd8OBvL._SX679_.jpg",
+    "trailer_url": "https://youtube.com/watch?v=Zi4LMpSDccc",
+    "created_at": "2026-03-02T15:31:33.262Z",
+    "updated_at": "2026-03-02T15:31:33.262Z",
+    "views_count": 4
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 44,
+  "fields": {
+    "title": "Suicide Squad",
+    "description": "A secret government agency recruits imprisoned supervillains to execute dangerous missions in exchange for reduced sentences.",
+    "genre": "Sci-Fi",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2016-08-05",
+    "duration": "2h 3m",
+    "director": "David Ayer",
+    "cast": "Will Smith, Margot Robbie, Jared Leto",
+    "poster_url": "https://upload.wikimedia.org/wikipedia/en/5/5c/Suicide_Squad_%282016_film%29_poster.png",
+    "trailer_url": "https://www.youtube.com/watch?v=CmRih_VtVAs",
+    "created_at": "2026-03-02T15:34:58.901Z",
+    "updated_at": "2026-03-02T15:34:58.901Z",
+    "views_count": 3
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 45,
+  "fields": {
+    "title": "Cars",
+    "description": "A race car stranded in a small town learns important life lessons about friendship and humility.",
+    "genre": "Animation",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2006-06-09",
+    "duration": "1h 57m",
+    "director": "John Lasseter",
+    "cast": "Owen Wilson, Paul Newman",
+    "poster_url": "https://m.media-amazon.com/images/I/71crSWm111L._SY879_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=-Vui-DhwIAg",
+    "created_at": "2026-03-02T15:37:49.237Z",
+    "updated_at": "2026-03-02T16:09:17.565Z",
+    "views_count": 4
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 46,
+  "fields": {
+    "title": "Avengers: Endgame",
+    "description": "The Avengers assemble once more to reverse Thanos’ destruction and restore balance to the universe.",
+    "genre": "Sci-Fi",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2019-04-26",
+    "duration": "3h 1m",
+    "director": "Anthony Russo, Joe Russo",
+    "cast": "Robert Downey Jr., Chris Evans, Scarlett Johansson",
+    "poster_url": "https://m.media-amazon.com/images/I/81nig-I3TDL._SY879_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=TcMBFSGVi1c",
+    "created_at": "2026-03-02T15:40:48.976Z",
+    "updated_at": "2026-03-02T16:08:36.211Z",
+    "views_count": 9
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 47,
+  "fields": {
+    "title": "Transformers: Age of Extinction",
+    "description": "After the battle in Chicago, humanity turns against Transformers. An inventor and his daughter become involved in a conflict between Autobots, Decepticons, and powerful new enemies threatening Earth.",
+    "genre": "Sci-Fi",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2014-06-07",
+    "duration": "2h 45m",
+    "director": "Michael Bay",
+    "cast": "Mark Wahlberg, Nicola Peltz, Jack Reynor, Stanley Tucci",
+    "poster_url": "https://rukminim2.flixcart.com/image/2560/2560/kv5kfww0/wall-decoration/b/j/n/transformers-age-of-extinction-movies-optimus-prime-wallpaper-original-imag846z6sbg6xck.jpeg?q=90",
+    "trailer_url": "https://www.youtube.com/watch?v=T9bQCAWahLk",
+    "created_at": "2026-03-02T15:45:45.838Z",
+    "updated_at": "2026-03-02T15:48:20.501Z",
+    "views_count": 3
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 48,
+  "fields": {
+    "title": "Dies Irae",
+    "description": "A dark horror-thriller exploring supernatural events and psychological fear, where disturbing forces and hidden secrets begin to affect the lives of those involved, leading to terrifying consequences.",
+    "genre": "Horror",
+    "language": "Hindi",
+    "content_type": "Movie",
+    "release_date": "2025-10-27",
+    "duration": "1h 58m",
+    "director": "Rahul Sadasivan",
+    "cast": "Pranav Mohanlal, Lena, Siddique",
+    "poster_url": "https://posterspy.com/wp-content/uploads/2025/10/Dies-Irae-F.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=S1FGXOamA5I",
+    "created_at": "2026-03-02T15:53:18.600Z",
+    "updated_at": "2026-03-02T15:54:10.192Z",
+    "views_count": 4
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 49,
+  "fields": {
+    "title": "Big Hero 6",
+    "description": "A young robotics prodigy forms a superhero team with his inflatable robot Baymax to stop a masked villain.",
+    "genre": "Animation",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2014-11-07",
+    "duration": "1h 43m",
+    "director": "Don Hall, Chris Williams",
+    "cast": "Ryan Potter, Scott Adsit",
+    "poster_url": "https://m.media-amazon.com/images/I/818AHjVfufL._AC_SY500_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=z3biFxZIJOQ",
+    "created_at": "2026-03-02T15:58:51.910Z",
+    "updated_at": "2026-03-26T07:34:17.084Z",
+    "views_count": 4
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 50,
+  "fields": {
+    "title": "Arcane",
+    "description": "Two sisters find themselves on opposite sides of a war between a rich city and its oppressed underground.",
+    "genre": "Animation",
+    "language": "English",
+    "content_type": "Web Series",
+    "release_date": "2020-11-06",
+    "duration": "Season 1-2",
+    "director": "Christian Linke, Alex Yee",
+    "cast": "Hailee Steinfeld, Ella Purnell",
+    "poster_url": "https://m.media-amazon.com/images/I/71maqFlWdbL._AC_SY879_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=fXmAurh012s",
+    "created_at": "2026-03-02T16:01:32.071Z",
+    "updated_at": "2026-03-26T07:32:57.765Z",
+    "views_count": 9
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 51,
+  "fields": {
+    "title": "The Amazing Spider-Man",
+    "description": "Peter Parker becomes Spider-Man and uncovers secrets about his parents while fighting the Lizard.",
+    "genre": "Sci-Fi",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2012-07-03",
+    "duration": "2h 16m",
+    "director": "Marc Webb",
+    "cast": "Andrew Garfield, Emma Stone",
+    "poster_url": "https://m.media-amazon.com/images/I/51d1u8vgKgL.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=upwf8RsyNqQ",
+    "created_at": "2026-03-02T16:05:13.919Z",
+    "updated_at": "2026-03-02T16:05:13.919Z",
+    "views_count": 2
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 52,
+  "fields": {
+    "title": "Inception",
+    "description": "A skilled thief enters people’s dreams to steal secrets but is tasked with planting an idea instead.",
+    "genre": "Sci-Fi",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2010-07-16",
+    "duration": "2h 28m",
+    "director": "Christopher Nolan",
+    "cast": "Leonardo DiCaprio, Joseph Gordon-Levitt, Cillian Murphy, Tom Hardy",
+    "poster_url": "https://m.media-amazon.com/images/I/71DwIcSgFcS._SY879_.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=YoHD9XEInc0",
+    "created_at": "2026-03-02T16:07:59.723Z",
+    "updated_at": "2026-03-02T16:07:59.723Z",
+    "views_count": 9
+  }
+},
+{
+  "model": "recommendox.content",
+  "pk": 53,
+  "fields": {
+    "title": "The Bluff",
+    "description": "A Caribbean woman gets her secret past revealed when her island is invaded by vicious buccaneers.",
+    "genre": "Action",
+    "language": "English",
+    "content_type": "Movie",
+    "release_date": "2026-02-25",
+    "duration": "1h 41m",
+    "director": "Frank E. Flowers",
+    "cast": "Priyanka Chopra Jonas, Karl Urban, Safia Oakley-Green",
+    "poster_url": "http://www.impawards.com/2026/posters/bluff.jpg",
+    "trailer_url": "https://www.youtube.com/watch?v=uUYMqRjNxhM",
+    "created_at": "2026-03-04T12:36:41.616Z",
+    "updated_at": "2026-03-04T12:36:41.617Z",
+    "views_count": 16
+  }
+},
+{
+  "model": "recommendox.userprofile",
+  "pk": 1,
+  "fields": {
+    "user": 1,
+    "bio": "",
+    "profile_picture": "",
+    "is_premium": true,
+    "favorite_genres": null,
+    "preferred_languages": null,
+    "created_at": "2026-02-18T15:14:28.631Z"
+  }
+},
+{
+  "model": "recommendox.userprofile",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "bio": "",
+    "profile_picture": "",
+    "is_premium": false,
+    "favorite_genres": null,
+    "preferred_languages": null,
+    "created_at": "2026-02-18T16:23:08.268Z"
+  }
+},
+{
+  "model": "recommendox.userprofile",
+  "pk": 3,
+  "fields": {
+    "user": 3,
+    "bio": null,
+    "profile_picture": "",
+    "is_premium": false,
+    "favorite_genres": null,
+    "preferred_languages": null,
+    "created_at": "2026-02-18T16:25:58.297Z"
+  }
+},
+{
+  "model": "recommendox.userprofile",
+  "pk": 4,
+  "fields": {
+    "user": 4,
+    "bio": "",
+    "profile_picture": "",
+    "is_premium": false,
+    "favorite_genres": null,
+    "preferred_languages": null,
+    "created_at": "2026-02-18T16:28:32.528Z"
+  }
+},
+{
+  "model": "recommendox.userprofile",
+  "pk": 5,
+  "fields": {
+    "user": 5,
+    "bio": null,
+    "profile_picture": "",
+    "is_premium": false,
+    "favorite_genres": null,
+    "preferred_languages": null,
+    "created_at": "2026-02-24T16:27:14.652Z"
+  }
+},
+{
+  "model": "recommendox.userprofile",
+  "pk": 6,
+  "fields": {
+    "user": 6,
+    "bio": null,
+    "profile_picture": "",
+    "is_premium": false,
+    "favorite_genres": null,
+    "preferred_languages": null,
+    "created_at": "2026-02-28T11:48:31.302Z"
+  }
+},
+{
+  "model": "recommendox.userprofile",
+  "pk": 7,
+  "fields": {
+    "user": 7,
+    "bio": null,
+    "profile_picture": "",
+    "is_premium": false,
+    "favorite_genres": null,
+    "preferred_languages": null,
+    "created_at": "2026-03-02T16:56:23.383Z"
+  }
+},
+{
+  "model": "recommendox.userprofile",
+  "pk": 8,
+  "fields": {
+    "user": 8,
+    "bio": null,
+    "profile_picture": "",
+    "is_premium": false,
+    "favorite_genres": null,
+    "preferred_languages": null,
+    "created_at": "2026-03-04T11:55:14.158Z"
+  }
+},
+{
+  "model": "recommendox.userprofile",
+  "pk": 9,
+  "fields": {
+    "user": 9,
+    "bio": null,
+    "profile_picture": "",
+    "is_premium": false,
+    "favorite_genres": null,
+    "preferred_languages": null,
+    "created_at": "2026-03-04T12:11:41.387Z"
+  }
+},
+{
+  "model": "recommendox.userprofile",
+  "pk": 10,
+  "fields": {
+    "user": 10,
+    "bio": "",
+    "profile_picture": "",
+    "is_premium": true,
+    "favorite_genres": null,
+    "preferred_languages": null,
+    "created_at": "2026-03-06T11:36:51.675Z"
+  }
+},
+{
+  "model": "recommendox.userprofile",
+  "pk": 11,
+  "fields": {
+    "user": 11,
+    "bio": "",
+    "profile_picture": "",
+    "is_premium": true,
+    "favorite_genres": null,
+    "preferred_languages": null,
+    "created_at": "2026-03-06T11:50:40.072Z"
+  }
+},
+{
+  "model": "recommendox.userprofile",
+  "pk": 12,
+  "fields": {
+    "user": 12,
+    "bio": "",
+    "profile_picture": "",
+    "is_premium": true,
+    "favorite_genres": null,
+    "preferred_languages": null,
+    "created_at": "2026-03-06T11:56:33.558Z"
+  }
+},
+{
+  "model": "recommendox.userprofile",
+  "pk": 14,
+  "fields": {
+    "user": 17,
+    "bio": null,
+    "profile_picture": "",
+    "is_premium": false,
+    "favorite_genres": null,
+    "preferred_languages": null,
+    "created_at": "2026-03-07T11:51:27.939Z"
+  }
+},
+{
+  "model": "recommendox.goldenuser",
+  "pk": 11,
+  "fields": {
+    "user_profile": 10,
+    "profession": "Actor",
+    "bio": "i am professional actor",
+    "years_of_experience": 20,
+    "company": "",
+    "website": "",
+    "social_media_links": {
+      "twitter": "",
+      "instagram": "",
+      "linkedin": "",
+      "imdb": ""
+    },
+    "profile_image": "",
+    "cover_image": "",
+    "verification_status": "Verified",
+    "verification_documents": "verification_docs/Professional_document.pdf",
+    "verification_notes": "welcome Cillian",
+    "verified_at": "2026-03-06T11:47:38.165Z",
+    "verified_by": 1,
+    "notable_works": "",
+    "awards": "Academy award for best actor",
+    "total_content_views": 12,
+    "total_reviews_given": 0,
+    "followers_count": 0,
+    "created_at": "2026-03-06T11:46:58.614Z",
+    "updated_at": "2026-03-06T16:15:41.135Z"
+  }
+},
+{
+  "model": "recommendox.goldenuser",
+  "pk": 12,
+  "fields": {
+    "user_profile": 11,
+    "profession": "Director",
+    "bio": "I am one of the greatest director",
+    "years_of_experience": 30,
+    "company": "",
+    "website": "",
+    "social_media_links": {
+      "twitter": "",
+      "instagram": "",
+      "linkedin": "",
+      "imdb": ""
+    },
+    "profile_image": "",
+    "cover_image": "",
+    "verification_status": "Verified",
+    "verification_documents": "verification_docs/Professional_document_ICgXyz8.pdf",
+    "verification_notes": "welcome ! nolan sir",
+    "verified_at": "2026-03-06T11:53:02.836Z",
+    "verified_by": 1,
+    "notable_works": "",
+    "awards": "Academy award for Best Director",
+    "total_content_views": 6,
+    "total_reviews_given": 0,
+    "followers_count": 0,
+    "created_at": "2026-03-06T11:51:56.620Z",
+    "updated_at": "2026-03-10T12:36:21.348Z"
+  }
+},
+{
+  "model": "recommendox.goldenuser",
+  "pk": 13,
+  "fields": {
+    "user_profile": 12,
+    "profession": "Critic",
+    "bio": "i am world best critic and reviewer",
+    "years_of_experience": 35,
+    "company": "",
+    "website": "",
+    "social_media_links": {
+      "twitter": "",
+      "instagram": "",
+      "linkedin": "",
+      "imdb": ""
+    },
+    "profile_image": "",
+    "cover_image": "",
+    "verification_status": "Verified",
+    "verification_documents": "verification_docs/Professional_document_XMhfWua.pdf",
+    "verification_notes": "welcome ! roger albert sir\r\n",
+    "verified_at": "2026-03-06T11:58:43.532Z",
+    "verified_by": 1,
+    "notable_works": "",
+    "awards": "Greatest Cine Critic Award",
+    "total_content_views": 0,
+    "total_reviews_given": 0,
+    "followers_count": 0,
+    "created_at": "2026-03-06T11:57:54.874Z",
+    "updated_at": "2026-03-06T11:58:43.542Z"
+  }
+},
+{
+  "model": "recommendox.goldenuser",
+  "pk": 15,
+  "fields": {
+    "user_profile": 1,
+    "profession": "Critic",
+    "bio": "i am film critic and founder of recommendoX",
+    "years_of_experience": 1,
+    "company": "",
+    "website": "",
+    "social_media_links": {
+      "twitter": "",
+      "instagram": "",
+      "linkedin": "",
+      "imdb": ""
+    },
+    "profile_image": "",
+    "cover_image": "",
+    "verification_status": "Verified",
+    "verification_documents": "verification_docs/Professional_document_C3RzkJy.pdf",
+    "verification_notes": null,
+    "verified_at": "2026-03-06T12:27:46.052Z",
+    "verified_by": 1,
+    "notable_works": "",
+    "awards": "",
+    "total_content_views": 0,
+    "total_reviews_given": 0,
+    "followers_count": 0,
+    "created_at": "2026-03-06T12:27:46.065Z",
+    "updated_at": "2026-03-06T12:27:46.065Z"
+  }
+},
+{
+  "model": "recommendox.watchlist",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "content": 2,
+    "added_at": "2026-02-18T16:24:09.680Z"
+  }
+},
+{
+  "model": "recommendox.watchlist",
+  "pk": 2,
+  "fields": {
+    "user": 2,
+    "content": 6,
+    "added_at": "2026-02-18T16:24:23.860Z"
+  }
+},
+{
+  "model": "recommendox.watchlist",
+  "pk": 6,
+  "fields": {
+    "user": 1,
+    "content": 12,
+    "added_at": "2026-02-19T04:53:03.504Z"
+  }
+},
+{
+  "model": "recommendox.watchlist",
+  "pk": 7,
+  "fields": {
+    "user": 1,
+    "content": 15,
+    "added_at": "2026-02-28T11:18:47.783Z"
+  }
+},
+{
+  "model": "recommendox.watchlist",
+  "pk": 9,
+  "fields": {
+    "user": 1,
+    "content": 6,
+    "added_at": "2026-03-02T13:22:49.993Z"
+  }
+},
+{
+  "model": "recommendox.watchlist",
+  "pk": 10,
+  "fields": {
+    "user": 9,
+    "content": 48,
+    "added_at": "2026-03-04T12:13:42.433Z"
+  }
+},
+{
+  "model": "recommendox.watchlist",
+  "pk": 11,
+  "fields": {
+    "user": 9,
+    "content": 33,
+    "added_at": "2026-03-04T12:13:52.850Z"
+  }
+},
+{
+  "model": "recommendox.watchlist",
+  "pk": 12,
+  "fields": {
+    "user": 9,
+    "content": 24,
+    "added_at": "2026-03-04T12:14:08.587Z"
+  }
+},
+{
+  "model": "recommendox.watchlist",
+  "pk": 14,
+  "fields": {
+    "user": 5,
+    "content": 12,
+    "added_at": "2026-03-25T07:10:55.365Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 6,
+  "fields": {
+    "user": 1,
+    "content": 1,
+    "rating_value": 4,
+    "rating_date": "2026-02-19T04:28:15.648Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 7,
+  "fields": {
+    "user": 1,
+    "content": 12,
+    "rating_value": 5,
+    "rating_date": "2026-02-19T04:52:58.868Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 8,
+  "fields": {
+    "user": 1,
+    "content": 14,
+    "rating_value": 4,
+    "rating_date": "2026-02-22T06:19:19.345Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 9,
+  "fields": {
+    "user": 1,
+    "content": 16,
+    "rating_value": 4,
+    "rating_date": "2026-02-22T08:41:15.758Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 10,
+  "fields": {
+    "user": 4,
+    "content": 25,
+    "rating_value": 4,
+    "rating_date": "2026-02-24T14:43:15.736Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 11,
+  "fields": {
+    "user": 5,
+    "content": 11,
+    "rating_value": 5,
+    "rating_date": "2026-02-25T03:44:05.604Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 12,
+  "fields": {
+    "user": 5,
+    "content": 2,
+    "rating_value": 1,
+    "rating_date": "2026-02-25T03:44:24.403Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 13,
+  "fields": {
+    "user": 5,
+    "content": 6,
+    "rating_value": 5,
+    "rating_date": "2026-02-25T03:44:37.766Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 14,
+  "fields": {
+    "user": 5,
+    "content": 17,
+    "rating_value": 4,
+    "rating_date": "2026-02-25T03:44:52.172Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 15,
+  "fields": {
+    "user": 5,
+    "content": 27,
+    "rating_value": 4,
+    "rating_date": "2026-02-25T03:45:03.506Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 16,
+  "fields": {
+    "user": 5,
+    "content": 15,
+    "rating_value": 5,
+    "rating_date": "2026-02-25T03:45:24.200Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 17,
+  "fields": {
+    "user": 1,
+    "content": 2,
+    "rating_value": 3,
+    "rating_date": "2026-02-25T05:14:10.182Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 18,
+  "fields": {
+    "user": 5,
+    "content": 31,
+    "rating_value": 5,
+    "rating_date": "2026-02-25T05:15:36.957Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 19,
+  "fields": {
+    "user": 5,
+    "content": 1,
+    "rating_value": 3,
+    "rating_date": "2026-02-25T05:17:21.121Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 20,
+  "fields": {
+    "user": 5,
+    "content": 32,
+    "rating_value": 4,
+    "rating_date": "2026-02-25T05:17:50.006Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 21,
+  "fields": {
+    "user": 1,
+    "content": 30,
+    "rating_value": 4,
+    "rating_date": "2026-02-28T10:55:53.572Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 22,
+  "fields": {
+    "user": 1,
+    "content": 15,
+    "rating_value": 5,
+    "rating_date": "2026-02-28T11:18:01.809Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 23,
+  "fields": {
+    "user": 3,
+    "content": 14,
+    "rating_value": 3,
+    "rating_date": "2026-02-28T11:34:41.465Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 24,
+  "fields": {
+    "user": 3,
+    "content": 29,
+    "rating_value": 5,
+    "rating_date": "2026-02-28T11:34:59.914Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 25,
+  "fields": {
+    "user": 1,
+    "content": 23,
+    "rating_value": 4,
+    "rating_date": "2026-02-28T11:41:49.011Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 26,
+  "fields": {
+    "user": 6,
+    "content": 29,
+    "rating_value": 4,
+    "rating_date": "2026-02-28T11:49:42.280Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 27,
+  "fields": {
+    "user": 6,
+    "content": 31,
+    "rating_value": 3,
+    "rating_date": "2026-02-28T11:49:53.518Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 28,
+  "fields": {
+    "user": 6,
+    "content": 15,
+    "rating_value": 5,
+    "rating_date": "2026-02-28T11:50:03.549Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 29,
+  "fields": {
+    "user": 6,
+    "content": 32,
+    "rating_value": 3,
+    "rating_date": "2026-02-28T11:50:16.337Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 30,
+  "fields": {
+    "user": 6,
+    "content": 28,
+    "rating_value": 4,
+    "rating_date": "2026-02-28T11:50:30.992Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 31,
+  "fields": {
+    "user": 6,
+    "content": 21,
+    "rating_value": 4,
+    "rating_date": "2026-02-28T11:50:59.580Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 32,
+  "fields": {
+    "user": 6,
+    "content": 8,
+    "rating_value": 3,
+    "rating_date": "2026-02-28T11:51:17.781Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 33,
+  "fields": {
+    "user": 6,
+    "content": 18,
+    "rating_value": 4,
+    "rating_date": "2026-02-28T11:51:40.092Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 34,
+  "fields": {
+    "user": 1,
+    "content": 34,
+    "rating_value": 4,
+    "rating_date": "2026-03-01T05:26:48.282Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 35,
+  "fields": {
+    "user": 1,
+    "content": 40,
+    "rating_value": 4,
+    "rating_date": "2026-03-01T06:23:40.684Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 36,
+  "fields": {
+    "user": 1,
+    "content": 11,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T13:21:10.698Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 37,
+  "fields": {
+    "user": 1,
+    "content": 6,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T13:22:54.374Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 38,
+  "fields": {
+    "user": 1,
+    "content": 48,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T15:54:41.218Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 39,
+  "fields": {
+    "user": 2,
+    "content": 52,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:19:22.489Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 40,
+  "fields": {
+    "user": 2,
+    "content": 50,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:37:43.773Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 41,
+  "fields": {
+    "user": 2,
+    "content": 46,
+    "rating_value": 5,
+    "rating_date": "2026-03-02T16:38:16.964Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 42,
+  "fields": {
+    "user": 2,
+    "content": 24,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:38:38.105Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 43,
+  "fields": {
+    "user": 2,
+    "content": 40,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:38:52.392Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 44,
+  "fields": {
+    "user": 2,
+    "content": 44,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:39:01.611Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 45,
+  "fields": {
+    "user": 2,
+    "content": 12,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:39:12.734Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 46,
+  "fields": {
+    "user": 2,
+    "content": 41,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:39:21.433Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 47,
+  "fields": {
+    "user": 2,
+    "content": 49,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:39:30.305Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 48,
+  "fields": {
+    "user": 2,
+    "content": 39,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:39:43.914Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 49,
+  "fields": {
+    "user": 2,
+    "content": 36,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:39:59.105Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 50,
+  "fields": {
+    "user": 2,
+    "content": 34,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:40:08.034Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 51,
+  "fields": {
+    "user": 3,
+    "content": 48,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:40:47.080Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 52,
+  "fields": {
+    "user": 3,
+    "content": 1,
+    "rating_value": 5,
+    "rating_date": "2026-03-02T16:40:59.845Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 53,
+  "fields": {
+    "user": 3,
+    "content": 15,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:41:15.534Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 54,
+  "fields": {
+    "user": 3,
+    "content": 33,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:41:27.112Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 55,
+  "fields": {
+    "user": 3,
+    "content": 46,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:41:35.838Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 56,
+  "fields": {
+    "user": 3,
+    "content": 23,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:41:45.494Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 57,
+  "fields": {
+    "user": 3,
+    "content": 26,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:41:53.172Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 58,
+  "fields": {
+    "user": 3,
+    "content": 27,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:41:59.592Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 59,
+  "fields": {
+    "user": 3,
+    "content": 2,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:42:07.701Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 60,
+  "fields": {
+    "user": 3,
+    "content": 11,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:42:20.207Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 61,
+  "fields": {
+    "user": 3,
+    "content": 47,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:43:10.098Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 62,
+  "fields": {
+    "user": 3,
+    "content": 52,
+    "rating_value": 5,
+    "rating_date": "2026-03-02T16:44:09.301Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 63,
+  "fields": {
+    "user": 3,
+    "content": 44,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:44:18.412Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 64,
+  "fields": {
+    "user": 3,
+    "content": 43,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:44:43.655Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 65,
+  "fields": {
+    "user": 3,
+    "content": 50,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:44:52.600Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 66,
+  "fields": {
+    "user": 3,
+    "content": 20,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:45:05.744Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 67,
+  "fields": {
+    "user": 3,
+    "content": 31,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:45:15.266Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 68,
+  "fields": {
+    "user": 3,
+    "content": 51,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:45:55.297Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 69,
+  "fields": {
+    "user": 3,
+    "content": 9,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:46:07.182Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 70,
+  "fields": {
+    "user": 3,
+    "content": 42,
+    "rating_value": 5,
+    "rating_date": "2026-03-02T16:46:16.322Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 71,
+  "fields": {
+    "user": 3,
+    "content": 45,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:46:27.131Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 72,
+  "fields": {
+    "user": 3,
+    "content": 8,
+    "rating_value": 5,
+    "rating_date": "2026-03-02T16:46:32.810Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 73,
+  "fields": {
+    "user": 3,
+    "content": 25,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:46:46.283Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 74,
+  "fields": {
+    "user": 3,
+    "content": 34,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:47:07.320Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 75,
+  "fields": {
+    "user": 3,
+    "content": 30,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:47:24.648Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 76,
+  "fields": {
+    "user": 3,
+    "content": 19,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:47:48.739Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 77,
+  "fields": {
+    "user": 3,
+    "content": 38,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:47:55.874Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 78,
+  "fields": {
+    "user": 6,
+    "content": 48,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:48:55.581Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 79,
+  "fields": {
+    "user": 6,
+    "content": 50,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:49:22.596Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 80,
+  "fields": {
+    "user": 6,
+    "content": 43,
+    "rating_value": 5,
+    "rating_date": "2026-03-02T16:50:25.076Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 81,
+  "fields": {
+    "user": 6,
+    "content": 40,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:50:59.822Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 82,
+  "fields": {
+    "user": 6,
+    "content": 44,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:51:10.194Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 83,
+  "fields": {
+    "user": 6,
+    "content": 49,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:51:22.251Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 84,
+  "fields": {
+    "user": 6,
+    "content": 42,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:51:46.532Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 85,
+  "fields": {
+    "user": 6,
+    "content": 39,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:52:02.522Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 86,
+  "fields": {
+    "user": 6,
+    "content": 37,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:52:14.496Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 87,
+  "fields": {
+    "user": 5,
+    "content": 50,
+    "rating_value": 5,
+    "rating_date": "2026-03-02T16:53:14.513Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 88,
+  "fields": {
+    "user": 5,
+    "content": 46,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:53:54.586Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 89,
+  "fields": {
+    "user": 5,
+    "content": 26,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:54:05.693Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 90,
+  "fields": {
+    "user": 5,
+    "content": 8,
+    "rating_value": 5,
+    "rating_date": "2026-03-02T16:54:17.749Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 91,
+  "fields": {
+    "user": 5,
+    "content": 12,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:54:27.221Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 92,
+  "fields": {
+    "user": 5,
+    "content": 47,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:54:35.987Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 93,
+  "fields": {
+    "user": 5,
+    "content": 21,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T16:54:53.478Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 94,
+  "fields": {
+    "user": 5,
+    "content": 16,
+    "rating_value": 5,
+    "rating_date": "2026-03-02T16:55:03.089Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 95,
+  "fields": {
+    "user": 5,
+    "content": 42,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:55:14.415Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 96,
+  "fields": {
+    "user": 5,
+    "content": 36,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T16:55:25.495Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 97,
+  "fields": {
+    "user": 5,
+    "content": 30,
+    "rating_value": 5,
+    "rating_date": "2026-03-02T16:55:35.817Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 98,
+  "fields": {
+    "user": 5,
+    "content": 29,
+    "rating_value": 5,
+    "rating_date": "2026-03-02T16:55:45.469Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 99,
+  "fields": {
+    "user": 7,
+    "content": 27,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T17:00:16.305Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 100,
+  "fields": {
+    "user": 7,
+    "content": 15,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T17:00:25.665Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 101,
+  "fields": {
+    "user": 7,
+    "content": 50,
+    "rating_value": 5,
+    "rating_date": "2026-03-02T17:00:32.673Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 102,
+  "fields": {
+    "user": 7,
+    "content": 46,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T17:00:43.459Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 103,
+  "fields": {
+    "user": 7,
+    "content": 32,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T17:00:58.040Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 104,
+  "fields": {
+    "user": 7,
+    "content": 47,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T17:01:10.323Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 105,
+  "fields": {
+    "user": 7,
+    "content": 52,
+    "rating_value": 4,
+    "rating_date": "2026-03-02T17:01:31.228Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 106,
+  "fields": {
+    "user": 7,
+    "content": 18,
+    "rating_value": 5,
+    "rating_date": "2026-03-02T17:01:39.084Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 107,
+  "fields": {
+    "user": 7,
+    "content": 37,
+    "rating_value": 3,
+    "rating_date": "2026-03-02T17:02:04.146Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 108,
+  "fields": {
+    "user": 8,
+    "content": 11,
+    "rating_value": 3,
+    "rating_date": "2026-03-04T11:56:12.509Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 109,
+  "fields": {
+    "user": 8,
+    "content": 41,
+    "rating_value": 5,
+    "rating_date": "2026-03-04T11:56:21.316Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 110,
+  "fields": {
+    "user": 7,
+    "content": 41,
+    "rating_value": 3,
+    "rating_date": "2026-03-04T11:57:13.981Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 111,
+  "fields": {
+    "user": 7,
+    "content": 23,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T11:58:24.017Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 112,
+  "fields": {
+    "user": 7,
+    "content": 12,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T11:58:37.082Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 113,
+  "fields": {
+    "user": 7,
+    "content": 43,
+    "rating_value": 3,
+    "rating_date": "2026-03-04T11:58:59.189Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 114,
+  "fields": {
+    "user": 7,
+    "content": 20,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T11:59:13.287Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 115,
+  "fields": {
+    "user": 7,
+    "content": 16,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T11:59:26.579Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 116,
+  "fields": {
+    "user": 7,
+    "content": 19,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T12:00:07.048Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 117,
+  "fields": {
+    "user": 7,
+    "content": 17,
+    "rating_value": 3,
+    "rating_date": "2026-03-04T12:01:08.731Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 118,
+  "fields": {
+    "user": 7,
+    "content": 28,
+    "rating_value": 3,
+    "rating_date": "2026-03-04T12:01:32.891Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 119,
+  "fields": {
+    "user": 7,
+    "content": 45,
+    "rating_value": 5,
+    "rating_date": "2026-03-04T12:01:44.926Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 120,
+  "fields": {
+    "user": 8,
+    "content": 18,
+    "rating_value": 5,
+    "rating_date": "2026-03-04T12:02:33.786Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 121,
+  "fields": {
+    "user": 8,
+    "content": 45,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T12:02:48.707Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 122,
+  "fields": {
+    "user": 8,
+    "content": 8,
+    "rating_value": 3,
+    "rating_date": "2026-03-04T12:03:04.507Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 123,
+  "fields": {
+    "user": 8,
+    "content": 15,
+    "rating_value": 3,
+    "rating_date": "2026-03-04T12:03:35.066Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 124,
+  "fields": {
+    "user": 8,
+    "content": 2,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T12:04:18.040Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 125,
+  "fields": {
+    "user": 8,
+    "content": 14,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T12:04:37.690Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 126,
+  "fields": {
+    "user": 8,
+    "content": 49,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T12:04:50.711Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 127,
+  "fields": {
+    "user": 8,
+    "content": 20,
+    "rating_value": 5,
+    "rating_date": "2026-03-04T12:05:01.309Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 128,
+  "fields": {
+    "user": 8,
+    "content": 28,
+    "rating_value": 5,
+    "rating_date": "2026-03-04T12:05:14.655Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 129,
+  "fields": {
+    "user": 8,
+    "content": 40,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T12:05:39.298Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 130,
+  "fields": {
+    "user": 8,
+    "content": 25,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T12:05:53.736Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 131,
+  "fields": {
+    "user": 8,
+    "content": 19,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T12:06:16.414Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 132,
+  "fields": {
+    "user": 9,
+    "content": 19,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T12:12:40.198Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 133,
+  "fields": {
+    "user": 9,
+    "content": 21,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T12:12:59.276Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 134,
+  "fields": {
+    "user": 4,
+    "content": 53,
+    "rating_value": 4,
+    "rating_date": "2026-03-04T12:36:57.742Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 135,
+  "fields": {
+    "user": 12,
+    "content": 1,
+    "rating_value": 4,
+    "rating_date": "2026-03-06T12:03:08.243Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 136,
+  "fields": {
+    "user": 12,
+    "content": 18,
+    "rating_value": 5,
+    "rating_date": "2026-03-06T12:04:24.095Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 137,
+  "fields": {
+    "user": 12,
+    "content": 42,
+    "rating_value": 4,
+    "rating_date": "2026-03-06T12:07:36.138Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 138,
+  "fields": {
+    "user": 5,
+    "content": 52,
+    "rating_value": 4,
+    "rating_date": "2026-03-25T07:12:18.052Z"
+  }
+},
+{
+  "model": "recommendox.rating",
+  "pk": 139,
+  "fields": {
+    "user": 5,
+    "content": 53,
+    "rating_value": 1,
+    "rating_date": "2026-03-25T07:15:04.995Z"
+  }
+},
+{
+  "model": "recommendox.review",
+  "pk": 5,
+  "fields": {
+    "user": 4,
+    "content": 1,
+    "comment": "Good ..",
+    "review_date": "2026-02-19T03:18:56.848Z",
+    "is_approved": true,
+    "is_verified": false
+  }
+},
+{
+  "model": "recommendox.review",
+  "pk": 11,
+  "fields": {
+    "user": 3,
+    "content": 29,
+    "comment": "Pure Cinematic Movie ",
+    "review_date": "2026-02-28T11:35:20.042Z",
+    "is_approved": true,
+    "is_verified": false
+  }
+},
+{
+  "model": "recommendox.review",
+  "pk": 12,
+  "fields": {
+    "user": 1,
+    "content": 6,
+    "comment": "Such a Masterpiece",
+    "review_date": "2026-02-28T11:47:48.463Z",
+    "is_approved": true,
+    "is_verified": true
+  }
+},
+{
+  "model": "recommendox.review",
+  "pk": 13,
+  "fields": {
+    "user": 6,
+    "content": 15,
+    "comment": "Good",
+    "review_date": "2026-02-28T11:49:23.744Z",
+    "is_approved": true,
+    "is_verified": false
+  }
+},
+{
+  "model": "recommendox.review",
+  "pk": 14,
+  "fields": {
+    "user": 2,
+    "content": 52,
+    "comment": "Very nice movie and concept is very good",
+    "review_date": "2026-03-02T16:19:18.149Z",
+    "is_approved": true,
+    "is_verified": false
+  }
+},
+{
+  "model": "recommendox.review",
+  "pk": 15,
+  "fields": {
+    "user": 2,
+    "content": 46,
+    "comment": "Such a wonder Cinematic experience",
+    "review_date": "2026-03-02T16:38:10.715Z",
+    "is_approved": true,
+    "is_verified": false
+  }
+},
+{
+  "model": "recommendox.review",
+  "pk": 16,
+  "fields": {
+    "user": 3,
+    "content": 47,
+    "comment": 

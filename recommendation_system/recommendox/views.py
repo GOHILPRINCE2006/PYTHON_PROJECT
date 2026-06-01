@@ -272,7 +272,7 @@ def user_logout(request):
     """User logout"""
     logout(request)
     messages.success(request, 'You have been logged out.')
-    return redirect('recommendox:home')
+    return redirect('recommendox:home')     
 
 
 #USER VIEWS

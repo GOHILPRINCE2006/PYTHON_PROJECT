@@ -6,7 +6,9 @@ from .models import Content, Review
 class ContentForm(forms.ModelForm):
     class Meta:
         model = Content
-        fields = '__all__'
+        fields = ['title', 'description', 'genre', 'language', 'content_type', 
+                  'release_date', 'duration', 'director', 'cast', 
+                  'poster_url', 'trailer_url']
         widgets = {
             'release_date': forms.DateInput(attrs={'type': 'date'}),
             'description': forms.Textarea(attrs={'rows': 4}),
